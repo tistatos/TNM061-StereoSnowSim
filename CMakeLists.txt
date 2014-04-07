@@ -28,11 +28,11 @@ set_target_properties(${APP_NAME} PROPERTIES
 )
 
 #copy data
-if( NOT SGCT_PLACE_TARGETS_IN_SOURCE_TREE )
-	add_custom_command(TARGET ${APP_NAME}
-		PRE_BUILD
-		COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR} ${EXAMPE_TARGET_PATH})
-endif()
+#if( NOT SGCT_PLACE_TARGETS_IN_SOURCE_TREE )
+#	add_custom_command(TARGET ${APP_NAME}
+#		PRE_BUILD
+#		COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR} ${EXAMPE_TARGET_PATH})
+#endif()
 
 if( APPLE  )
 	option(SGCT_CPP11 "Use c++11" OFF)
