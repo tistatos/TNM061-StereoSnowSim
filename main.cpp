@@ -2,6 +2,8 @@
 #include "sgct.h"
 #include "ParticleSystem.h"
 
+#include <iostream>
+
 sgct::Engine* gEngine;
 ParticleSystem* gParticles;
 
@@ -13,7 +15,6 @@ void draw();
 int main(int argc, char *argv[])
 {
 	gEngine = new sgct::Engine(argc, argv);
-	gParticles = new ParticleSystem(gEngine);
 
 	gEngine->setInitOGLFunction(initialize);
 	gEngine->setDrawFunction(draw);
@@ -23,10 +24,12 @@ int main(int argc, char *argv[])
 		delete gEngine;
 		return EXIT_FAILURE;
 	}
+	gParticles = new ParticleSystem(gEngine);
 
 	gEngine->render();
-
+	gParticles->destroy();
 	delete gEngine;
+	delete gParticles;
 	exit( EXIT_SUCCESS);
 }
 
