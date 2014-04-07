@@ -11,7 +11,7 @@ PROJECT(${APP_NAME})
 
 # to add more .cpp files, simply add the after main.cpp
 add_executable(${APP_NAME}
-	main.cpp) # for example "main.cpp coolt.cpp kiss.cpp)"
+	main.cpp src/ParticleSystem.cpp) # for example "main.cpp coolt.cpp kiss.cpp)"
 
 option(SGCT_PLACE_TARGETS_IN_SOURCE_TREE "Place targets in source tree" OFF)
 if( SGCT_PLACE_TARGETS_IN_SOURCE_TREE )
@@ -72,6 +72,8 @@ set(SGCT_LIBS
 find_package(OpenGL REQUIRED)
 
 include_directories(${SGCT_INCLUDE_DIRECTORY})
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
 
 if( MSVC )
 	set(LIBS
@@ -106,6 +108,8 @@ else() #linux
 		${X11_LIBRARY}
 		${XRANDR_LIBRARY}
 		${XI_LIBRARY}
+		Xxf86vm
+		pthread
 	)
 endif()
 
