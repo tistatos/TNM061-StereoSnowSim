@@ -1,9 +1,11 @@
+#include <iostream>
 #include "sgct.h"
 #include "ParticleSystem.h"
 
 sgct::Engine* gEngine;
 ParticleSystem* gParticles;
 
+using namespace std;
 
 void initialize();
 void draw();
@@ -16,7 +18,7 @@ int main(int argc, char *argv[])
 	gEngine->setInitOGLFunction(initialize);
 	gEngine->setDrawFunction(draw);
 
-	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile));
+	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
 		delete gEngine;
 		return EXIT_FAILURE;
@@ -35,5 +37,6 @@ void initialize()
 
 void draw()
 {
-
+	gParticles->move();
+	gParticles->draw();
 }

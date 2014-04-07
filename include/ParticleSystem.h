@@ -7,7 +7,7 @@ struct Particle
 {
 	glm::vec3 mPosition;
 	glm::vec3 mSpeed;
-	
+
 	float mSize;
 	float mLife;
 };
@@ -21,6 +21,7 @@ class ParticleSystem
 		void initialize();
 		void draw();
 		void destroy();
+		void move();
 	private:
 		bool mInitialized;
 		sgct::Engine* mEngine;

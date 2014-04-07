@@ -5,7 +5,7 @@ Thumbs.db
 Makefile
 .o
 CMakeCache.txt
-.cmake
+*.cmake
 run
 CMakeFiles/
 cmake_install.cmake

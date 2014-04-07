@@ -19,7 +19,7 @@ void ParticleSystem::initialize()
 
 	glGenBuffers(1, &mBillBoardVB);
 	glBindBuffer(GL_ARRAY_BUFFER, mBillBoardVB);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData), 
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData),
 				 vertexBufferData, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &mParticlePositionBuffer);
@@ -34,7 +34,7 @@ void ParticleSystem::draw()
 {
 	if(mInitialized)
 	{
-
+		// cout << "Drawing all them pritty particles\n";
 	}
 }
 
@@ -45,5 +45,18 @@ void ParticleSystem::destroy()
 		glDeleteBuffers(1, &mBillBoardVB);
 		glDeleteBuffers(1, &mParticlePositionBuffer);
 		mInitialized = false;
+	}
+}
+
+void ParticleSystem::move()
+{
+	// do gravity and shit
+	for (int i = 0; i < MAX_PARTICLES; i++)
+	{
+		// kill it? Has it passed some sort of boundary?
+		if(mParticles[i].mPosition.y < 0)
+		{
+			mParticles[i].mLife -= 0.01f; // reduce life
+		}
 	}
 }
