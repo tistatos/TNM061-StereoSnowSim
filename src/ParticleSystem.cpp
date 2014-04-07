@@ -1,4 +1,5 @@
 #include "ParticleSystem.h"
+#include <iostream>
 
 ParticleSystem::ParticleSystem(sgct::Engine* engine)
 {
@@ -10,12 +11,18 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 
 void ParticleSystem::initialize()
 {
+
 	static const GLfloat vertexBufferData[] = {
 		-0.5f, -0.5f, 0.0f,
 		0.5f, -0.5f, 0.0f,
 		-0.5f, 0.5f, 0.0f,
 		0.5f, 0.5f, 0.0f
 	};
+	/*
+	GLuint vertexArray = 0;
+
+	glGenVertexArrays(1, &vertexArray);
+	glBindVertexArray(vertexArray);
 
 	glGenBuffers(1, &mBillBoardVB);
 	glBindBuffer(GL_ARRAY_BUFFER, mBillBoardVB);
@@ -27,7 +34,11 @@ void ParticleSystem::initialize()
 	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES*4*sizeof(GLubyte),
 				 NULL, GL_STREAM_DRAW);
 
+	glBindVertexArray(0);
+	*/
+	
 	mInitialized = true;
+	
 }
 
 void ParticleSystem::draw()
