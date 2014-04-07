@@ -53,10 +53,14 @@ void ParticleSystem::move()
 	// do gravity and shit
 	for (int i = 0; i < MAX_PARTICLES; i++)
 	{
+		Particle& p = mParticles[i];
+		// pull it down!
+		p.mSpeed += glm::vec3(0.0f, -9.81f, 0.0f);
+		p.mPosition += p.mSpeed;
 		// kill it? Has it passed some sort of boundary?
-		if(mParticles[i].mPosition.y < 0)
+		if(p.mPosition.y < 0)
 		{
-			mParticles[i].mLife -= 0.01f; // reduce life
+			p.mLife -= 0.01f; // reduce life
 		}
 	}
 }
