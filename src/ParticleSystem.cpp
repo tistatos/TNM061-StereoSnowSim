@@ -59,8 +59,7 @@ void ParticleSystem::destroy()
 
 void ParticleSystem::move(double delta)
 {
-
-	// do gravity and shit
+	// do gravity and shit on every particle
 	for (int i = 0; i < MAX_PARTICLES; i++)
 	{
 		// get ref to current particle
@@ -76,4 +75,24 @@ void ParticleSystem::move(double delta)
 			p.mLife -= delta; // reduce life
 		}
 	}
+}
+
+/**
+ * reset the particle at index index
+ * @param index the index
+ */
+void ParticleSystem::reset(int index)
+{
+	reset(mParticles[index]);
+}
+
+/**
+ * reset particle p
+ * @param p
+ */
+void ParticleSystem::reset(Particle& p)
+{
+	p.mLife = 5.0f; // takes 5 sec to melt
+	p.mPosition = glm::vec3(0.0f, 10.0f, 0.0f); // move it to the sky (lol)
+	p.mSpeed = glm::vec3(0.0f, 0.0f, 0.0f); // reset speed
 }
