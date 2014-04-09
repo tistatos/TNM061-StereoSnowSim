@@ -32,7 +32,7 @@ int main(int argc, char *argv[])
 	gParticles->destroy();
 	delete gEngine;
 	delete gParticles;
-	exit( EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }
 
 void initialize()
@@ -42,6 +42,8 @@ void initialize()
 
 void draw()
 {
-	gParticles->move();
-	gParticles->draw();
+	double delta = gEngine->getDt();
+
+	gParticles->move(delta);
+	gParticles->draw(delta);
 }

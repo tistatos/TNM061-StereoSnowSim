@@ -39,7 +39,7 @@ void ParticleSystem::initialize()
 	mInitialized = true;
 }
 
-void ParticleSystem::draw()
+void ParticleSystem::draw(double delta)
 {
 	if(mInitialized)
 	{
@@ -57,17 +57,12 @@ void ParticleSystem::destroy()
 	}
 }
 
-void ParticleSystem::move()
+void ParticleSystem::move(double delta)
 {
-	double lastTime = glfwGetTime();
+
 	// do gravity and shit
 	for (int i = 0; i < MAX_PARTICLES; i++)
 	{
-		// keep track of time
-		double currentTime = glfwGetTime();
-		double delta = currentTime - lastTime;
-		lastTime = currentTime;
-
 		// get ref to current particle
 		Particle& p = mParticles[i];
 
