@@ -6,7 +6,7 @@
 struct Particle
 {
 	glm::vec3 mPosition;
-	glm::vec3 mSpeed;
+	glm::vec3 mVelocity;
 
 	float mSize;
 	float mLife;
@@ -23,11 +23,19 @@ class ParticleSystem
 		void destroy();
 		void move(double delta);
 	private:
+		int findLastParticle();
+
+
 		bool mInitialized;
 		sgct::Engine* mEngine;
 		Particle mParticles[MAX_PARTICLES];
+		int mLastUsedParticle;
+		GLuint mVertexArray;
+		GLint mMatrixLoc;
+		GLfloat* g_particule_position_size_data;
 		GLuint mBillBoardVB;
 		GLuint mParticlePositionBuffer;
+		GLuint mParticleColorBuffer;
 };
 
 #endif
