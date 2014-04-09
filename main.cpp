@@ -40,13 +40,15 @@ int main(int argc, char *argv[])
 void initialize()
 {
 	gParticles->initialize();
-	gWorld->initialize();
+	gWorld->initializeWorld();
 }
 
 void draw()
 {
 	double delta = gEngine->getDt();
 
-	gParticles->move(delta);
-	gParticles->draw(delta);
+	//gParticles->move(delta);
+	//gParticles->draw(delta);
+
+	gWorld->drawWorld();
 }
