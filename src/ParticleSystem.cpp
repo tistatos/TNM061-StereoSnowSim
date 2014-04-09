@@ -11,14 +11,13 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 
 void ParticleSystem::initialize()
 {
-
 	static const GLfloat vertexBufferData[] = {
 		-0.5f, -0.5f, 0.0f,
 		0.5f, -0.5f, 0.0f,
 		-0.5f, 0.5f, 0.0f,
 		0.5f, 0.5f, 0.0f
 	};
-	/*
+
 	GLuint vertexArray = 0;
 
 	glGenVertexArrays(1, &vertexArray);
@@ -35,17 +34,15 @@ void ParticleSystem::initialize()
 				 NULL, GL_STREAM_DRAW);
 
 	glBindVertexArray(0);
-	*/
-	
+
 	mInitialized = true;
-	
 }
 
 void ParticleSystem::draw()
 {
 	if(mInitialized)
 	{
-		// cout << "Drawing all them pritty particles\n";
+		// std::cout << "DRAWING! ";
 	}
 }
 
