@@ -59,8 +59,7 @@ void ParticleSystem::destroy()
 
 void ParticleSystem::move(double delta)
 {
-
-	// do gravity and shit
+	// do gravity and shit on every particle
 	for (int i = 0; i < MAX_PARTICLES; i++)
 	{
 		// get ref to current particle
