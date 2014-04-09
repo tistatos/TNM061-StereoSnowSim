@@ -12,8 +12,7 @@ class Field
 	public:
 		Field();
 		virtual glm:: vec3 getVelocity(float delta) = 0;
-	private:
-		vector<Field*> fields;
+		virtual void init(float speed) = 0;
 };
 
 #endif

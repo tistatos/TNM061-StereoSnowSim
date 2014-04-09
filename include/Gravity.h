@@ -1,5 +1,5 @@
-#ifndef __FIELD_H__
-#define __GRATIVY_H__
+#ifndef __GRAVITY_H__
+#define __GRAVITY_H__
 
 
 #include <iostream>
@@ -11,8 +11,8 @@ using namespace std;
 class Gravity : public Field
 {
 	public:
-		Gravity();
-		Gravity(float speed);
+		Gravity(){};
+		void init(float speed = -9.81);
 		glm::vec3 getVelocity(double delta);
 	private:
 		glm::vec3 velocity;
