@@ -76,3 +76,23 @@ void ParticleSystem::move(double delta)
 		}
 	}
 }
+
+/**
+ * reset the particle at index index
+ * @param index the index
+ */
+void ParticleSystem::reset(int index)
+{
+	reset(mParticles[index]);
+}
+
+/**
+ * reset particle p
+ * @param p
+ */
+void ParticleSystem::reset(Particle& p)
+{
+	p.mLife = 5.0f; // takes 5 sec to melt
+	p.mPosition = glm::vec3(0.0f, 10.0f, 0.0f); // move it to the sky (lol)
+	p.mSpeed = glm::vec3(0.0f, 0.0f, 0.0f); // reset speed
+}
