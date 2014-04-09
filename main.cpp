@@ -2,7 +2,7 @@
 #include "sgct.h"
 #include "ParticleSystem.h"
 #include "World.h"
-
+#include "HelperFunctions.h"
 #include <iostream>
 
 sgct::Engine* gEngine;
@@ -29,12 +29,12 @@ int main(int argc, char *argv[])
 		delete gEngine;
 		return EXIT_FAILURE;
 	}
-	
+
 	gEngine->render();
 	gParticles->destroy();
 	delete gEngine;
 	delete gParticles;
-	exit( EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }
 
 void initialize()
@@ -45,6 +45,8 @@ void initialize()
 
 void draw()
 {
-	gParticles->move();
-	gParticles->draw();
+	double delta = gEngine->getDt();
+
+	gParticles->move(delta);
+	gParticles->draw(delta);
 }

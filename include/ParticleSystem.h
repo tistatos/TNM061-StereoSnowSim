@@ -19,9 +19,9 @@ class ParticleSystem
 	public:
 		ParticleSystem(sgct::Engine* engine);
 		void initialize();
-		void draw();
+		void draw(double delta);
 		void destroy();
-		void move();
+		void move(double delta);
 	private:
 		bool mInitialized;
 		sgct::Engine* mEngine;
