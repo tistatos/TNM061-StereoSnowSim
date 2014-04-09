@@ -67,12 +67,22 @@ void ParticleSystem::move(double delta)
 
 		// pull it down!
 		p.mSpeed += glm::vec3(0.0f, -9.81f, 0.0f) * (float)delta;
-		p.mPosition += p.mSpeed * (float)delta;
 
 		// reduce life? Has it passed some sort of boundary?
 		if(p.mPosition.y < 0)
 		{
 			p.mLife -= delta; // reduce life
+		}
+		else
+		{
+			// move it only if it is above y = 0
+			p.mPosition += p.mSpeed * (float)delta;
+		}
+
+		// should the particle be revived?
+		if(p.mLife < 0)
+		{
+			reset(p);
 		}
 	}
 }
