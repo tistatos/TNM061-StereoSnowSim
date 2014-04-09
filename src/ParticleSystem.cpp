@@ -81,9 +81,7 @@ void ParticleSystem::move(double delta)
 
 		// should the particle be revived?
 		if(p.mLife < 0)
-		{
-			reset(p);
-		}
+			reset(p); // reset the particles vars
 	}
 }
 
