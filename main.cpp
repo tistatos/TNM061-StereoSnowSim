@@ -1,12 +1,13 @@
 #include <iostream>
 #include "sgct.h"
 #include "ParticleSystem.h"
+#include "World.h"
 #include "HelperFunctions.h"
-
 #include <iostream>
 
 sgct::Engine* gEngine;
 ParticleSystem* gParticles;
+World* gWorld;
 
 using namespace std;
 
@@ -21,6 +22,7 @@ int main(int argc, char *argv[])
 	gEngine->setDrawFunction(draw);
 
 	gParticles = new ParticleSystem(gEngine);
+	gWorld = new World(gEngine);
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
@@ -38,12 +40,15 @@ int main(int argc, char *argv[])
 void initialize()
 {
 	gParticles->initialize();
+	gWorld->initializeWorld();
 }
 
 void draw()
 {
 	double delta = gEngine->getDt();
 
-	gParticles->move(delta);
-	gParticles->draw(delta);
+	//gParticles->move(delta);
+	//gParticles->draw(delta);
+
+	gWorld->drawWorld();
 }

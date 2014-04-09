@@ -22,6 +22,8 @@ class ParticleSystem
 		void draw(double delta);
 		void destroy();
 		void move(double delta);
+		void reset(int index);
+		void reset(Particle& p);
 	private:
 		int findLastParticle();
 
