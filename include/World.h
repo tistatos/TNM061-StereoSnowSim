@@ -12,10 +12,14 @@ class World
 		void createSphere();
 		void setTexture(string name, string textureFile);
 		void loadTexture();
-		void initialize();
+		void initializeWorld();
+		void drawWorld();
+		void cleanUpWorld();
 	private:
 		sgct::Engine* mEngine;
 		sgct_utils::SGCTSphere* mSphere;
+		GLint mMatrixLocation;
+		GLint mTextureLocation;
 		float mRadius;
 		unsigned int mSegments; //only non-negative integers
 		size_t mTextureHandle; //holds the texture handle

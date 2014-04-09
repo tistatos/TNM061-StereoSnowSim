@@ -11,6 +11,6 @@ out vec2 UV;
 
 void main()
 {
-	gl_Position MVP * vec4(vertexPositions, 1.0);
+	gl_Position = MVP * vec4(vertexPositions, 1.0);
 	UV = textureCoordinates;
 }
