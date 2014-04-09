@@ -19,13 +19,14 @@ int main(int argc, char *argv[])
 	gEngine->setInitOGLFunction(initialize);
 	gEngine->setDrawFunction(draw);
 
+	gParticles = new ParticleSystem(gEngine);
+
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
 		delete gEngine;
 		return EXIT_FAILURE;
 	}
-	gParticles = new ParticleSystem(gEngine);
-
+	
 	gEngine->render();
 	gParticles->destroy();
 	delete gEngine;

@@ -12,7 +12,8 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 void ParticleSystem::initialize()
 {
 
-	static const GLfloat vertexBufferData[] = {
+	static const GLfloat vertexBufferData[] = 
+	{
 		-0.5f, -0.5f, 0.0f,
 		0.5f, -0.5f, 0.0f,
 		-0.5f, 0.5f, 0.0f,
