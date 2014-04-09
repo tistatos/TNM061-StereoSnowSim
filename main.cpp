@@ -1,6 +1,7 @@
 #include <iostream>
 #include "sgct.h"
 #include "ParticleSystem.h"
+#include "HelperFunctions.h"
 
 #include <iostream>
 

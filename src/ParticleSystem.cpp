@@ -13,7 +13,6 @@ void ParticleSystem::initialize()
 {
 	static const GLfloat vertexBufferData[] =
 	{
-
 		-0.5f, -0.5f, 0.0f,
 		0.5f, -0.5f, 0.0f,
 		-0.5f, 0.5f, 0.0f,
@@ -60,18 +59,26 @@ void ParticleSystem::destroy()
 
 void ParticleSystem::move()
 {
+	double lastTime = glfwGetTime();
 	// do gravity and shit
 	for (int i = 0; i < MAX_PARTICLES; i++)
 	{
-		float delta = 0.01;
+		// keep track of time
+		double currentTime = glfwGetTime();
+		double delta = currentTime - lastTime;
+		lastTime = currentTime;
+
+		// get ref to current particle
 		Particle& p = mParticles[i];
+
 		// pull it down!
-		p.mSpeed += glm::vec3(0.0f, -9.81f, 0.0f) * delta;
-		p.mPosition += p.mSpeed;
-		// kill it? Has it passed some sort of boundary?
+		p.mSpeed += glm::vec3(0.0f, -9.81f, 0.0f) * (float)delta;
+		p.mPosition += p.mSpeed * (float)delta;
+
+		// reduce life? Has it passed some sort of boundary?
 		if(p.mPosition.y < 0)
 		{
-			p.mLife -= 0.01f; // reduce life
+			p.mLife -= delta; // reduce life
 		}
 	}
 }
