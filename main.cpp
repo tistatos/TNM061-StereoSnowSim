@@ -4,6 +4,7 @@
 #include "World.h"
 #include "HelperFunctions.h"
 #include "Gravity.h"
+#include "Wind.h"
 #include <iostream>
 
 sgct::Engine* gEngine;
@@ -16,6 +17,8 @@ void draw();
 
 int main(int argc, char *argv[])
 {
+	initRandom();
+
 	gEngine = new sgct::Engine(argc, argv);
 
 	gEngine->setInitOGLFunction(initialize);
@@ -27,6 +30,12 @@ int main(int argc, char *argv[])
 	Gravity* grav = new Gravity();
 	grav->init(-0.08f);
 	gParticles->addField(grav);
+
+	Wind* wind = new Wind();
+	wind->init(getRandom(-1.0, 1.0), 0.0f, getRandom(-1.0, 1.0));
+	gParticles->addField(wind);
+
+	cout << "Wind direction: " << wind->getAcceleration() << endl;
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
@@ -43,8 +52,6 @@ int main(int argc, char *argv[])
 
 void initialize()
 {
-	initRandom();
-
 	gParticles->initialize();
 	gWorld->initializeWorld();
 }

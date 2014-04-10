@@ -9,9 +9,8 @@ class World
 {
 	public:
 		World(sgct::Engine* engine);
-		void setRadius(float radius);
-		void setSegments(unsigned int segments);
-		void createSphere();
+		void setBoxSize(float boxSize);
+		void createSkyBox();
 		void setTexture(string name, string textureFile);
 		void loadTexture();
 		void initializeWorld();
@@ -19,11 +18,10 @@ class World
 		void cleanUpWorld();
 	private:
 		sgct::Engine* mEngine;
-		sgct_utils::SGCTSphere* mSphere;
+		sgct_utils::SGCTBox* mSphere;
 		GLint mMatrixLocation;
 		GLint mTextureLocation;
-		float mRadius;
-		unsigned int mSegments; //only non-negative integers
+		float mSize;
 		size_t mTextureHandle; //holds the texture handle
 		string mName;
 		string mTextureFile;

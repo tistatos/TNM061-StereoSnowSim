@@ -38,10 +38,10 @@ void ParticleSystem::initialize()
 	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
 	{
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f
+		-1 * PARTICLE_SIZE, -1 * PARTICLE_SIZE, 0.0f,
+		PARTICLE_SIZE, -1 * PARTICLE_SIZE, 0.0f,
+		-1 * PARTICLE_SIZE, PARTICLE_SIZE, 0.0f,
+		PARTICLE_SIZE, PARTICLE_SIZE, 0.0f
 	};
 
 	// Enable depth test
@@ -238,24 +238,24 @@ void ParticleSystem::move(double delta)
 
 		if(p.mLife > 0.0f)
 		{
+			glm::vec3 tempVelo;
 			// loop through the fields, and sum the fields' velocity
 			for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
 			{
-				p.mVelocity += (*f)->getVelocity(delta);
+				tempVelo += (*f)->getVelocity(delta, p.mVelocity);
 			}
 
-			// apply the velocity
-			p.mPosition += p.mVelocity*(float)delta;
+			p.mVelocity = tempVelo;
 
 			// reduce life? Has it passed some sort of boundary?
 			if(p.mPosition.y < -2)
 			{
-				p.mLife = 0; // reduce life
-				p.mPosition.y = 0;
-				p.mVelocity.x = 0;
-				p.mVelocity.y = 0;
-				p.mVelocity.z = 0;
+				p.mLife -= delta; // reduce life
+				p.mVelocity.y = 0; // stop vertical speed!
 			}
+
+			// apply the velocity
+			p.mPosition += p.mVelocity*(float)delta;
 		}
 		else
 		{
