@@ -23,10 +23,10 @@ void ParticleSystem::initialize()
 	initRandom();
 	static const GLfloat vertexBufferData[] =
 	{
-		-0.1f, -0.1f, 0.0f,
-		0.1f, -0.1f, 0.0f,
-		-0.1f, 0.1f, 0.0f,
-		0.1f, 0.1f, 0.0f
+		-0.5f, -0.5f, 0.0f,
+		0.5f, -0.5f, 0.0f,
+		-0.5f, 0.5f, 0.0f,
+		0.5f, 0.5f, 0.0f
 	};
 
 	// Enable depth test
@@ -224,7 +224,7 @@ void ParticleSystem::move(double delta)
 			// pull it down!
 			p.mVelocity += glm::vec3(0.0f, -9.81f, 0.0f) * (float)delta*0.01f;
 			p.mPosition += p.mVelocity*(float)delta;
-			p.mLife -= 1.0f*(float)delta; // reduce life
+			p.mLife -= delta; // reduce life
 
 			// reduce life? Has it passed some sort of boundary?
 			if(p.mPosition.y < 0 || p.mLife <= 0)
@@ -234,7 +234,6 @@ void ParticleSystem::move(double delta)
 			}
 		}
 	}
-
 }
 
 /**

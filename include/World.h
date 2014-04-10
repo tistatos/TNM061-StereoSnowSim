@@ -1,3 +1,6 @@
+#ifndef __WORLD_H__
+#define __WORLD_H__
+
 #include <iostream>
 #include "sgct.h"
 
@@ -26,3 +29,5 @@ class World
 		string mName;
 		string mTextureFile;
 };
+
+#endif
