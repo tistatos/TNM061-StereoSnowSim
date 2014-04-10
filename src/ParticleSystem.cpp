@@ -14,7 +14,6 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mBillBoardVB = 0;
 	mParticlePositionBuffer = 0;
 	mParticlePositionData = new GLfloat[MAX_PARTICLES * 4];
-
 }
 
 void ParticleSystem::initialize()
@@ -254,4 +253,9 @@ void ParticleSystem::reset(Particle& p)
 	p.mLife = 5.0f; // takes 5 sec to melt
 	p.mPosition = glm::vec3(0.0f, 10.0f, 0.0f); // move it to the sky (lol)
 	p.mVelocity = glm::vec3(0.0f, 0.0f, 0.0f); // reset speed
+}
+
+void ParticleSystem::addField(Field *f)
+{
+	fields.push_back(f);
 }

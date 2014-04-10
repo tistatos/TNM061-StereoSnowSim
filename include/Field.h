@@ -11,7 +11,7 @@ class Field
 {
 	public:
 		Field();
-		virtual glm:: vec3 getVelocity(float delta) = 0;
+		virtual glm:: vec3 getVelocity(float delta)= 0;//{ return glm::vec3(0);};
 		virtual void init(float speed) = 0;
 };
 
