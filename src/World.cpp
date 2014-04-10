@@ -6,25 +6,20 @@ World::World(sgct::Engine* engine)
 	mEngine = engine;
 	mSphere = nullptr;
 	mMatrixLocation = -1;
-	mRadius = 25;
-	mSegments = 36;
-	mName = "";
-	mTextureFile = "";
+	mSize = 25;
+	mName = "sky";
+	mTextureFile = "einar.png";
 }
 
-void World::setRadius(float radius)
+void World::setBoxSize(float boxSize)
 {
-	mRadius = radius;
+	mSize = boxSize;
 }
 
-void World::setSegments(unsigned int segments)
+void World::createSkyBox()
 {
-	mSegments = segments;
-}
-
-void World::createSphere()
-{
-	mSphere = new sgct_utils::SGCTSphere(mRadius, mSegments);
+	//create a box with size and texturemapping mode
+	mSphere = new sgct_utils::SGCTBox(mSize, sgct_utils::SGCTBox::SkyBox);
 }
 
 
@@ -37,13 +32,13 @@ void World::setTexture(string name, string textureFile)
 void World::loadTexture()
 {
 	//NOTE: missing a t in loadTexure
-	//sgct::TextureManager::instance()->loadTexure(mTextureHandle, mName, mTextureFile, true);
-	sgct::TextureManager::instance()->loadTexure(mTextureHandle, "einar", "einar.png", true);
+	sgct::TextureManager::instance()->loadTexure(mTextureHandle, mName, mTextureFile, true);
+	//sgct::TextureManager::instance()->loadTexure(mTextureHandle, "einar", "einar.png", true);
 }
 
 void World::initializeWorld()
 {
-	createSphere();
+	createSkyBox();
 	loadTexture();
 
 	//set up backface culling
@@ -56,7 +51,7 @@ void World::initializeWorld()
 
 	//retrieve matrix location
 	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram("banan").getUniformLocation("MVP");
-	mTextureLocation = sgct::ShaderManager::instance()->getShaderProgram("banan").getUniformLocation("tex");
+	//mTextureLocation = sgct::ShaderManager::instance()->getShaderProgram("banan").getUniformLocation("tex");
 	//glUniform1i(mTextureLocation, 0);
 
 	sgct::ShaderManager::instance()->unBindShaderProgram();

@@ -122,8 +122,6 @@ void ParticleSystem::draw(double delta)
 		{
 			newParticles = (int)(0.001f*10000.0);
 		}
-		if(newParticles > 0)
-			std::cout << newParticles << std::endl;
 
 		for (int i = 0; i < newParticles; ++i)
 		{
