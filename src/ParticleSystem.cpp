@@ -31,10 +31,10 @@ void ParticleSystem::initialize()
 	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
 	{
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f
+		-1 * PARTICLE_SIZE, -1 * PARTICLE_SIZE, 0.0f,
+		PARTICLE_SIZE, -1 * PARTICLE_SIZE, 0.0f,
+		-1 * PARTICLE_SIZE, PARTICLE_SIZE, 0.0f,
+		PARTICLE_SIZE, PARTICLE_SIZE, 0.0f
 	};
 
 	// Enable depth test
@@ -65,7 +65,7 @@ void ParticleSystem::initialize()
 	//Bind shader and get location of MVP matrix
 	sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
 
-	mMatrixLoc = sgct::ShaderManager::instance()->getShaderProgram( "particle").getUniformLocation( "VP" );
+	mMatrixLoc = sgct::ShaderManager::instance()->getShaderProgram("particle").getUniformLocation( "VP" );
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
@@ -86,7 +86,6 @@ int ParticleSystem::findLastParticle()
 {
 	for (int i = mLastUsedParticle; i < MAX_PARTICLES; ++i)
 	{
-
 		if(mParticles[i].mLife <= 0)
 		{
 			mLastUsedParticle = i;
@@ -128,9 +127,7 @@ void ParticleSystem::draw(double delta)
 			int particleIndex = findLastParticle();
 
 			reset(particleIndex);
-
 		}
-
 
 		int particleCount = 0;
 		for(int i=0; i< MAX_PARTICLES; i++)
@@ -156,7 +153,7 @@ void ParticleSystem::draw(double delta)
 		glDisable(GL_CULL_FACE);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
+		sgct::ShaderManager::instance()->bindShaderProgram("particle");
 
 		glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix();
 		glUniformMatrix4fv(mMatrixLoc, 1, GL_FALSE, &MVP[0][0]);
@@ -237,18 +234,15 @@ void ParticleSystem::move(double delta)
 				p.mVelocity += (*f)->getVelocity(delta);
 			}
 
-			// apply the velocity
-			p.mPosition += p.mVelocity*(float)delta;
-
 			// reduce life? Has it passed some sort of boundary?
 			if(p.mPosition.y < -2)
 			{
-				p.mLife = 0; // reduce life
-				p.mPosition.y = 0;
-				p.mVelocity.x = 0;
-				p.mVelocity.y = 0;
-				p.mVelocity.z = 0;
+				p.mLife -= delta; // reduce life
+				p.mVelocity = glm::vec3(0); // stop speed!
 			}
+
+			// apply the velocity
+			p.mPosition += p.mVelocity*(float)delta;
 		}
 		else
 		{
