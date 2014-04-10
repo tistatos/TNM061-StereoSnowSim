@@ -28,6 +28,13 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
  */
 void ParticleSystem::initialize()
 {
+	size_t handle;
+	//add texture for snowflake
+	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
+	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
+	sgct::TextureManager::instance()->loadTexure(handle, "snow", "snow.png", true);
+
+
 	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
 	{
@@ -122,8 +129,6 @@ void ParticleSystem::draw(double delta)
 		{
 			newParticles = (int)(0.001f*10000.0);
 		}
-		if(newParticles > 0)
-			std::cout << newParticles << std::endl;
 
 		for (int i = 0; i < newParticles; ++i)
 		{
@@ -287,7 +292,7 @@ void ParticleSystem::reset(Particle& p)
 
 	p.mVelocity = glm::vec3(xval,yval,zval);
 
-    p.mSize = 0.3f;
+    p.mSize = 0.1f;
 }
 
 void ParticleSystem::addField(Field *f)

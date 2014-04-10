@@ -14,7 +14,7 @@ struct Particle
 	float mLife;
 };
 
-const int MAX_PARTICLES = 1000;
+const int MAX_PARTICLES = 10000;
 
 class ParticleSystem
 {
