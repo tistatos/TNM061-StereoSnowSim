@@ -224,15 +224,19 @@ void ParticleSystem::move(double delta)
 				p.mVelocity += (*f)->getVelocity(delta);
 			}
 
+			// reduce life? Has it passed some sort of boundary?
+			if(p.mPosition.y <= 0)
+			{
+				p.mLife -= delta; // reduce life
+				p.mVelocity = glm::vec3(0);
+			}
+
 			// apply the velocity
 			p.mPosition += p.mVelocity*(float)delta;
-			p.mLife -= delta; // reduce life
-
-			// reduce life? Has it passed some sort of boundary?
-			if(p.mPosition.y < 0 || p.mLife <= 0)
-			{
-				reset(p); // reset particle
-			}
+		}
+		else
+		{
+			reset(p); // reset particle
 		}
 	}
 }
