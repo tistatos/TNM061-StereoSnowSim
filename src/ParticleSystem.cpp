@@ -142,9 +142,7 @@ void ParticleSystem::draw(double delta)
 
 			//FIXME
             mParticles[particleIndex].mSize = 0.1f;
-
 		}
-
 
 		int particleCount = 0;
 		for(int i=0; i< MAX_PARTICLES; i++)

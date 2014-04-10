@@ -24,12 +24,11 @@ class ParticleSystem
 		void draw(double delta);
 		void destroy();
 		void move(double delta);
-		void reset(int index);
-		void reset(Particle& p);
 		void addField(Field *f);
 	private:
 		int findLastParticle();
-
+		void reset(int index);
+		void reset(Particle& p);
 
 		bool mInitialized; /// Is the particle system initalized?
 		sgct::Engine* mEngine; /// Pointer to SGCT engine
@@ -40,7 +39,7 @@ class ParticleSystem
 		GLuint mBillBoardVB; /// Vertex buffer for billboard
 		GLuint mParticlePositionBuffer; /// Buffer for particle's position data
 		GLfloat* mParticlePositionData; /// temp storage to move data from particles to buffer
-		std::vector<Field*> fields;
+		std::vector<Field*> fields; /// the fields that affect the particles
 };
 
 
