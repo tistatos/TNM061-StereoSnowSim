@@ -1,3 +1,6 @@
+#ifndef __HELPERFUNCTIONS_H__
+#define __HELPETFUNCTIONS_H__
+
 #include "sgct.h"
 #include <iostream>
 
@@ -8,3 +11,5 @@ void initRandom();
 float getRandom();
 
 float getRandom(float a, float b);
+
+#endif
