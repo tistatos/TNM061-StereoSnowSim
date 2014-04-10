@@ -47,8 +47,8 @@ void draw()
 {
 	double delta = gEngine->getDt();
 
-	//gParticles->move(delta);
-	//gParticles->draw(delta);
-
 	gWorld->drawWorld();
+
+	gParticles->move(delta);
+	gParticles->draw(delta);
 }

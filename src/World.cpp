@@ -6,7 +6,7 @@ World::World(sgct::Engine* engine)
 	mEngine = engine;
 	mSphere = nullptr;
 	mMatrixLocation = -1;
-	mRadius = 2;
+	mRadius = 9;
 	mSegments = 36;
 	mName = "";
 	mTextureFile = "";
@@ -57,7 +57,7 @@ void World::initializeWorld()
 	//retrieve matrix location
 	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram("banan").getUniformLocation("MVP");
 	mTextureLocation = sgct::ShaderManager::instance()->getShaderProgram("banan").getUniformLocation("tex");
-	glUniform1i(mTextureLocation, 0);
+	//glUniform1i(mTextureLocation, 0);
 
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 }

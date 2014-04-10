@@ -1,5 +1,6 @@
 #include "ParticleSystem.h"
 #include <iostream>
+#include "HelperFunctions.h"
 
 ParticleSystem::ParticleSystem(sgct::Engine* engine)
 {
@@ -12,23 +13,26 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 
 	mBillBoardVB = 0;
 	mParticlePositionBuffer = 0;
+	mParticlePositionData = new GLfloat[MAX_PARTICLES * 4];
 
-	g_particule_position_size_data = new GLfloat[MAX_PARTICLES * 4];
 }
 
 void ParticleSystem::initialize()
 {
 
+	initRandom();
 	static const GLfloat vertexBufferData[] =
 	{
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f
+		-0.1f, -0.1f, 0.0f,
+		0.1f, -0.1f, 0.0f,
+		-0.1f, 0.1f, 0.0f,
+		0.1f, 0.1f, 0.0f
 	};
 
-
-
+	// Enable depth test
+    glEnable(GL_DEPTH_TEST);
+    // Accept fragment if it closer to the camera than the former one
+    glDepthFunc(GL_LESS);
 
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);
@@ -40,12 +44,7 @@ void ParticleSystem::initialize()
 
 	glGenBuffers(1, &mParticlePositionBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES*4*sizeof(GLubyte),
-				 NULL, GL_STREAM_DRAW);
-
-	glGenBuffers(1, &mParticleColorBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, mParticleColorBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES*4*sizeof(GLubyte),
+	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES*4*sizeof(GLfloat),
 				 NULL, GL_STREAM_DRAW);
 
 	glBindVertexArray(0);
@@ -60,13 +59,20 @@ void ParticleSystem::initialize()
 
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
+	// Enable depth test
+    glEnable(GL_DEPTH_TEST);
+    // Accept fragment if it closer to the camera than the former one
+    glDepthFunc(GL_LESS);
+
+
 }
 
 int ParticleSystem::findLastParticle()
 {
 	for (int i = mLastUsedParticle; i < MAX_PARTICLES; ++i)
 	{
-		if(mParticles[i].mLife < 0)
+
+		if(mParticles[i].mLife <= 0)
 		{
 			mLastUsedParticle = i;
 			return i;
@@ -75,7 +81,7 @@ int ParticleSystem::findLastParticle()
 
 	for (int i = 0; i < MAX_PARTICLES; ++i)
 	{
-		if(mParticles[i].mLife < 0)
+		if(mParticles[i].mLife <= 0)
 		{
 			mLastUsedParticle = i;
 			return i;
@@ -91,23 +97,27 @@ void ParticleSystem::draw(double delta)
 	{
 
 		int newParticles = (int)(delta*10000.0);
-		if(newParticles > (int)(0.016f*10000.0))
+		if(newParticles > (int)(0.001f*10000.0))
 		{
-			newParticles = (int)(0.016f*10000.0);
+			newParticles = (int)(0.001f*10000.0);
 		}
 
 
 		for (int i = 0; i < newParticles; ++i)
 		{
-			Particle &p = mParticles[i];
-
 			int particleIndex = findLastParticle();
-			mParticles[particleIndex].mLife = 5.0f;
-			mParticles[particleIndex].mPosition = glm::vec3(0,0,-10);
-			mParticles[particleIndex].mVelocity = glm::vec3(0,10,0);
+
+			mParticles[particleIndex].mLife = 10.0f;
+			float xval = getRandom(-2.0f, 2.0f);
+			float yval = getRandom(0.5f, 2.0f);
+
+			std::cout << xval << " " << yval << std::endl;
+			mParticles[particleIndex].mPosition = glm::vec3(xval,yval,0.0f);
+			mParticles[particleIndex].mVelocity = glm::vec3(0,0.2f,0.0f);
 
 			//FIXME
-            mParticles[particleIndex].mSize = (rand()%1000)/2000.0f + 0.1f;
+            mParticles[particleIndex].mSize = 0.3f;
+
 		}
 
 
@@ -118,21 +128,21 @@ void ParticleSystem::draw(double delta)
 
 			if(p.mLife > 0.0f)
 			{
-				g_particule_position_size_data[4*particleCount+0] = p.mPosition.x;
-                g_particule_position_size_data[4*particleCount+1] = p.mPosition.y;
-                g_particule_position_size_data[4*particleCount+2] = p.mPosition.z;
+				mParticlePositionData[4*particleCount+0] = p.mPosition.x;
+                mParticlePositionData[4*particleCount+1] = p.mPosition.y;
+                mParticlePositionData[4*particleCount+2] = p.mPosition.z;
 
-                g_particule_position_size_data[4*particleCount+3] = p.mSize;
+                mParticlePositionData[4*particleCount+3] = p.mSize;
 			}
-
+			particleCount++;
 		}
 
 		glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
-        glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW); // Buffer orphaning, a common way to improve streaming perf. See above link for details.
-        glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * sizeof(GLfloat) * 4, g_particule_position_size_data);
-
+        glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * sizeof(GLfloat) * 4, mParticlePositionData);
 
 		glEnable(GL_BLEND);
+		glDisable(GL_CULL_FACE);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
@@ -197,7 +207,7 @@ void ParticleSystem::destroy()
 
 		mInitialized = false;
 
-		delete[] g_particule_position_size_data;
+		delete[] mParticlePositionData;
 	}
 }
 
@@ -209,20 +219,22 @@ void ParticleSystem::move(double delta)
 		// get ref to current particle
 		Particle& p = mParticles[i];
 
-		if(p.mLife < 0.0f)
+		if(p.mLife > 0.0f)
 		{
 			// pull it down!
-			p.mVelocity += glm::vec3(0.0f, -9.81f, 0.0f) * (float)delta;
-			p.mPosition += p.mVelocity;
-			p.mLife -= 0.01f; // reduce life
+			p.mVelocity += glm::vec3(0.0f, -9.81f, 0.0f) * (float)delta*0.01f;
+			p.mPosition += p.mVelocity*(float)delta;
+			p.mLife -= 1.0f*(float)delta; // reduce life
 
 			// reduce life? Has it passed some sort of boundary?
-			if(p.mPosition.y < 0)
+			if(p.mPosition.y < 0 || p.mLife <= 0)
 			{
 				p.mLife = 0.0f; // reduce life
+
 			}
 		}
 	}
+
 }
 
 /**
@@ -242,5 +254,5 @@ void ParticleSystem::reset(Particle& p)
 {
 	p.mLife = 5.0f; // takes 5 sec to melt
 	p.mPosition = glm::vec3(0.0f, 10.0f, 0.0f); // move it to the sky (lol)
-	p.mSpeed = glm::vec3(0.0f, 0.0f, 0.0f); // reset speed
+	p.mVelocity = glm::vec3(0.0f, 0.0f, 0.0f); // reset speed
 }
