@@ -117,31 +117,18 @@ void ParticleSystem::draw(double delta)
 
 		//limit the amount of particles created each frame
 		int newParticles = (int)(delta*10000.0);
-		if(newParticles > (int)(0.0001f*10000.0))
+		if(newParticles > (int)(0.001f*10000.0))
 		{
 			newParticles = (int)(0.001f*10000.0);
 		}
-
+		if(newParticles > 0)
+			std::cout << newParticles << std::endl;
 
 		for (int i = 0; i < newParticles; ++i)
 		{
 			int particleIndex = findLastParticle();
 
-			mParticles[particleIndex].mLife = 100.0f;
-			float xval = getRandom(-10.0f, 10.0f);
-			float yval = getRandom(8.0f, 10.0f);
-			float zval = getRandom(-10.0f, 10.0f);
-
-			// std::cout << xval << " " << yval << std::endl;
-			mParticles[particleIndex].mPosition = glm::vec3(xval,yval,zval);
-			xval = getRandom(-0.3f, 0.3f);
-			yval = getRandom(-0.3f, 0.3f);
-			zval = getRandom(-0.3f, 0.3f);
-
-			mParticles[particleIndex].mVelocity = glm::vec3(xval,yval,zval);
-
-			//FIXME
-            mParticles[particleIndex].mSize = 0.1f;
+			reset(particleIndex);
 		}
 
 		int particleCount = 0;
@@ -250,10 +237,11 @@ void ParticleSystem::move(double delta)
 			}
 
 			// reduce life? Has it passed some sort of boundary?
-			if(p.mPosition.y <= 0)
+			if(p.mPosition.y < -2)
 			{
+				p.mPosition.y = 0;
 				p.mLife -= delta; // reduce life
-				p.mVelocity = glm::vec3(0);
+				p.mVelocity = glm::vec3(0); // stop speed!
 			}
 
 			// apply the velocity
@@ -281,9 +269,20 @@ void ParticleSystem::reset(int index)
  */
 void ParticleSystem::reset(Particle& p)
 {
-	p.mLife = 5.0f; // takes 5 sec to melt
-	p.mPosition = glm::vec3(0.0f, 10.0f, 0.0f); // move it to the sky (lol)
-	p.mVelocity = glm::vec3(0.0f, 0.0f, 0.0f); // reset speed
+	p.mLife = 5.0f;
+	float xval = getRandom(-10.0f, 10.0f);
+	float yval = getRandom(2.0f, 10.0f);
+	float zval = getRandom(-10.0f, 10.0f);
+
+	// std::cout << xval << " " << yval << std::endl;
+	p.mPosition = glm::vec3(xval,yval,zval);
+	xval = getRandom(-0.3f, 0.3f);
+	yval = getRandom(-0.3f, 0.3f);
+	zval = getRandom(-0.3f, 0.3f);
+
+	p.mVelocity = glm::vec3(xval,yval,zval);
+
+    p.mSize = 0.3f;
 }
 
 void ParticleSystem::addField(Field *f)

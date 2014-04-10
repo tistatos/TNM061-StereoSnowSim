@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
 	gWorld = new World(gEngine);
 
 	Gravity* grav = new Gravity();
-	grav->init(-1.0f);
+	grav->init(-0.08f);
 	gParticles->addField(grav);
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
