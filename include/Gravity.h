@@ -12,7 +12,7 @@ class Gravity : public Field
 {
 	public:
 		Gravity(){};
-		void init(float speed = -9.81);
+		void init(float acceleration = -9.81);
 		glm::vec3 getVelocity(double delta);
 	private:
 		glm::vec3 velocity;

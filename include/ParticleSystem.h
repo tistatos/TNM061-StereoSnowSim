@@ -2,13 +2,14 @@
 #define __PARTICLE_SYSTEM_H__
 
 #include "sgct.h"
+#include "Field.h"
 
 struct Particle
 {
 	glm::vec3 mPosition;
 	glm::vec3 mVelocity;
 
-	float mSize = 1.0f;
+	float mSize;
 	float mLife;
 };
 
@@ -24,6 +25,7 @@ class ParticleSystem
 		void move(double delta);
 		void reset(int index);
 		void reset(Particle& p);
+		void addField(Field *f);
 	private:
 		int findLastParticle();
 
@@ -38,6 +40,8 @@ class ParticleSystem
 		GLuint mParticlePositionBuffer;
 		GLuint mParticleColorBuffer;
 		GLfloat* mParticlePositionData;
+		std::vector<Field*> fields;
+
 };
 
 
