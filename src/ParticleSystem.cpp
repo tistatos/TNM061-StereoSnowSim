@@ -2,6 +2,11 @@
 #include <iostream>
 #include "HelperFunctions.h"
 
+/**
+ * Constructor for particle field
+ *
+ * @param engine pointer to SGCT engine
+ */
 ParticleSystem::ParticleSystem(sgct::Engine* engine)
 {
 	mEngine = engine;
@@ -17,10 +22,13 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 
 }
 
+/**
+ * Initialize Particle system
+ *
+ */
 void ParticleSystem::initialize()
 {
-
-	initRandom();
+	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
 	{
 		-0.5f, -0.5f, 0.0f,
@@ -34,14 +42,16 @@ void ParticleSystem::initialize()
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
 
+    //Fix buffers
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);
-
+	//add billboard, its static since it wont change
 	glGenBuffers(1, &mBillBoardVB);
 	glBindBuffer(GL_ARRAY_BUFFER, mBillBoardVB);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexBufferData),
 				 vertexBufferData, GL_STATIC_DRAW);
 
+	//Prepare for position buffers
 	glGenBuffers(1, &mParticlePositionBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
 	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES*4*sizeof(GLfloat),
@@ -49,14 +59,13 @@ void ParticleSystem::initialize()
 
 	glBindVertexArray(0);
 
-	mInitialized = true;
-
+	//Create shader
 	sgct::ShaderManager::instance()->addShaderProgram("particle", "particle.vert", "particle.frag");
 
+	//Bind shader and get location of MVP matrix
 	sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
-
 	mMatrixLoc = sgct::ShaderManager::instance()->getShaderProgram( "particle").getUniformLocation( "VP" );
-
+	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
 	// Enable depth test
@@ -64,9 +73,14 @@ void ParticleSystem::initialize()
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
 
+    //Particle shader is now initialized
+	mInitialized = true;
 
 }
-
+/**
+ * Get the particle that isn't alive
+ * @return index of particle
+ */
 int ParticleSystem::findLastParticle()
 {
 	for (int i = mLastUsedParticle; i < MAX_PARTICLES; ++i)
@@ -91,32 +105,44 @@ int ParticleSystem::findLastParticle()
 	return 0;
 }
 
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param delta time delta
+ */
 void ParticleSystem::draw(double delta)
 {
 	if(mInitialized)
 	{
 
+		//limit the amount of particles created each frame
 		int newParticles = (int)(delta*10000.0);
-		if(newParticles > (int)(0.001f*10000.0))
+		if(newParticles > (int)(0.0001f*10000.0))
 		{
 			newParticles = (int)(0.001f*10000.0);
 		}
 
-
+		std::cout << newParticles << std::endl;
 		for (int i = 0; i < newParticles; ++i)
 		{
 			int particleIndex = findLastParticle();
 
-			mParticles[particleIndex].mLife = 10.0f;
-			float xval = getRandom(-2.0f, 2.0f);
-			float yval = getRandom(0.5f, 2.0f);
+			mParticles[particleIndex].mLife = 100.0f;
+			float xval = getRandom(-10.0f, 10.0f);
+			float yval = getRandom(8.0f, 10.0f);
+			float zval = getRandom(-10.0f, 10.0f);
 
-			std::cout << xval << " " << yval << std::endl;
-			mParticles[particleIndex].mPosition = glm::vec3(xval,yval,0.0f);
-			mParticles[particleIndex].mVelocity = glm::vec3(0,0.2f,0.0f);
+			// std::cout << xval << " " << yval << std::endl;
+			mParticles[particleIndex].mPosition = glm::vec3(xval,yval,zval);
+			xval = getRandom(-0.3f, 0.3f);
+			yval = getRandom(-0.3f, 0.3f);
+			zval = getRandom(-0.3f, 0.3f);
+
+			mParticles[particleIndex].mVelocity = glm::vec3(xval,yval,zval);
 
 			//FIXME
-            mParticles[particleIndex].mSize = 0.3f;
+            mParticles[particleIndex].mSize = 0.1f;
 
 		}
 
@@ -201,7 +227,6 @@ void ParticleSystem::destroy()
 	{
 		glDeleteBuffers(1, &mBillBoardVB);
 		glDeleteBuffers(1, &mParticlePositionBuffer);
-		glDeleteBuffers(1, &mParticleColorBuffer);
 
 		glDeleteVertexArrays(1, &mVertexArray);
 
@@ -227,7 +252,7 @@ void ParticleSystem::move(double delta)
 			p.mLife -= delta; // reduce life
 
 			// reduce life? Has it passed some sort of boundary?
-			if(p.mPosition.y < 0 || p.mLife <= 0)
+			if(p.mPosition.y < -2 || p.mLife <= 0)
 			{
 				p.mLife = 0.0f; // reduce life
 

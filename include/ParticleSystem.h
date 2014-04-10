@@ -8,11 +8,11 @@ struct Particle
 	glm::vec3 mPosition;
 	glm::vec3 mVelocity;
 
-	float mSize = 1.0f;
+	float mSize;
 	float mLife;
 };
 
-const int MAX_PARTICLES = 100;
+const int MAX_PARTICLES = 10000;
 
 class ParticleSystem
 {
@@ -28,16 +28,15 @@ class ParticleSystem
 		int findLastParticle();
 
 
-		bool mInitialized;
-		sgct::Engine* mEngine;
-		Particle mParticles[MAX_PARTICLES];
-		int mLastUsedParticle;
-		GLuint mVertexArray;
-		GLint mMatrixLoc;
-		GLuint mBillBoardVB;
-		GLuint mParticlePositionBuffer;
-		GLuint mParticleColorBuffer;
-		GLfloat* mParticlePositionData;
+		bool mInitialized; /// Is the particle system initalized?
+		sgct::Engine* mEngine; /// Pointer to SGCT engine
+		Particle mParticles[MAX_PARTICLES]; /// array of particles
+		int mLastUsedParticle; /// used for quicker update in particle system
+		GLuint mVertexArray; /// pointer for vertex array on GPU
+		GLint mMatrixLoc; /// matrix loc in shader
+		GLuint mBillBoardVB; /// Vertex buffer for billboard
+		GLuint mParticlePositionBuffer; /// Buffer for particle's position data
+		GLfloat* mParticlePositionData; /// temp storage to move data from particles to buffer
 };
 
 
