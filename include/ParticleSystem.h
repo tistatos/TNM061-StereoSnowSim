@@ -3,16 +3,9 @@
 
 #include <vector>
 #include "sgct.h"
-#include "Field.h"
+#include "Particle.h"
 
-struct Particle
-{
-	glm::vec3 mPosition;
-	glm::vec3 mVelocity;
-
-	float mSize;
-	float mLife;
-};
+class Field;
 
 const int MAX_PARTICLES = 20000;
 const float PARTICLE_SIZE = 0.1f;

@@ -11,7 +11,7 @@ class Gravity : public Field
 	public:
 		Gravity(){};
 		void init(float acc = -9.81);
-		glm::vec3 getVelocity(double delta, glm::vec3 velocity);
+		glm::vec3 getVelocity(double delta, Particle& p);
 	private:
 		glm::vec3 acceleration;
 };

@@ -1,6 +1,7 @@
 #include "ParticleSystem.h"
 #include <iostream>
 #include "HelperFunctions.h"
+#include "Field.h"
 
 /**
  * Constructor for particle field
@@ -233,7 +234,7 @@ void ParticleSystem::move(double delta)
 			// loop through the fields, and sum the fields' velocity
 			for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
 			{
-				tempVelo += (*f)->getVelocity(delta, p.mVelocity);
+				tempVelo += (*f)->getVelocity(delta, p);
 			}
 
 			p.mVelocity = tempVelo;

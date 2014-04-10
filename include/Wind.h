@@ -11,7 +11,7 @@ class Wind : public Field
 	public:
 		Wind(){};
 		void init(float x = 0.0f, float y = 0.0f, float z = 0.0f);
-		glm::vec3 getVelocity(double delta, glm::vec3 velocity);
+		glm::vec3 getVelocity(double delta, Particle& p);
 		glm::vec3 getAcceleration();
 	private:
 		glm::vec3 acceleration;

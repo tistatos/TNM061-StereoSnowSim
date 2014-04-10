@@ -3,6 +3,7 @@
 #include "ParticleSystem.h"
 #include "World.h"
 #include "HelperFunctions.h"
+#include "Field.h"
 #include "Gravity.h"
 #include "Wind.h"
 #include <iostream>

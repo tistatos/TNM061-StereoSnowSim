@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include "sgct.h"
+#include "Particle.h"
 
 using namespace std;
 
@@ -14,7 +15,7 @@ class Field
 {
 	public:
 		Field(){};
-		virtual glm::vec3 getVelocity(double delta, glm::vec3 velocity) = 0;
+		virtual glm::vec3 getVelocity(double delta, Particle& p) = 0;
 };
 
 #endif

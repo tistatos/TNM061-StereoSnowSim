@@ -14,7 +14,7 @@ void Wind::init(float x, float y, float z)
  * @param  delta 		the time delta function, such as gEngines getDt();
  * @return glm::vec3 	the speed!
  */
-glm::vec3 Wind::getVelocity(double delta, glm::vec3 velocity)
+glm::vec3 Wind::getVelocity(double delta, Particle& p)
 {
 	return (acceleration * (float)delta);
 }
