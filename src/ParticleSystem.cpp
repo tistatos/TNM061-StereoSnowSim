@@ -19,7 +19,6 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 
 void ParticleSystem::initialize()
 {
-
 	initRandom();
 	static const GLfloat vertexBufferData[] =
 	{
@@ -221,16 +220,19 @@ void ParticleSystem::move(double delta)
 
 		if(p.mLife > 0.0f)
 		{
-			// pull it down!
-			p.mVelocity += glm::vec3(0.0f, -9.81f, 0.0f) * (float)delta*0.01f;
+			// loop through the fields, and sum the fields' velocity
+			for(std::vector<Field>::iterator f = fields.begin(); f != fields.end(); ++f) {
+				p.mVelocity += *f.getVelocity(delta);
+			}
+
+			// apply the velocity
 			p.mPosition += p.mVelocity*(float)delta;
 			p.mLife -= delta; // reduce life
 
 			// reduce life? Has it passed some sort of boundary?
 			if(p.mPosition.y < 0 || p.mLife <= 0)
 			{
-				p.mLife = 0.0f; // reduce life
-
+				reset(p); // reset particle
 			}
 		}
 	}

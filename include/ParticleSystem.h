@@ -1,6 +1,7 @@
 #ifndef __PARTICLE_SYSTEM_H__
 #define __PARTICLE_SYSTEM_H__
 
+#include <vector>
 #include "sgct.h"
 
 struct Particle
@@ -33,10 +34,10 @@ class ParticleSystem
 		Particle mParticles[MAX_PARTICLES];
 		int mLastUsedParticle;
 		GLuint mVertexArray;
-		GLint mMatrixLoc;
 		GLuint mBillBoardVB;
 		GLuint mParticlePositionBuffer;
 		GLuint mParticleColorBuffer;
+		GLint mMatrixLoc;
 		GLfloat* mParticlePositionData;
 };
 

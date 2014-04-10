@@ -3,6 +3,7 @@
 #include "ParticleSystem.h"
 #include "World.h"
 #include "HelperFunctions.h"
+#include "Field.h"
 #include <iostream>
 
 sgct::Engine* gEngine;

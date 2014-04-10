@@ -11,7 +11,7 @@ PROJECT(${APP_NAME})
 
 # to add more .cpp files, simply add the after main.cpp
 add_executable(${APP_NAME}
-	main.cpp src/ParticleSystem.cpp include/ParticleSystem.h src/HelperFunctions.cpp include/HelperFunctions.h src/World.cpp include/World.h src/Field.cpp include/Field.h src/Gravity.cpp include/Gravity.h) # for example "main.cpp coolt.cpp kiss.cpp)"
+	main.cpp src/ParticleSystem.cpp include/ParticleSystem.h src/HelperFunctions.cpp include/HelperFunctions.h src/World.cpp include/World.h include/Field.h src/Gravity.cpp include/Gravity.h) # for example "main.cpp coolt.cpp kiss.cpp)"
 
 option(SGCT_PLACE_TARGETS_IN_SOURCE_TREE "Place targets in source tree" OFF)
 if( SGCT_PLACE_TARGETS_IN_SOURCE_TREE )
