@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 		delete gEngine;
 		return EXIT_FAILURE;
 	}
-
+	sgct::SGCTSettings::instance()->setSwapInterval(1);
 	gEngine->render();
 	gParticles->destroy();
 	delete gEngine;
@@ -44,6 +44,8 @@ int main(int argc, char *argv[])
 
 void initialize()
 {
+	initRandom();
+
 	gParticles->initialize();
 	gWorld->initializeWorld();
 }

@@ -6,7 +6,7 @@ World::World(sgct::Engine* engine)
 	mEngine = engine;
 	mSphere = nullptr;
 	mMatrixLocation = -1;
-	mRadius = 9;
+	mRadius = 25;
 	mSegments = 36;
 	mName = "";
 	mTextureFile = "";
