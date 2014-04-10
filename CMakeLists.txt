@@ -152,7 +152,7 @@ elseif( APPLE  )
 	endif()
 else()
 	add_definitions(-D__LINUX__)
-	list( APPEND CMAKE_CXX_FLAGS "-std=c++0x ${CMAKE_CXX_FLAGS} -g -ftest-coverage -fprofile-arcs")
+	list( APPEND CMAKE_CXX_FLAGS "-std=c++0x")
 
 endif()
 
