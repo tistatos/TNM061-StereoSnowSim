@@ -12,7 +12,6 @@ sgct::Engine* gEngine;
 ParticleSystem* gParticles;
 World* gWorld;
 
-using namespace std;
 
 void initialize();
 void draw();

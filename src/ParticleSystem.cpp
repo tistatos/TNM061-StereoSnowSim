@@ -20,6 +20,7 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mBillBoardVB = 0;
 	mParticlePositionBuffer = 0;
 	mParticlePositionData = new GLfloat[MAX_PARTICLES * 4];
+
 }
 
 /**
@@ -28,6 +29,13 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
  */
 void ParticleSystem::initialize()
 {
+	size_t handle;
+	//add texture for snowflake
+	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
+	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
+	sgct::TextureManager::instance()->loadTexure(handle, "snow", "snow.png", true);
+
+
 	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
 	{
@@ -65,7 +73,7 @@ void ParticleSystem::initialize()
 	//Bind shader and get location of MVP matrix
 	sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
 
-	mMatrixLoc = sgct::ShaderManager::instance()->getShaderProgram("particle").getUniformLocation( "VP" );
+	mMatrixLoc = sgct::ShaderManager::instance()->getShaderProgram( "particle").getUniformLocation( "VP" );
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
@@ -86,6 +94,7 @@ int ParticleSystem::findLastParticle()
 {
 	for (int i = mLastUsedParticle; i < MAX_PARTICLES; ++i)
 	{
+
 		if(mParticles[i].mLife <= 0)
 		{
 			mLastUsedParticle = i;
@@ -122,14 +131,14 @@ void ParticleSystem::draw(double delta)
 			newParticles = (int)(0.001f*10000.0);
 		}
 
-		//std::cout << "Creating " << newParticles << " new particles" << std::endl;
-
 		for (int i = 0; i < newParticles; ++i)
 		{
 			int particleIndex = findLastParticle();
 
 			reset(particleIndex);
+
 		}
+
 
 		int particleCount = 0;
 		for(int i=0; i< MAX_PARTICLES; i++)
@@ -155,7 +164,7 @@ void ParticleSystem::draw(double delta)
 		glDisable(GL_CULL_FACE);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		sgct::ShaderManager::instance()->bindShaderProgram("particle");
+		sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
 
 		glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix();
 		glUniformMatrix4fv(mMatrixLoc, 1, GL_FALSE, &MVP[0][0]);
@@ -201,7 +210,7 @@ void ParticleSystem::draw(double delta)
 		glBindVertexArray(0);
 
 		sgct::ShaderManager::instance()->unBindShaderProgram();
-		// std::cout << "Drawing all them pritty particles\n";
+		//std::cout << "Drawing all them pritty particles\n";
 	}
 }
 
@@ -284,7 +293,7 @@ void ParticleSystem::reset(Particle& p)
 
 	p.mVelocity = glm::vec3(xval,yval,zval);
 
-    p.mSize = 0.3f;
+    p.mSize = 0.1f;
 }
 
 void ParticleSystem::addField(Field *f)
