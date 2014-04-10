@@ -14,7 +14,6 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mBillBoardVB = 0;
 	mParticlePositionBuffer = 0;
 	mParticlePositionData = new GLfloat[MAX_PARTICLES * 4];
-
 }
 
 void ParticleSystem::initialize()
@@ -110,13 +109,12 @@ void ParticleSystem::draw(double delta)
 			float xval = getRandom(-2.0f, 2.0f);
 			float yval = getRandom(0.5f, 2.0f);
 
-			std::cout << xval << " " << yval << std::endl;
+			// std::cout << xval << " " << yval << std::endl;
 			mParticles[particleIndex].mPosition = glm::vec3(xval,yval,0.0f);
-			mParticles[particleIndex].mVelocity = glm::vec3(0,0.2f,0.0f);
+			mParticles[particleIndex].mVelocity = glm::vec3(0,0.0f,0.0f);
 
 			//FIXME
             mParticles[particleIndex].mSize = 0.3f;
-
 		}
 
 
@@ -221,8 +219,9 @@ void ParticleSystem::move(double delta)
 		if(p.mLife > 0.0f)
 		{
 			// loop through the fields, and sum the fields' velocity
-			for(std::vector<Field>::iterator f = fields.begin(); f != fields.end(); ++f) {
-				p.mVelocity += *f.getVelocity(delta);
+			for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
+			{
+				p.mVelocity += (*f)->getVelocity(delta);
 			}
 
 			// apply the velocity
@@ -256,4 +255,9 @@ void ParticleSystem::reset(Particle& p)
 	p.mLife = 5.0f; // takes 5 sec to melt
 	p.mPosition = glm::vec3(0.0f, 10.0f, 0.0f); // move it to the sky (lol)
 	p.mVelocity = glm::vec3(0.0f, 0.0f, 0.0f); // reset speed
+}
+
+void ParticleSystem::addField(Field *f)
+{
+	fields.push_back(f);
 }

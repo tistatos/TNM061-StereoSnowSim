@@ -10,7 +10,7 @@ void Gravity::init(float acc)
 }
 
 /**
- * returns the speed effect from the field
+ * returns the speed effect from the field (velocity = v0 + a*t)
  * @param  delta 		the time delta function, such as gEngines getDt();
  * @return glm::vec3 	the speed!
  */
