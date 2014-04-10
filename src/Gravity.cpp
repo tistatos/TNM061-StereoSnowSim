@@ -14,7 +14,7 @@ void Gravity::init(float acc)
  * @param  delta 		the time delta function, such as gEngines getDt();
  * @return glm::vec3 	the speed!
  */
-glm::vec3 Gravity::getVelocity(double delta)
+glm::vec3 Gravity::getVelocity(double delta, glm::vec3 velocity)
 {
-	return (acceleration * (float)delta);
+	return velocity + (acceleration * (float)delta);
 }

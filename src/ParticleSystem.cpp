@@ -19,7 +19,6 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mBillBoardVB = 0;
 	mParticlePositionBuffer = 0;
 	mParticlePositionData = new GLfloat[MAX_PARTICLES * 4];
-
 }
 
 /**
@@ -122,8 +121,7 @@ void ParticleSystem::draw(double delta)
 			newParticles = (int)(0.001f*10000.0);
 		}
 
-		if(newParticles > 0)
-			std::cout << "Createing " << newParticles << " new particles" << std::endl;
+		//std::cout << "Creating " << newParticles << " new particles" << std::endl;
 
 		for (int i = 0; i < newParticles; ++i)
 		{
@@ -202,7 +200,7 @@ void ParticleSystem::draw(double delta)
 		glBindVertexArray(0);
 
 		sgct::ShaderManager::instance()->unBindShaderProgram();
-		//std::cout << "Drawing all them pritty particles\n";
+		// std::cout << "Drawing all them pritty particles\n";
 	}
 }
 
@@ -231,17 +229,20 @@ void ParticleSystem::move(double delta)
 
 		if(p.mLife > 0.0f)
 		{
+			glm::vec3 tempVelo;
 			// loop through the fields, and sum the fields' velocity
 			for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
 			{
-				p.mVelocity += (*f)->getVelocity(delta);
+				tempVelo += (*f)->getVelocity(delta, p.mVelocity);
 			}
+
+			p.mVelocity = tempVelo;
 
 			// reduce life? Has it passed some sort of boundary?
 			if(p.mPosition.y < -2)
 			{
 				p.mLife -= delta; // reduce life
-				p.mVelocity = glm::vec3(0); // stop speed!
+				p.mVelocity.y = 0; // stop vertical speed!
 			}
 
 			// apply the velocity

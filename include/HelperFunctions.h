@@ -1,5 +1,5 @@
 #ifndef __HELPERFUNCTIONS_H__
-#define __HELPETFUNCTIONS_H__
+#define __HELPERFUNCTIONS_H__
 
 #include "sgct.h"
 #include <iostream>
