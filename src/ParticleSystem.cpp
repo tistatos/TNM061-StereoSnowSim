@@ -31,10 +31,10 @@ void ParticleSystem::initialize()
 	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
 	{
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f,
-		0.5f, 0.5f, 0.0f
+		-1 * PARTICLE_SIZE, -1 * PARTICLE_SIZE, 0.0f,
+		PARTICLE_SIZE, -1 * PARTICLE_SIZE, 0.0f,
+		-1 * PARTICLE_SIZE, PARTICLE_SIZE, 0.0f,
+		PARTICLE_SIZE, PARTICLE_SIZE, 0.0f
 	};
 
 	// Enable depth test
@@ -121,8 +121,9 @@ void ParticleSystem::draw(double delta)
 		{
 			newParticles = (int)(0.001f*10000.0);
 		}
+
 		if(newParticles > 0)
-			std::cout << newParticles << std::endl;
+			std::cout << "Createing " << newParticles << " new particles" << std::endl;
 
 		for (int i = 0; i < newParticles; ++i)
 		{
@@ -155,7 +156,7 @@ void ParticleSystem::draw(double delta)
 		glDisable(GL_CULL_FACE);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
+		sgct::ShaderManager::instance()->bindShaderProgram("particle");
 
 		glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix();
 		glUniformMatrix4fv(mMatrixLoc, 1, GL_FALSE, &MVP[0][0]);
@@ -239,7 +240,6 @@ void ParticleSystem::move(double delta)
 			// reduce life? Has it passed some sort of boundary?
 			if(p.mPosition.y < -2)
 			{
-				p.mPosition.y = 0;
 				p.mLife -= delta; // reduce life
 				p.mVelocity = glm::vec3(0); // stop speed!
 			}
