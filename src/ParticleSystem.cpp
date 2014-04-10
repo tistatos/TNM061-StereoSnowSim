@@ -64,6 +64,7 @@ void ParticleSystem::initialize()
 
 	//Bind shader and get location of MVP matrix
 	sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
+
 	mMatrixLoc = sgct::ShaderManager::instance()->getShaderProgram( "particle").getUniformLocation( "VP" );
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
@@ -106,9 +107,8 @@ int ParticleSystem::findLastParticle()
 }
 
 /**
- * @brief [brief description]
- * @details [long description]
- *
+ * Draw Particle
+ * 
  * @param delta time delta
  */
 void ParticleSystem::draw(double delta)
@@ -123,7 +123,7 @@ void ParticleSystem::draw(double delta)
 			newParticles = (int)(0.001f*10000.0);
 		}
 
-		std::cout << newParticles << std::endl;
+
 		for (int i = 0; i < newParticles; ++i)
 		{
 			int particleIndex = findLastParticle();
@@ -279,4 +279,9 @@ void ParticleSystem::reset(Particle& p)
 	p.mLife = 5.0f; // takes 5 sec to melt
 	p.mPosition = glm::vec3(0.0f, 10.0f, 0.0f); // move it to the sky (lol)
 	p.mVelocity = glm::vec3(0.0f, 0.0f, 0.0f); // reset speed
+}
+
+void ParticleSystem::addField(Field *f)
+{
+	fields.push_back(f);
 }

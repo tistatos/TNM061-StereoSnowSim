@@ -3,6 +3,7 @@
 #include "ParticleSystem.h"
 #include "World.h"
 #include "HelperFunctions.h"
+#include "Gravity.h"
 #include <iostream>
 
 sgct::Engine* gEngine;
@@ -23,6 +24,10 @@ int main(int argc, char *argv[])
 
 	gParticles = new ParticleSystem(gEngine);
 	gWorld = new World(gEngine);
+
+	Gravity* grav = new Gravity();
+	grav->init(-1.0f);
+	gParticles->addField(grav);
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{

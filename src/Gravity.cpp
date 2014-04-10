@@ -1,11 +1,20 @@
 #include "Gravity.h"
 
-void Gravity::init(float speed)
+/**
+ * initialize the gravity field, sets acc to -9.81 by default
+ * @param acc
+ */
+void Gravity::init(float acc)
 {
-	velocity = glm::vec3(0.0f, speed, 0.0f);
+	acceleration = glm::vec3(0.0f, acc, 0.0f);
 }
 
+/**
+ * returns the speed effect from the field (velocity = v0 + a*t)
+ * @param  delta 		the time delta function, such as gEngines getDt();
+ * @return glm::vec3 	the speed!
+ */
 glm::vec3 Gravity::getVelocity(double delta)
 {
-	return (velocity * (float)delta);
+	return (acceleration * (float)delta);
 }
