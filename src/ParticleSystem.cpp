@@ -147,9 +147,9 @@ void ParticleSystem::draw(double delta)
 
 			if(p.mLife > 0.0f)
 			{
-				mParticlePositionData[4*particleCount+0] = p.mPosition.x;
-                mParticlePositionData[4*particleCount+1] = p.mPosition.y;
-                mParticlePositionData[4*particleCount+2] = p.mPosition.z;
+				mParticlePositionData[4*particleCount+0] = p.mMatrix[3][0]; //x;
+                mParticlePositionData[4*particleCount+1] = p.mMatrix[3][1]; //y;
+                mParticlePositionData[4*particleCount+2] = p.mMatrix[3][2]; //z;
 
                 mParticlePositionData[4*particleCount+3] = p.mSize;
 			}
@@ -249,14 +249,15 @@ void ParticleSystem::move(double delta)
 			p.mVelocity = tempVelo;
 
 			// reduce life? Has it passed some sort of boundary?
-			if(p.mPosition.y < -2)
+			if(p.mMatrix[3][1] < -2)
 			{
 				p.mLife -= delta; // reduce life
 				p.mVelocity.y = 0; // stop vertical speed!
 			}
 
 			// apply the velocity
-			p.mPosition += p.mVelocity*(float)delta;
+			p.mMatrix = glm::translate(p.mMatrix, p.mVelocity*(float)delta);
+			 
 		}
 		else
 		{
@@ -286,7 +287,10 @@ void ParticleSystem::reset(Particle& p)
 	float zval = getRandom(-10.0f, 10.0f);
 
 	// std::cout << xval << " " << yval << std::endl;
-	p.mPosition = glm::vec3(xval,yval,zval);
+	
+ 	p.mMatrix[3][0] = xval; //x;
+	p.mMatrix[3][1] = yval; //x;
+	p.mMatrix[3][2] = zval; //x;
 	xval = getRandom(-0.3f, 0.3f);
 	yval = getRandom(-0.3f, 0.3f);
 	zval = getRandom(-0.3f, 0.3f);

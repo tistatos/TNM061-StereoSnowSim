@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 	gWorld = new World(gEngine);
 
 	Gravity* grav = new Gravity();
-	grav->init(-0.08f);
+	grav->init(-0.1f);
 	gParticles->addField(grav);
 
 	Wind* wind = new Wind();
