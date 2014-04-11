@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 	gParticles->addField(grav);
 
 	Wind* wind = new Wind();
-	wind->init(getRandom(-1.0, 1.0), 0.0f, getRandom(-1.0, 1.0));
+	wind->init(getRandom(-0.5, 0.5), 0.0f, getRandom(-0.5, 0.5));
 	gParticles->addField(wind);
 
 	cout << "Wind direction: " << wind->getAcceleration() << endl;
@@ -46,8 +46,10 @@ int main(int argc, char *argv[])
 	sgct::SGCTSettings::instance()->setSwapInterval(1);
 	gEngine->render();
 	gParticles->destroy();
+
 	delete gEngine;
 	delete gParticles;
+
 	exit(EXIT_SUCCESS);
 }
 

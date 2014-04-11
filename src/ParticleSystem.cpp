@@ -29,20 +29,13 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
  */
 void ParticleSystem::initialize()
 {
-	size_t handle;
-	//add texture for snowflake
-	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
-	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
-	sgct::TextureManager::instance()->loadTexure(handle, "snow", "snow.png", true);
-
-
 	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
 	{
-		-1 * PARTICLE_SIZE, -1 * PARTICLE_SIZE, 0.0f,
-		PARTICLE_SIZE, -1 * PARTICLE_SIZE, 0.0f,
-		-1 * PARTICLE_SIZE, PARTICLE_SIZE, 0.0f,
-		PARTICLE_SIZE, PARTICLE_SIZE, 0.0f
+		-1.0f , -1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f
 	};
 
 	// Enable depth test
@@ -67,6 +60,15 @@ void ParticleSystem::initialize()
 
 	glBindVertexArray(0);
 
+
+	size_t handle;
+
+	//add texture for snowflake
+	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
+	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
+	sgct::TextureManager::instance()->loadTexure(handle, "snow", "snow.png", true);
+
+
 	//Create shader
 	sgct::ShaderManager::instance()->addShaderProgram("particle", "particle.vert", "particle.frag");
 
@@ -74,6 +76,7 @@ void ParticleSystem::initialize()
 	sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
 
 	mMatrixLoc = sgct::ShaderManager::instance()->getShaderProgram( "particle").getUniformLocation( "VP" );
+
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
@@ -165,6 +168,9 @@ void ParticleSystem::draw(double delta)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByName("snow"));
 
 		glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix();
 		glUniformMatrix4fv(mMatrixLoc, 1, GL_FALSE, &MVP[0][0]);
@@ -293,7 +299,7 @@ void ParticleSystem::reset(Particle& p)
 
 	p.mVelocity = glm::vec3(xval,yval,zval);
 
-    p.mSize = 0.1f;
+    p.mSize = 0.5f;
 }
 
 void ParticleSystem::addField(Field *f)
