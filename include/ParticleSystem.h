@@ -8,7 +8,7 @@
 class Field;
 
 const int MAX_PARTICLES = 20000;
-const float PARTICLE_SIZE = 0.1f;
+const float PARTICLE_SIZE = 0.5f;
 
 class ParticleSystem
 {

@@ -20,7 +20,6 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mBillBoardVB = 0;
 	mParticlePositionBuffer = 0;
 	mParticlePositionData = new GLfloat[MAX_PARTICLES * 4];
-
 }
 
 /**
@@ -240,7 +239,7 @@ void ParticleSystem::move(double delta)
 		if(p.mLife > 0.0f)
 		{
 			glm::vec3 tempVelo;
-			// loop through the fields, and sum the fields' velocity
+			// loop through the fields, and sum the fields' velocities
 			for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
 			{
 				tempVelo += (*f)->getVelocity(delta, p);

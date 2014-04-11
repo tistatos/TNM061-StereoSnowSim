@@ -6,6 +6,7 @@
 #include "Field.h"
 #include "Gravity.h"
 #include "Wind.h"
+#include "Vortex.h"
 #include <iostream>
 
 sgct::Engine* gEngine;
@@ -29,12 +30,16 @@ int main(int argc, char *argv[])
 	gWorld = new World(gEngine);
 
 	Gravity* grav = new Gravity();
-	grav->init(-0.08f);
+	grav->init(-0.5f);
 	gParticles->addField(grav);
 
 	Wind* wind = new Wind();
-	wind->init(getRandom(-1.0, 1.0), 0.0f, getRandom(-1.0, 1.0));
+	wind->init(getRandom(-0.5, 0.5), 0.0f, getRandom(-0.5, 0.5));
 	gParticles->addField(wind);
+
+	Vortex* turbine = new Vortex();
+	turbine->init(0.0f, 0.0f, 2.0f);
+	gParticles->addField(turbine);
 
 	cout << "Wind direction: " << wind->getAcceleration() << endl;
 
