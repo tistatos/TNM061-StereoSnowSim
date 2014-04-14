@@ -29,14 +29,14 @@ int main(int argc, char *argv[])
 	gWorld = new World(gEngine);
 
 	Gravity* grav = new Gravity();
-	grav->init(-0.1f);
+	grav->init(-0.08f);
 	gParticles->addField(grav);
 
 	Wind* wind = new Wind();
 	wind->init(getRandom(-0.5, 0.5), 0.0f, getRandom(-0.5, 0.5));
 	gParticles->addField(wind);
 
-	cout << "Wind direction: " << wind->getAcceleration() << endl;
+	//cout << "Wind direction: " << wind->getAcceleration() << endl;
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{

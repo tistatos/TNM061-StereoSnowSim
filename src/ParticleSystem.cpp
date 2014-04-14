@@ -295,8 +295,8 @@ void ParticleSystem::reset(Particle& p)
 	// std::cout << xval << " " << yval << std::endl;
 	
  	p.mMatrix[3][0] = xval; //x;
-	p.mMatrix[3][1] = yval; //x;
-	p.mMatrix[3][2] = zval; //x;
+	p.mMatrix[3][1] = yval; //y;
+	p.mMatrix[3][2] = zval; //z;
 	xval = getRandom(-0.3f, 0.3f);
 	yval = getRandom(-0.3f, 0.3f);
 	zval = getRandom(-0.3f, 0.3f);
