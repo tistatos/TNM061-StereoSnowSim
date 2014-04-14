@@ -4,6 +4,8 @@
 #include <iostream>
 #include "sgct.h"
 #include "Field.h"
+#include "HelperFunctions.h"
+#include "glm/gtx/vector_angle.hpp"
 
 class Vortex : public Field
 {
@@ -15,7 +17,7 @@ class Vortex : public Field
 		void setRadius(float r);
 		void setForce(float x, float y, float z);
 	private:
-		float calcParticleDistance(const Particle& p); /// calc distance from p to center of cylinder
+		float calcDistance(const Particle& p); /// calc distance from p to center of cylinder
 
 		glm::vec3 mPosition; /// center of cylinder
 		glm::vec3 mForce; /// force at center of cylinder

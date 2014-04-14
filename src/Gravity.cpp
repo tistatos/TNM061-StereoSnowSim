@@ -16,5 +16,5 @@ void Gravity::init(float acc)
  */
 glm::vec3 Gravity::getVelocity(double delta, Particle& p)
 {
-	return p.mVelocity + (acceleration * (float)delta);
+	return p.mVelocity + (acceleration * DAMPENING * (float)delta);
 }

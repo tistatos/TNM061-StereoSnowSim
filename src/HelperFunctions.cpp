@@ -11,6 +11,14 @@ std::ostream &operator<< (std::ostream &out, const glm::vec3 &vec) {
     return out;
 }
 
+std::ostream &operator<< (std::ostream &out, const glm::vec2 &vec) {
+    out << "{"
+        << vec.x << " " << vec.y
+        << "}";
+
+    return out;
+}
+
 void initRandom()
 {
 	srand (time(NULL));

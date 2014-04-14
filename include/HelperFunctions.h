@@ -5,6 +5,7 @@
 #include <iostream>
 
 std::ostream &operator<< (std::ostream &out, const glm::vec3 &vec);
+std::ostream &operator<< (std::ostream &out, const glm::vec2 &vec);
 
 void initRandom();
 
