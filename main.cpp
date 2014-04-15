@@ -42,7 +42,9 @@ int main(int argc, char *argv[])
 	turbine->setForce(-10.0f, 0.0f, -1.0f);
 	gParticles->addField(turbine);
 
-	cout << "Wind direction: " << wind->getAcceleration() << endl;
+	cout << "---- Fields active on gParticles ----" << endl;
+	gParticles->printFields();
+	cout << "---------------" << endl << endl;
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{

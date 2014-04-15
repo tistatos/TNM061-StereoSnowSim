@@ -57,3 +57,8 @@ float Vortex::calcDistance(const Particle& p)
 
 	return sqrt(pow(deltax, 2) + pow(deltaz, 2));
 }
+
+void Vortex::printInfo()
+{
+	std::cout << "Vortex with force " << mForce << " at " << mPosition << " with radius " << mRadius << std::endl;
+}

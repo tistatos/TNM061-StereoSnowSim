@@ -16,6 +16,7 @@ class Vortex : public Field
 		void setPosition(float x, float z);
 		void setRadius(float r);
 		void setForce(float x, float y, float z);
+		void printInfo();
 	private:
 		float calcDistance(const Particle& p); /// calc distance from p to center of cylinder
 

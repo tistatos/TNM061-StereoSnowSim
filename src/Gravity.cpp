@@ -18,3 +18,8 @@ glm::vec3 Gravity::getVelocity(double delta, Particle& p)
 {
 	return p.mVelocity + (acceleration * DAMPENING * (float)delta);
 }
+
+void Gravity::printInfo()
+{
+	std::cout << "Gravity with force: " << acceleration * DAMPENING << std::endl;
+}

@@ -19,6 +19,7 @@ class ParticleSystem
 		void destroy();
 		void move(double delta);
 		void addField(Field *f);
+		void printFields();
 	private:
 		int findLastParticle();
 		void reset(int index);

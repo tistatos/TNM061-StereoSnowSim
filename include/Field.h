@@ -16,6 +16,7 @@ class Field
 	public:
 		Field(){};
 		virtual glm::vec3 getVelocity(double delta, Particle& p) = 0;
+		virtual void printInfo() = 0;
 };
 
 #endif

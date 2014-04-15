@@ -262,7 +262,7 @@ void ParticleSystem::move(double delta)
 
 			// apply the velocity
 			p.mMatrix = glm::translate(p.mMatrix, p.mVelocity*(float)delta);
-			 
+
 		}
 		else
 		{
@@ -292,7 +292,7 @@ void ParticleSystem::reset(Particle& p)
 	float zval = getRandom(-10.0f, 10.0f);
 
 	// std::cout << xval << " " << yval << std::endl;
-	
+
  	p.mMatrix[3][0] = xval; //x;
 	p.mMatrix[3][1] = yval; //y;
 	p.mMatrix[3][2] = zval; //z;
@@ -308,4 +308,13 @@ void ParticleSystem::reset(Particle& p)
 void ParticleSystem::addField(Field *f)
 {
 	fields.push_back(f);
+}
+
+void ParticleSystem::printFields()
+{
+	// loop through the fields, and print the fields' info
+	for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
+	{
+		(*f)->printInfo();
+	}
 }
