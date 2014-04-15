@@ -5,19 +5,21 @@ glm::vec3 Vortex::getVelocity(double delta, Particle& p)
 	float nDistance = calcDistance(p) / mRadius;
 	if(nDistance < 1)
 	{
+		// get position as vector
+		glm::vec3 particlePosition = glm::vec3(p.mMatrix[3].x, p.mMatrix[3].y, p.mMatrix[3].z);
 		// normalize vectors
-		glm::vec3 nPosition = (p.mPosition - mPosition) / mRadius;
+		glm::vec3 nPosition = (particlePosition - mPosition) / mRadius;
 		// calc angle between vectors
 		// glm::vec3 nAnglevec = glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), nPosition);
 		float angle = glm::angle(glm::vec2(1.0f, 0.0f),
-								 glm::vec2(p.mPosition.x, p.mPosition.z)/mRadius);
+								 glm::vec2(particlePosition.x, particlePosition.z)/mRadius);
 		// rotate vector
 		glm::vec2 direction = glm::rotate(glm::vec2(mForce.x, mForce.z), angle);
 		// create new vector from what we got
 		glm::vec3 nAnglevec = glm::vec3(direction.x, mForce.y, direction.y);
 
 		// std::cout << "Normalized distance to center: " << nDistance << std::endl;
-		// std::cout << "Position is " << glm::vec2(p.mPosition.x, p.mPosition.z)/mRadius << std::endl;
+		// std::cout << "Position is " << glm::vec2(particlePosition.x, particlePosition.z)/mRadius << std::endl;
 		// std::cout << "Angle " << angle << " results in " << direction << std::endl << std::endl;
 		return nAnglevec * (1 - nDistance) * (float)delta;
 	}
@@ -50,8 +52,8 @@ void Vortex::setForce(float x, float y, float z)
 float Vortex::calcDistance(const Particle& p)
 {
 	float deltax, deltaz;
-	deltax = mPosition.x - p.mPosition.x;
-	deltaz = mPosition.z - p.mPosition.z;
+	deltax = mPosition.x - p.mMatrix[3].x;
+	deltaz = mPosition.z - p.mMatrix[3].z;
 
 	return sqrt(pow(deltax, 2) + pow(deltaz, 2));
 }

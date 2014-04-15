@@ -3,7 +3,7 @@
 
 struct Particle
 {
-	glm::vec3 mPosition;
+	glm::mat4 mMatrix;
 	glm::vec3 mVelocity;
 
 	float mSize;

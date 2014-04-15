@@ -35,7 +35,7 @@ int main(int argc, char *argv[])
 
 	Wind* wind = new Wind();
 	wind->init(getRandom(-0.5, 0.5), 0.0f, getRandom(-0.5, 0.5));
-	// gParticles->addField(wind);
+	gParticles->addField(wind);
 
 	Vortex* turbine = new Vortex();
 	turbine->init(0.0f, -4.0f, 2.0f);
@@ -52,8 +52,10 @@ int main(int argc, char *argv[])
 	sgct::SGCTSettings::instance()->setSwapInterval(1);
 	gEngine->render();
 	gParticles->destroy();
+
 	delete gEngine;
 	delete gParticles;
+
 	exit(EXIT_SUCCESS);
 }
 

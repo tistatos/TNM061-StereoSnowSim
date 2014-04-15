@@ -28,20 +28,13 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
  */
 void ParticleSystem::initialize()
 {
-	size_t handle;
-	//add texture for snowflake
-	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
-	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
-	sgct::TextureManager::instance()->loadTexure(handle, "snow", "snow.png", true);
-
-
 	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
 	{
-		-1 * PARTICLE_SIZE, -1 * PARTICLE_SIZE, 0.0f,
-		PARTICLE_SIZE, -1 * PARTICLE_SIZE, 0.0f,
-		-1 * PARTICLE_SIZE, PARTICLE_SIZE, 0.0f,
-		PARTICLE_SIZE, PARTICLE_SIZE, 0.0f
+		-1.0f , -1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+		-1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f
 	};
 
 	// Enable depth test
@@ -66,6 +59,15 @@ void ParticleSystem::initialize()
 
 	glBindVertexArray(0);
 
+
+	size_t handle;
+
+	//add texture for snowflake
+	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
+	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
+	sgct::TextureManager::instance()->loadTexure(handle, "snow", "snow.png", true);
+
+
 	//Create shader
 	sgct::ShaderManager::instance()->addShaderProgram("particle", "particle.vert", "particle.frag");
 
@@ -73,6 +75,7 @@ void ParticleSystem::initialize()
 	sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
 
 	mMatrixLoc = sgct::ShaderManager::instance()->getShaderProgram( "particle").getUniformLocation( "VP" );
+
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
@@ -146,9 +149,9 @@ void ParticleSystem::draw(double delta)
 
 			if(p.mLife > 0.0f)
 			{
-				mParticlePositionData[4*particleCount+0] = p.mPosition.x;
-                mParticlePositionData[4*particleCount+1] = p.mPosition.y;
-                mParticlePositionData[4*particleCount+2] = p.mPosition.z;
+				mParticlePositionData[4*particleCount+0] = p.mMatrix[3][0]; //x;
+                mParticlePositionData[4*particleCount+1] = p.mMatrix[3][1]; //y;
+                mParticlePositionData[4*particleCount+2] = p.mMatrix[3][2]; //z;
 
                 mParticlePositionData[4*particleCount+3] = p.mSize;
 			}
@@ -164,6 +167,9 @@ void ParticleSystem::draw(double delta)
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
+
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByName("snow"));
 
 		glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix();
 		glUniformMatrix4fv(mMatrixLoc, 1, GL_FALSE, &MVP[0][0]);
@@ -248,14 +254,15 @@ void ParticleSystem::move(double delta)
 			p.mVelocity = tempVelo;
 
 			// reduce life? Has it passed some sort of boundary?
-			if(p.mPosition.y < -2)
+			if(p.mMatrix[3][1] < -2)
 			{
 				p.mLife -= delta; // reduce life
 				p.mVelocity.y = 0; // stop vertical speed!
 			}
 
 			// apply the velocity
-			p.mPosition += p.mVelocity*(float)delta;
+			p.mMatrix = glm::translate(p.mMatrix, p.mVelocity*(float)delta);
+			 
 		}
 		else
 		{
@@ -285,14 +292,17 @@ void ParticleSystem::reset(Particle& p)
 	float zval = getRandom(-10.0f, 10.0f);
 
 	// std::cout << xval << " " << yval << std::endl;
-	p.mPosition = glm::vec3(xval,yval,zval);
+	
+ 	p.mMatrix[3][0] = xval; //x;
+	p.mMatrix[3][1] = yval; //y;
+	p.mMatrix[3][2] = zval; //z;
 	xval = getRandom(-0.3f, 0.3f);
 	yval = getRandom(-0.3f, 0.3f);
 	zval = getRandom(-0.3f, 0.3f);
 
 	p.mVelocity = glm::vec3(xval,yval,zval);
 
-    p.mSize = 0.1f;
+    p.mSize = 0.5f;
 }
 
 void ParticleSystem::addField(Field *f)
