@@ -84,6 +84,6 @@ void draw()
 	gWorld->drawWorld();
 	gBubble->drawBubble();
 
-	//gParticles->move(delta);
-	//gParticles->draw(delta);
+	gParticles->move(delta);
+	gParticles->draw(delta);
 }
