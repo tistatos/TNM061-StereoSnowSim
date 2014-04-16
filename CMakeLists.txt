@@ -18,6 +18,7 @@ add_executable(${APP_NAME}
 	include/Field.h src/Gravity.cpp
 	include/Gravity.h src/Wind.cpp
 	include/Wind.h include/Particle.h
+	include/SoapBubble.h src/SoapBubble.cpp
 	) # for example "main.cpp coolt.cpp kiss.cpp)"
 
 option(SGCT_PLACE_TARGETS_IN_SOURCE_TREE "Place targets in source tree" OFF)

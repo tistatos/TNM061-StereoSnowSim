@@ -47,10 +47,10 @@ void World::initializeWorld()
 	glFrontFace(GL_CW);
 
 	//add shaders
-	sgct::ShaderManager::instance()->addShaderProgram("banan", "WorldVertex.vertexshader", "WorldFragment.fragmentshader");
+	sgct::ShaderManager::instance()->addShaderProgram("world", "WorldVertex.vertexshader", "WorldFragment.fragmentshader");
 
 	//retrieve matrix location
-	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram("banan").getUniformLocation("MVP");
+	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram("world").getUniformLocation("MVP");
 	//mTextureLocation = sgct::ShaderManager::instance()->getShaderProgram("banan").getUniformLocation("tex");
 	//glUniform1i(mTextureLocation, 0);
 
@@ -74,7 +74,7 @@ void World::drawWorld()
 	//bind a named texture to a texturing target
 	glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByHandle(mTextureHandle));
 
-	sgct::ShaderManager::instance()->bindShaderProgram("banan");
+	sgct::ShaderManager::instance()->bindShaderProgram("world");
 
 	glUniformMatrix4fv(mMatrixLocation, 1, GL_FALSE, &MVP[0][0]);
 

@@ -6,11 +6,13 @@
 #include "Field.h"
 #include "Gravity.h"
 #include "Wind.h"
+#include "SoapBubble.h"
 #include <iostream>
 
 sgct::Engine* gEngine;
 ParticleSystem* gParticles;
 World* gWorld;
+SoapBubble* gBubble;
 
 
 void initialize();
@@ -27,6 +29,7 @@ int main(int argc, char *argv[])
 
 	gParticles = new ParticleSystem(gEngine);
 	gWorld = new World(gEngine);
+	gBubble = new SoapBubble(gEngine);
 
 	Gravity* grav = new Gravity();
 	grav->init(-0.1f);
@@ -49,6 +52,8 @@ int main(int argc, char *argv[])
 
 	delete gEngine;
 	delete gParticles;
+	delete gWorld;
+	delete gBubble;
 
 	exit(EXIT_SUCCESS);
 }
@@ -57,6 +62,7 @@ void initialize()
 {
 	gParticles->initialize();
 	gWorld->initializeWorld();
+	gBubble->createSphere(1.5f, 100);
 }
 
 void draw()
@@ -64,7 +70,8 @@ void draw()
 	double delta = gEngine->getDt();
 
 	gWorld->drawWorld();
+	gBubble->drawBubble();
 
-	gParticles->move(delta);
-	gParticles->draw(delta);
+	//gParticles->move(delta);
+	//gParticles->draw(delta);
 }
