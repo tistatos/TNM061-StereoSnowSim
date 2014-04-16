@@ -1,9 +1,10 @@
 #include <iostream>
 #include <stdio.h>
 #include "objSystem.h"
+#include <glm/gtc/matrix_transform.hpp> 
+#include <glm/gtx/transform.hpp>
 
 Object::Object(sgct::Engine* engine)
-	:vertices(NULL), uvs(NULL), normals(NULL)
 {
 	mEngine = engine;
 	nVertices = 0;
@@ -13,31 +14,6 @@ Object::Object(sgct::Engine* engine)
 	vertexBuffer = 0;
 	indexBuffer = 0;
 	mMatrixLocation = -1;
-	/*vertices = new std::vector<glm::vec3>();
-	uvs = new std::vector<glm::vec2>();
-	normals = new std::vector<glm::vec3>();*/
-}
-
-void Object::initialize()
-{
-
-	//set up backface culling
-	glCullFace(GL_BACK);
-	//define frontfacing polygons
-	glFrontFace(GL_CW);
-
-	//Create shader
-	sgct::ShaderManager::instance()->addShaderProgram("object", "object.vert", "object.frag");
-
-	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram( "object").getUniformLocation( "MVP" );
-	
-	//Unbind shader
-	sgct::ShaderManager::instance()->unBindShaderProgram();
-
-	// Enable depth test
-    glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
 }
 
 /* 
@@ -194,14 +170,18 @@ void Object::loadObj(char* filename)
         cout << "Mesh read error. No mesh data generated";
 		return;
 	}
+	// Enable depth test
+    glEnable(GL_DEPTH_TEST);
+    // Accept fragment if it closer to the camera than the former one
+    glDepthFunc(GL_LESS);
 
 	// Generate one vertex array object (VAO) and bind it
-	glGenVertexArrays(1, &(vertexArrayObject));
+	glGenVertexArrays(1, &vertexArrayObject);
 	glBindVertexArray(vertexArrayObject);
 
 	// Generate two buffer IDs
-	glGenBuffers(1, &(vertexBuffer));
-	glGenBuffers(1, &(indexBuffer));
+	glGenBuffers(1, &vertexBuffer);
+	glGenBuffers(1, &indexBuffer);
 
  	// Activate the vertex buffer
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -210,9 +190,9 @@ void Object::loadObj(char* filename)
 		8*nVertices * sizeof(GLfloat), vertexList, GL_STATIC_DRAW);
 
 	// Specify how many attribute arrays we have in our VAO
-	glEnableVertexAttribArray(2); // Vertex coordinates
+	glEnableVertexAttribArray(0); // Vertex coordinates
 	glEnableVertexAttribArray(1); // Normals
-	glEnableVertexAttribArray(0); // Texture coordinates
+	glEnableVertexAttribArray(2); // Texture coordinates
 	// Specify how OpenGL should interpret the vertex buffer data:
 	// Attributes 0, 1, 2 (must match the lines above and the layout in the shader)
 	// Number of dimensions (3 means vec3 in the shader, 2 means vec2)
@@ -221,7 +201,7 @@ void Object::loadObj(char* filename)
 	// Stride 8 (interleaved array with 8 floats per vertex)
 	// Array buffer offset 0, 3, 6 (offset into first vertex)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE,
-		8*sizeof(GLfloat), (void*)(6*sizeof(GLfloat))); // xyz coordinates
+		8*sizeof(GLfloat), (void*)0); // xyz coordinates
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE,
 		8*sizeof(GLfloat), (void*)(3*sizeof(GLfloat))); // normals
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE,
@@ -245,11 +225,16 @@ void Object::loadObj(char* filename)
 	//define frontfacing polygons
 	glFrontFace(GL_CW);
 
+	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
+	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
+	sgct::TextureManager::instance()->loadTexure(mTextureHandle, "object", "bubble.png", true);
+
 	//Create shader
 	sgct::ShaderManager::instance()->addShaderProgram("object", "object.vert", "object.frag");
 
 	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram( "object").getUniformLocation( "MVP" );
-	
+	mTransformLocation = sgct::ShaderManager::instance()->getShaderProgram("object").getUniformLocation( "P" );
+
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
@@ -272,10 +257,21 @@ void Object::draw()
 	glm::mat4 sceneMatrix = glm::mat4(1.0f);
 	
 	glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix() * sceneMatrix;
+	
+	glm::mat4 T = glm::translate(0.0f, 0.0f, -1.0f);
+	glm::mat4 S = glm::scale(0.2f,0.2f,0.2f);
 
+	glm::mat4 P = S * T;
+
+	//select active texture unit
+	glActiveTexture(GL_TEXTURE0);
+	//bind a named texture to a texturing target
+	glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByHandle(mTextureHandle));
+	
 	sgct::ShaderManager::instance()->bindShaderProgram( "object" );
 	
 	glUniformMatrix4fv(mMatrixLocation, 1, GL_FALSE, &MVP[0][0]);
+	glUniformMatrix4fv(mTransformLocation, 1, GL_FALSE, &P[0][0]);
 	glBindVertexArray(vertexArrayObject);
 	glDrawElements(GL_TRIANGLES, 3 * nTriangles, GL_UNSIGNED_INT, (void*)0);
 	// (mode, vertex count, type, element array buffer offset)

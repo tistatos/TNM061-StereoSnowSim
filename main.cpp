@@ -80,7 +80,7 @@ void initialize()
 	gWorld->initializeWorld();
 
 	//gObject->initialize();
-	gObject->loadObj("cube.obj");
+	gObject->loadObj("lamppost.obj");
 	
 	gBubble->createSphere(1.5f, 100);
 }

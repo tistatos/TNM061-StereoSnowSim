@@ -6,11 +6,12 @@ layout(location = 2) in vec2 textureCoordinates;
 
 //model, view, projection
 uniform mat4 MVP;
+uniform mat4 P;
 
 out vec2 UV;
 
 void main()
 {
-	gl_Position = MVP * vec4(vertexPositions, 1.0);
+	gl_Position = ( P * MVP ) * vec4(vertexPositions, 1.0);
 	UV = textureCoordinates;
 }
