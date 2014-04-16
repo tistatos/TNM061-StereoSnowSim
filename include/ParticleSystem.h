@@ -19,14 +19,13 @@ class ParticleSystem
 {
 public:
 	ParticleSystem(sgct::Engine* engine);
-
 	virtual void initialize();
 	virtual void draw(double delta);
 	virtual void destroy();
 	virtual void move(double delta);
 
 	void addField(Field *f);
-
+	void printFields();
 	void setTexture(string name, string file);
 	void setShader(string name, string vertFile, string fragFile);
 

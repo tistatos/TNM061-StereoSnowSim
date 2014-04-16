@@ -14,19 +14,12 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mInitialized = false;
 
 	mVertexArray = 0;
+
 	mLastUsedParticle = 0;
 
 	mBillBoardVB = 0;
 	mParticlePositionBuffer = 0;
 	mParticlePositionData = new GLfloat[MAX_PARTICLES * 4 * 4];
-	//FIXME: Temporary variables
-	mShader.mShaderName = "snow";
-	mShader.mVertexFile = "particle.vert";
-	mShader.mFragmentFile = "particle.frag";
-
-	mTexture.mTextureName = "snow";
-	mTexture.mTextureFile = "snow.png";
-
 }
 
 /**
@@ -66,6 +59,7 @@ void ParticleSystem::initialize()
 				 NULL, GL_STREAM_DRAW);
 
 	glBindVertexArray(0);
+
 
 	size_t handle;
 
@@ -149,6 +143,7 @@ void ParticleSystem::draw(double delta)
 
 		}
 
+
 		int particleCount = 0;
 		for(int i=0; i< MAX_PARTICLES; i++)
 		{
@@ -156,7 +151,6 @@ void ParticleSystem::draw(double delta)
 
 			if(p.mLife > 0.0f)
 			{
-
 				// mParticlePositionData[4*particleCount+0] = p.mMatrix[3][0];
 				// mParticlePositionData[4*particleCount+1] = p.mMatrix[3][1];
 				// mParticlePositionData[4*particleCount+2] = p.mMatrix[3][2];
@@ -278,7 +272,6 @@ void ParticleSystem::destroy()
 		delete[] mParticlePositionData;
 
 		mInitialized = false;
-
 	}
 }
 
@@ -293,7 +286,7 @@ void ParticleSystem::move(double delta)
 		if(p.mLife > 0.0f)
 		{
 			glm::vec3 tempVelo;
-			// loop through the fields, and sum the fields' velocity
+			// loop through the fields, and sum the fields' velocities
 			for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
 			{
 				tempVelo += (*f)->getVelocity(delta, p);
@@ -336,6 +329,7 @@ void ParticleSystem::reset(int index)
 void ParticleSystem::reset(Particle& p)
 {
 	p.mLife = 5.0f;
+
 }
 
 void ParticleSystem::addField(Field *f)
@@ -343,16 +337,11 @@ void ParticleSystem::addField(Field *f)
 	fields.push_back(f);
 }
 
-
-void ParticleSystem::setTexture(string name, string file)
+void ParticleSystem::printFields()
 {
-	mTexture.mTextureName = name;
-	mTexture.mTextureFile = file;
-}
-
-void ParticleSystem::setShader(string name, string vertFile, string fragFile)
-{
-	mShader.mShaderName = name;
-	mShader.mVertexFile = vertFile;
-	mShader.mFragmentFile = fragFile;
+	// loop through the fields, and print the fields' info
+	for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
+	{
+		(*f)->printInfo();
+	}
 }

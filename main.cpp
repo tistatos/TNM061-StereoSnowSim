@@ -6,6 +6,11 @@
 #include "Field.h"
 #include "Gravity.h"
 #include "Wind.h"
+#include "Vortex.h"
+
+#include <iostream>
+
+
 
 sgct::Engine* gEngine;
 Snow* gParticles;
@@ -35,7 +40,14 @@ int main(int argc, char *argv[])
 	wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
 	gParticles->addField(wind);
 
-	cout << "Wind direction: " << wind->getAcceleration() << endl;
+	Vortex* turbine = new Vortex();
+	turbine->init(0.0f, -4.0f, 2.0f);
+	turbine->setForce(-10.0f, 0.0f, -1.0f);
+	gParticles->addField(turbine);
+
+	cout << "---- Fields active on gParticles ----" << endl;
+	gParticles->printFields();
+	cout << "---------------" << endl << endl;
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
@@ -45,8 +57,8 @@ int main(int argc, char *argv[])
 
 	gEngine->render();
 
-	gParticles->destroy();
 
+	gParticles->destroy();
 	delete gEngine;
 	delete gParticles;
 
@@ -57,7 +69,6 @@ void initialize()
 {
 	gParticles->initialize();
 	gWorld->initializeWorld();
-
 }
 
 void draw()
