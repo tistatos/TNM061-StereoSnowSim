@@ -1,16 +1,20 @@
-#include <iostream>
 #include "sgct.h"
 #include "ParticleSystem.h"
+#include "Snow.h"
 #include "World.h"
 #include "HelperFunctions.h"
 #include "Field.h"
 #include "Gravity.h"
 #include "Wind.h"
 #include "SoapBubble.h"
+#include "Vortex.h"
+
 #include <iostream>
 
+
+
 sgct::Engine* gEngine;
-ParticleSystem* gParticles;
+Snow* gParticles;
 World* gWorld;
 SoapBubble* gBubble;
 
@@ -27,7 +31,7 @@ int main(int argc, char *argv[])
 	gEngine->setInitOGLFunction(initialize);
 	gEngine->setDrawFunction(draw);
 
-	gParticles = new ParticleSystem(gEngine);
+	gParticles = new Snow(gEngine);
 	gWorld = new World(gEngine);
 	gBubble = new SoapBubble(gEngine);
 
@@ -36,20 +40,28 @@ int main(int argc, char *argv[])
 	gParticles->addField(grav);
 
 	Wind* wind = new Wind();
-	wind->init(getRandom(-0.5, 0.5), 0.0f, getRandom(-0.5, 0.5));
+	wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
 	gParticles->addField(wind);
 
-	cout << "Wind direction: " << wind->getAcceleration() << endl;
+	Vortex* turbine = new Vortex();
+	turbine->init(0.0f, -4.0f, 2.0f);
+	turbine->setForce(-10.0f, 0.0f, -1.0f);
+	gParticles->addField(turbine);
+
+	cout << "---- Fields active on gParticles ----" << endl;
+	gParticles->printFields();
+	cout << "---------------" << endl << endl;
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
 		delete gEngine;
 		return EXIT_FAILURE;
 	}
-	sgct::SGCTSettings::instance()->setSwapInterval(1);
-	gEngine->render();
-	gParticles->destroy();
 
+	gEngine->render();
+
+
+	gParticles->destroy();
 	delete gEngine;
 	delete gParticles;
 	delete gWorld;

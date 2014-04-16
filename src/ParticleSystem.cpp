@@ -19,8 +19,7 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 
 	mBillBoardVB = 0;
 	mParticlePositionBuffer = 0;
-	mParticlePositionData = new GLfloat[MAX_PARTICLES * 4];
-
+	mParticlePositionData = new GLfloat[MAX_PARTICLES * 4 * 4];
 }
 
 /**
@@ -46,6 +45,7 @@ void ParticleSystem::initialize()
     //Fix buffers
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);
+
 	//add billboard, its static since it wont change
 	glGenBuffers(1, &mBillBoardVB);
 	glBindBuffer(GL_ARRAY_BUFFER, mBillBoardVB);
@@ -55,7 +55,7 @@ void ParticleSystem::initialize()
 	//Prepare for position buffers
 	glGenBuffers(1, &mParticlePositionBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES*4*sizeof(GLfloat),
+	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES*4*4*sizeof(GLfloat),
 				 NULL, GL_STREAM_DRAW);
 
 	glBindVertexArray(0);
@@ -66,16 +66,16 @@ void ParticleSystem::initialize()
 	//add texture for snowflake
 	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
 	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
-	sgct::TextureManager::instance()->loadTexure(handle, "snow", "snow.png", true);
+	sgct::TextureManager::instance()->loadTexure(handle, mTexture.mTextureName, mTexture.mTextureFile, true);
 
 
 	//Create shader
-	sgct::ShaderManager::instance()->addShaderProgram("particle", "particle.vert", "particle.frag");
+	sgct::ShaderManager::instance()->addShaderProgram(mShader.mShaderName, mShader.mVertexFile, mShader.mFragmentFile);
 
 	//Bind shader and get location of MVP matrix
-	sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
+	sgct::ShaderManager::instance()->bindShaderProgram( mShader.mShaderName );
 
-	mMatrixLoc = sgct::ShaderManager::instance()->getShaderProgram( "particle").getUniformLocation( "VP" );
+	mViewProjectionLoc = sgct::ShaderManager::instance()->getShaderProgram( mShader.mShaderName ).getUniformLocation( "VP" );
 
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
@@ -89,6 +89,7 @@ void ParticleSystem::initialize()
 	mInitialized = true;
 
 }
+
 /**
  * Get the particle that isn't alive
  * @return index of particle
@@ -114,7 +115,7 @@ int ParticleSystem::findLastParticle()
 		}
 	}
 
-	return 0;
+	return -1;
 }
 
 /**
@@ -137,8 +138,8 @@ void ParticleSystem::draw(double delta)
 		for (int i = 0; i < newParticles; ++i)
 		{
 			int particleIndex = findLastParticle();
-
-			reset(particleIndex);
+			if(particleIndex >= 0)
+				reset(particleIndex);
 
 		}
 
@@ -150,30 +151,48 @@ void ParticleSystem::draw(double delta)
 
 			if(p.mLife > 0.0f)
 			{
-				mParticlePositionData[4*particleCount+0] = p.mMatrix[3][0]; //x;
-                mParticlePositionData[4*particleCount+1] = p.mMatrix[3][1]; //y;
-                mParticlePositionData[4*particleCount+2] = p.mMatrix[3][2]; //z;
+				// mParticlePositionData[4*particleCount+0] = p.mMatrix[3][0];
+				// mParticlePositionData[4*particleCount+1] = p.mMatrix[3][1];
+				// mParticlePositionData[4*particleCount+2] = p.mMatrix[3][2];
+				// mParticlePositionData[4*particleCount+3] = p.mSize;
 
-                mParticlePositionData[4*particleCount+3] = p.mSize;
+				mParticlePositionData[16*particleCount+0] = p.mMatrix[0][0];
+				mParticlePositionData[16*particleCount+1] = p.mMatrix[0][1];
+				mParticlePositionData[16*particleCount+2] = p.mMatrix[0][2];
+				mParticlePositionData[16*particleCount+3] = p.mMatrix[0][3];
+				mParticlePositionData[16*particleCount+4] = p.mMatrix[1][0];
+				mParticlePositionData[16*particleCount+5] = p.mMatrix[1][1];
+				mParticlePositionData[16*particleCount+6] = p.mMatrix[1][2];
+				mParticlePositionData[16*particleCount+7] = p.mMatrix[1][3];
+				mParticlePositionData[16*particleCount+8] = p.mMatrix[2][0];
+				mParticlePositionData[16*particleCount+9] = p.mMatrix[2][1];
+				mParticlePositionData[16*particleCount+10] = p.mMatrix[2][2];
+				mParticlePositionData[16*particleCount+11] = p.mMatrix[2][3];
+				mParticlePositionData[16*particleCount+12] = p.mMatrix[3][0];
+				mParticlePositionData[16*particleCount+13] = p.mMatrix[3][1];
+				mParticlePositionData[16*particleCount+14] = p.mMatrix[3][2];
+				mParticlePositionData[16*particleCount+15] = p.mMatrix[3][3];
 			}
 			particleCount++;
+
 		}
 
 		glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
-        glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * sizeof(GLfloat) * 4, mParticlePositionData);
+        glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * 4 * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * sizeof(GLfloat) * 4 * 4, mParticlePositionData);
 
 		glEnable(GL_BLEND);
 		glDisable(GL_CULL_FACE);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-		sgct::ShaderManager::instance()->bindShaderProgram( "particle" );
+		sgct::ShaderManager::instance()->bindShaderProgram( mShader.mShaderName );
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByName("snow"));
+		glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByName(mTexture.mTextureName));
 
 		glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix();
-		glUniformMatrix4fv(mMatrixLoc, 1, GL_FALSE, &MVP[0][0]);
+
+		glUniformMatrix4fv(mViewProjectionLoc, 1, GL_FALSE, &MVP[0][0]);
 
 		glBindVertexArray(mVertexArray);
 
@@ -187,17 +206,30 @@ void ParticleSystem::draw(double delta)
                     0,
                     reinterpret_cast<void*>(0) // array buffer offset
             );
-       	glEnableVertexAttribArray(1);
+		int pos  = sgct::ShaderManager::instance()->getShaderProgram(mShader.mShaderName).getAttribLocation("transformmatrix");
+		glEnableVertexAttribArray(pos);
+		glEnableVertexAttribArray(pos + 1);
+		glEnableVertexAttribArray(pos + 2);
+		glEnableVertexAttribArray(pos + 3);
 		glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
 
-		glVertexAttribPointer(
-                        1,
-                        4,
-                        GL_FLOAT,
-                        GL_FALSE,
-                        0,
-						reinterpret_cast<void*>(0) // array buffer offset
-                );
+		glVertexAttribPointer(pos, 4, GL_FLOAT,  GL_FALSE, sizeof(GLfloat) * 4 * 4, (void*)(0));
+		glVertexAttribPointer(pos + 1, 4, GL_FLOAT, GL_FALSE,  sizeof(GLfloat) * 4 * 4, (void*)(sizeof(float)*4));
+		glVertexAttribPointer(pos + 2, 4, GL_FLOAT, GL_FALSE,  sizeof(GLfloat) * 4 * 4, (void*)(sizeof(float)*8));
+		glVertexAttribPointer(pos + 3, 4, GL_FLOAT, GL_FALSE,  sizeof(GLfloat) * 4 * 4, (void*)(sizeof(float)*12));
+
+		//only position attribs
+       	// glEnableVertexAttribArray(1);
+
+		// glVertexAttribPointer(
+  //                       1,
+  //                       4,
+  //                       GL_FLOAT,
+  //                       GL_FALSE,
+  //                       0,
+		// 				reinterpret_cast<void*>(0) // array buffer offset
+  //               );
+
         // Draw the particules !
         // This draws many times a small triangle_strip (which looks like a quad).
         // This is equivalent to :
@@ -206,16 +238,24 @@ void ParticleSystem::draw(double delta)
 
         //FIXME
 		glVertexAttribDivisor(0, 0); // particles vertices : always reuse the same 4 vertices -> 0
-        glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
+        glVertexAttribDivisor(pos, 1);
+		glVertexAttribDivisor(pos + 1, 1);
+		glVertexAttribDivisor(pos + 2, 1);
+		glVertexAttribDivisor(pos + 3, 1);
+        //glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
 
         glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particleCount);
 
         glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(pos);
+		glDisableVertexAttribArray(pos + 1);
+		glDisableVertexAttribArray(pos + 2);
+		glDisableVertexAttribArray(pos + 3);
 
 		glBindVertexArray(0);
 
 		sgct::ShaderManager::instance()->unBindShaderProgram();
+
 		//std::cout << "Drawing all them pritty particles\n";
 	}
 }
@@ -229,9 +269,9 @@ void ParticleSystem::destroy()
 
 		glDeleteVertexArrays(1, &mVertexArray);
 
-		mInitialized = false;
-
 		delete[] mParticlePositionData;
+
+		mInitialized = false;
 	}
 }
 
@@ -246,24 +286,18 @@ void ParticleSystem::move(double delta)
 		if(p.mLife > 0.0f)
 		{
 			glm::vec3 tempVelo;
-			// loop through the fields, and sum the fields' velocity
+			// loop through the fields, and sum the fields' velocities
 			for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
 			{
 				tempVelo += (*f)->getVelocity(delta, p);
 			}
 
 			p.mVelocity = tempVelo;
-
-			// reduce life? Has it passed some sort of boundary?
-			if(p.mMatrix[3][1] < -2)
-			{
-				p.mLife -= delta; // reduce life
-				p.mVelocity.y = 0; // stop vertical speed!
-			}
-
+			calculateLife(p, delta);
 			// apply the velocity
-			p.mMatrix = glm::translate(p.mMatrix, p.mVelocity*(float)delta);
-			 
+			glm::mat4 tran = glm::translate(glm::mat4(1.0f), p.mVelocity*(float)delta);
+			//glm::mat4 rot =  glm::rotate( glm::mat4(1.0f), static_cast<float>(delta) * 10, glm::vec3(0.5f, 1.0f, 0.0f));
+			p.mMatrix = tran * p.mMatrix;
 		}
 		else
 		{
@@ -271,6 +305,13 @@ void ParticleSystem::move(double delta)
 		}
 	}
 }
+
+
+void ParticleSystem::calculateLife(Particle& p, double delta)
+{
+	p.mLife -= delta;
+}
+
 
 /**
  * reset the particle at index index
@@ -288,25 +329,19 @@ void ParticleSystem::reset(int index)
 void ParticleSystem::reset(Particle& p)
 {
 	p.mLife = 5.0f;
-	float xval = getRandom(-10.0f, 10.0f);
-	float yval = getRandom(2.0f, 10.0f);
-	float zval = getRandom(-10.0f, 10.0f);
 
-	// std::cout << xval << " " << yval << std::endl;
-	
- 	p.mMatrix[3][0] = xval; //x;
-	p.mMatrix[3][1] = yval; //x;
-	p.mMatrix[3][2] = zval; //x;
-	xval = getRandom(-0.3f, 0.3f);
-	yval = getRandom(-0.3f, 0.3f);
-	zval = getRandom(-0.3f, 0.3f);
-
-	p.mVelocity = glm::vec3(xval,yval,zval);
-
-    p.mSize = 0.5f;
 }
 
 void ParticleSystem::addField(Field *f)
 {
 	fields.push_back(f);
+}
+
+void ParticleSystem::printFields()
+{
+	// loop through the fields, and print the fields' info
+	for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
+	{
+		(*f)->printInfo();
+	}
 }
