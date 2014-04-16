@@ -23,3 +23,8 @@ glm::vec3 Wind::getAcceleration()
 {
 	return acceleration;
 }
+
+void Wind::printInfo()
+{
+	std::cout << "Wind direction: " << getAcceleration() << std::endl;
+}
