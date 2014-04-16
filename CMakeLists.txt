@@ -15,9 +15,13 @@ add_executable(${APP_NAME}
 	src/ParticleSystem.cpp include/ParticleSystem.h
 	src/HelperFunctions.cpp include/HelperFunctions.h
 	src/World.cpp include/World.h
-	include/Field.h src/Gravity.cpp
-	include/Gravity.h src/Wind.cpp
-	include/Wind.h include/Particle.h
+	include/Field.h 
+	src/Gravity.cpp	include/Gravity.h 
+	src/Wind.cpp
+	include/Wind.h 
+	include/Particle.h
+	include/Snow.h
+	src/Snow.cpp
 	) # for example "main.cpp coolt.cpp kiss.cpp)"
 
 option(SGCT_PLACE_TARGETS_IN_SOURCE_TREE "Place targets in source tree" OFF)
