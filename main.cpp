@@ -36,11 +36,11 @@ int main(int argc, char *argv[])
 	gBubble = new SoapBubble(gEngine);
 
 	Gravity* grav = new Gravity();
-	grav->init(-0.1f);
+	grav->init(-9.81f);
 	gParticles->addField(grav);
 
 	Wind* wind = new Wind();
-	wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
+	//wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
 	gParticles->addField(wind);
 
 	Vortex* turbine = new Vortex();

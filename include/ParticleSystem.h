@@ -10,7 +10,7 @@
 
 class Field;
 
-const int MAX_PARTICLES = 1000;
+const int MAX_PARTICLES = 5000;
 const float PARTICLE_SIZE = 0.1f;
 
 using namespace std;
@@ -30,6 +30,7 @@ public:
 	void setShader(string name, string vertFile, string fragFile);
 
 protected:
+	virtual void sortParticles();
 	int findLastParticle();
 	void reset(int index);
 	virtual void calculateLife(Particle& p, double delta);

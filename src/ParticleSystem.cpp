@@ -1,5 +1,6 @@
 #include "ParticleSystem.h"
 #include <iostream>
+#include <algorithm>
 #include "HelperFunctions.h"
 #include "Field.h"
 
@@ -143,11 +144,12 @@ void ParticleSystem::draw(double delta)
 
 		}
 
-
+		sortParticles();
 		int particleCount = 0;
 		for(int i=0; i< MAX_PARTICLES; i++)
 		{
 			Particle &p = mParticles[i];
+
 
 			if(p.mLife > 0.0f)
 			{
@@ -293,11 +295,16 @@ void ParticleSystem::move(double delta)
 			}
 
 			p.mVelocity = tempVelo;
+
 			calculateLife(p, delta);
 			// apply the velocity
 			glm::mat4 tran = glm::translate(glm::mat4(1.0f), p.mVelocity*(float)delta);
 			//glm::mat4 rot =  glm::rotate( glm::mat4(1.0f), static_cast<float>(delta) * 10, glm::vec3(0.5f, 1.0f, 0.0f));
 			p.mMatrix = tran * p.mMatrix;
+
+			//distance is positions magnitude since camera is in the
+			p.mDistance = glm::dot(p.position(),p.position());
+
 		}
 		else
 		{
@@ -344,4 +351,10 @@ void ParticleSystem::printFields()
 	{
 		(*f)->printInfo();
 	}
+}
+
+void ParticleSystem::sortParticles()
+{
+
+	std::sort(&mParticles[0], &mParticles[MAX_PARTICLES]);
 }

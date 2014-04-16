@@ -74,5 +74,5 @@ void Snow::reset(Particle& p)
 
 	p.mVelocity = glm::vec3(xval,yval,zval);
 
-    p.mSize = 0.25f;
+    p.mSize = 0.000025f; // FIXME the size is set in the shader atm
 }
