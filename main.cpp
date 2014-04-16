@@ -6,11 +6,13 @@
 #include "Field.h"
 #include "Gravity.h"
 #include "Wind.h"
+#include "objSystem.h"
 #include <iostream>
 
 sgct::Engine* gEngine;
 ParticleSystem* gParticles;
 World* gWorld;
+Object* gObject;
 
 
 void initialize();
@@ -27,13 +29,15 @@ int main(int argc, char *argv[])
 
 	gParticles = new ParticleSystem(gEngine);
 	gWorld = new World(gEngine);
+	gObject = new Object(gEngine);
+
 
 	Gravity* grav = new Gravity();
 	grav->init(-0.08f);
 	gParticles->addField(grav);
 
 	Wind* wind = new Wind();
-	wind->init(getRandom(-1.0, 1.0), 0.0f, getRandom(-1.0, 1.0));
+	wind->init(getRandom(-0.5, 0.5), 0.0f, getRandom(-0.5, 0.5));
 	gParticles->addField(wind);
 
 	cout << "Wind direction: " << wind->getAcceleration() << endl;
@@ -46,6 +50,8 @@ int main(int argc, char *argv[])
 	sgct::SGCTSettings::instance()->setSwapInterval(1);
 	gEngine->render();
 	gParticles->destroy();
+	gObject->deleteObject();
+	delete gObject;
 	delete gEngine;
 	delete gParticles;
 	exit(EXIT_SUCCESS);
@@ -55,6 +61,9 @@ void initialize()
 {
 	gParticles->initialize();
 	gWorld->initializeWorld();
+	//gObject->initialize();
+	gObject->loadObj("cube.obj");
+	
 }
 
 void draw()
@@ -65,4 +74,6 @@ void draw()
 
 	gParticles->move(delta);
 	gParticles->draw(delta);
+	
+	gObject->draw();
 }
