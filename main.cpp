@@ -6,9 +6,9 @@
 #include "Field.h"
 #include "Gravity.h"
 #include "Wind.h"
+#include "ObjSystem.h"
 #include "SoapBubble.h"
 #include "Vortex.h"
-
 #include <iostream>
 
 
@@ -16,6 +16,7 @@
 sgct::Engine* gEngine;
 Snow* gParticles;
 World* gWorld;
+Object* gObject;
 SoapBubble* gBubble;
 
 
@@ -33,6 +34,7 @@ int main(int argc, char *argv[])
 
 	gParticles = new Snow(gEngine);
 	gWorld = new World(gEngine);
+	gObject = new Object(gEngine);
 	gBubble = new SoapBubble(gEngine);
 
 	Gravity* grav = new Gravity();
@@ -62,6 +64,8 @@ int main(int argc, char *argv[])
 
 
 	gParticles->destroy();
+	gObject->deleteObject();
+	delete gObject;
 	delete gEngine;
 	delete gParticles;
 	delete gWorld;
@@ -78,6 +82,10 @@ void initialize()
 		exit(EXIT_FAILURE);
 	}
 	gWorld->initializeWorld();
+
+	//gObject->initialize();
+	gObject->loadObj("cube.obj");
+
 	gBubble->createSphere(1.5f, 100);
 }
 
@@ -85,9 +93,11 @@ void draw()
 {
 	double delta = gEngine->getDt();
 
-	gWorld->drawWorld();
+	//gWorld->drawWorld();
 	//gBubble->drawBubble();
 
 	gParticles->move(delta);
-	gParticles->draw(delta);
+	//gParticles->draw(delta);
+
+	gObject->draw();
 }
