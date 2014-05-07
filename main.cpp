@@ -93,11 +93,11 @@ void draw()
 {
 	double delta = gEngine->getDt();
 
-	//gWorld->drawWorld();
-	//gBubble->drawBubble();
+	gWorld->drawWorld();
+	gBubble->drawBubble();
 
 	gParticles->move(delta);
-	//gParticles->draw(delta);
+	gParticles->draw(delta);
 
 	gObject->draw();
 }
