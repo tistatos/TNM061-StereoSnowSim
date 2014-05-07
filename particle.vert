@@ -11,15 +11,14 @@ uniform mat4 VP; // Model-View-Projection matrix, but without the Model (the pos
 void main()
 {
 	mat4 M = transformmatrix;
-	float particleSize = 0.2; // because we encoded it this way.
+	float particleSize = 1;
 	vec4 xyzs = transformmatrix[3];
 	vec3 particleCenter_wordspace = xyzs.xyz;
 	vec3 CameraRight_worldspace = vec3(1.0f,0.0,0.0);
 	vec3 CameraUp_worldspace = vec3(0.0f,1.0f,0.0f);
 
 	vec3 vertexPosition_worldspace =
-		CameraRight_worldspace * squareVertices.x * particleSize
-		+ CameraUp_worldspace * squareVertices.y * particleSize;
+		squareVertices * particleSize;
 	// Output position of the vertex
 	gl_Position = VP * M * vec4(vertexPosition_worldspace, 1.0f);
 	camDistance = length(vec3(xyzs));

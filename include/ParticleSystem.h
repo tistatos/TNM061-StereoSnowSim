@@ -10,7 +10,7 @@
 
 class Field;
 
-const int MAX_PARTICLES = 5000;
+const int MAX_PARTICLES = 1000;
 const float PARTICLE_SIZE = 0.1f;
 
 using namespace std;
@@ -19,7 +19,7 @@ class ParticleSystem
 {
 public:
 	ParticleSystem(sgct::Engine* engine);
-	virtual void initialize();
+	virtual bool initialize();
 	virtual void draw(double delta);
 	virtual void destroy();
 	virtual void move(double delta);

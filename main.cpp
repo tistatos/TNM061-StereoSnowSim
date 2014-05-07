@@ -12,7 +12,7 @@
 #include <iostream>
 
 
-
+//our beautiful global variables
 sgct::Engine* gEngine;
 Snow* gParticles;
 World* gWorld;
@@ -72,7 +72,11 @@ int main(int argc, char *argv[])
 
 void initialize()
 {
-	gParticles->initialize();
+	if(!gParticles->initialize())
+	{
+		std::cout << "Error Initialzing Particle System:" << std::endl;
+		exit(EXIT_FAILURE);
+	}
 	gWorld->initializeWorld();
 	gBubble->createSphere(1.5f, 100);
 }
@@ -82,7 +86,7 @@ void draw()
 	double delta = gEngine->getDt();
 
 	gWorld->drawWorld();
-	gBubble->drawBubble();
+	//gBubble->drawBubble();
 
 	gParticles->move(delta);
 	gParticles->draw(delta);
