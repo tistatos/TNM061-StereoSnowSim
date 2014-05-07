@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 	gWorld = new World(gEngine);
 
 	Gravity* grav = new Gravity();
-	grav->init(-0.1f);
+	grav->init(-9.81f);
 	gParticles->addField(grav);
 
 	Wind* wind = new Wind();
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 	gParticles->addField(wind);
 
 	Vortex* turbine = new Vortex();
-	turbine->init(0.0f, -4.0f, 2.0f);
+	turbine->init(0.0f, -4.0f, 5.0f);
 	turbine->setForce(-10.0f, 0.0f, -1.0f);
 	gParticles->addField(turbine);
 
