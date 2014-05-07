@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdio.h>
-#include "objSystem.h"
-#include <glm/gtc/matrix_transform.hpp> 
+#include "ObjSystem.h"
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
 Object::Object(sgct::Engine* engine)
@@ -16,7 +16,7 @@ Object::Object(sgct::Engine* engine)
 	mMatrixLocation = -1;
 }
 
-/* 
+/*
 	Taken from https://code.google.com/p/opengl-tutorial-org/source/browse/common/objloader.cpp
 	and from   https://code.google.com/p/opengl-tutorial-org/source/browse/tutorial07_model_loading/tutorial07.cpp
 	Inputs:
@@ -170,10 +170,6 @@ void Object::loadObj(char* filename)
         cout << "Mesh read error. No mesh data generated";
 		return;
 	}
-	// Enable depth test
-    glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
 
 	// Generate one vertex array object (VAO) and bind it
 	glGenVertexArrays(1, &vertexArrayObject);
@@ -220,10 +216,6 @@ void Object::loadObj(char* filename)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
  	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
- 	//set up backface culling
-	glCullFace(GL_BACK);
-	//define frontfacing polygons
-	glFrontFace(GL_CW);
 
 	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
 	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
@@ -241,7 +233,7 @@ void Object::loadObj(char* filename)
 	// Enable depth test
     glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);	
+    glDepthFunc(GL_LESS);
 
 	return;
 }
@@ -250,33 +242,46 @@ void Object::draw()
 {
 	//do depth comparisons and pdate the depth buffer
 	glEnable(GL_DEPTH_TEST);
+	// Accept fragment if it closer to the camera than the former one
+    glDepthFunc(GL_LESS);
 	//cull polygons not shown in window
 	glEnable(GL_CULL_FACE);
 
 	//create a scene matrix incase we want movement
 	glm::mat4 sceneMatrix = glm::mat4(1.0f);
-	
-	glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix() * sceneMatrix;
-	
-	glm::mat4 T = glm::translate(0.0f, 0.0f, -1.0f);
-	glm::mat4 S = glm::scale(0.2f,0.2f,0.2f);
 
-	glm::mat4 P = S * T;
+	glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix() * sceneMatrix;
+
+	glm::mat4 T = glm::translate(0.0f, -0.0f, -2.0f);
+	glm::mat4 S = glm::scale(1.0f,1.0f,1.0f);
+
+	glm::mat4 P = T * S;
 
 	//select active texture unit
 	glActiveTexture(GL_TEXTURE0);
+
 	//bind a named texture to a texturing target
 	glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByHandle(mTextureHandle));
-	
+
+
+ 	//set up backface culling
+	glCullFace(GL_FRONT);
+	//define frontfacing polygons
+	glFrontFace(GL_CW);
+
+
 	sgct::ShaderManager::instance()->bindShaderProgram( "object" );
-	
+
 	glUniformMatrix4fv(mMatrixLocation, 1, GL_FALSE, &MVP[0][0]);
 	glUniformMatrix4fv(mTransformLocation, 1, GL_FALSE, &P[0][0]);
 	glBindVertexArray(vertexArrayObject);
-	glDrawElements(GL_TRIANGLES, 3 * nTriangles, GL_UNSIGNED_INT, (void*)0);
+
+
+	//glDrawArrays(GL_TRIANGLES, 0, nVertices);
+	glDrawElements(GL_TRIANGLES, nVertices, GL_UNSIGNED_INT, (void*)0);
 	// (mode, vertex count, type, element array buffer offset)
 	glBindVertexArray(0);
-	
+
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
 	glDisable(GL_DEPTH_TEST);

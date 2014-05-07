@@ -13,9 +13,9 @@ Snow::Snow(sgct::Engine* engine) : ParticleSystem(engine)
 	mTexture.mTextureFile = "snow.png";
 }
 
-void Snow::initialize()
+bool Snow::initialize()
 {
-	ParticleSystem::initialize();
+	return ParticleSystem::initialize();
 }
 
 void Snow::move(double delta)

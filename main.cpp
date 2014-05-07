@@ -6,13 +6,13 @@
 #include "Field.h"
 #include "Gravity.h"
 #include "Wind.h"
-#include "objSystem.h"
+#include "ObjSystem.h"
 #include "SoapBubble.h"
 #include "Vortex.h"
 #include <iostream>
 
 
-
+//our beautiful global variables
 sgct::Engine* gEngine;
 Snow* gParticles;
 World* gWorld;
@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 	gParticles->addField(wind);
 
 	Vortex* turbine = new Vortex();
-	turbine->init(0.0f, -4.0f, 2.0f);
+	turbine->init(0.0f, -4.0f, 5.0f);
 	turbine->setForce(-10.0f, 0.0f, -1.0f);
 	gParticles->addField(turbine);
 
@@ -76,12 +76,16 @@ int main(int argc, char *argv[])
 
 void initialize()
 {
-	gParticles->initialize();
+	if(!gParticles->initialize())
+	{
+		std::cout << "Error Initialzing Particle System:" << std::endl;
+		exit(EXIT_FAILURE);
+	}
 	gWorld->initializeWorld();
 
 	//gObject->initialize();
-	gObject->loadObj("lamppost.obj");
-	
+	gObject->loadObj("cube.obj");
+
 	gBubble->createSphere(1.5f, 100);
 }
 
@@ -91,10 +95,9 @@ void draw()
 
 	gWorld->drawWorld();
 	//gBubble->drawBubble();
-	gObject->draw();
 
 	gParticles->move(delta);
 	gParticles->draw(delta);
-	
+
 	gObject->draw();
 }

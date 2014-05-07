@@ -27,7 +27,7 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
  * Initialize Particle system
  *
  */
-void ParticleSystem::initialize()
+bool ParticleSystem::initialize()
 {
 	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
@@ -35,7 +35,8 @@ void ParticleSystem::initialize()
 		-1.0f , -1.0f, 0.0f,
 		1.0f, -1.0f, 0.0f,
 		-1.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f
+		1.0f, 1.0f, 0.0f,
+
 	};
 
 	// Enable depth test
@@ -71,8 +72,11 @@ void ParticleSystem::initialize()
 
 
 	//Create shader
-	sgct::ShaderManager::instance()->addShaderProgram(mShader.mShaderName, mShader.mVertexFile, mShader.mFragmentFile);
-
+	bool shaderResult = sgct::ShaderManager::instance()->addShaderProgram(mShader.mShaderName, mShader.mVertexFile, mShader.mFragmentFile);
+	if(shaderResult == false)
+	{
+		return false;
+	}
 	//Bind shader and get location of MVP matrix
 	sgct::ShaderManager::instance()->bindShaderProgram( mShader.mShaderName );
 
@@ -86,9 +90,12 @@ void ParticleSystem::initialize()
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
 
+
+
     //Particle shader is now initialized
 	mInitialized = true;
 
+	return true;
 }
 
 /**
@@ -174,9 +181,9 @@ void ParticleSystem::draw(double delta)
 				mParticlePositionData[16*particleCount+13] = p.mMatrix[3][1];
 				mParticlePositionData[16*particleCount+14] = p.mMatrix[3][2];
 				mParticlePositionData[16*particleCount+15] = p.mMatrix[3][3];
-			}
-			particleCount++;
+				particleCount++;
 
+			}
 		}
 
 		glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
