@@ -94,7 +94,7 @@ void draw()
 	double delta = gEngine->getDt();
 
 	gWorld->drawWorld();
-	gBubble->drawBubble();
+	//gBubble->drawBubble();
 
 	gParticles->move(delta);
 	gParticles->draw(delta);

@@ -252,7 +252,7 @@ void Object::draw()
 
 	glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix() * sceneMatrix;
 
-	glm::mat4 T = glm::translate(0.0f, -1.0f, -10.0f);
+	glm::mat4 T = glm::translate(0.0f, -0.0f, -2.0f);
 	glm::mat4 S = glm::scale(1.0f,1.0f,1.0f);
 
 	glm::mat4 P = T * S;
