@@ -15,8 +15,10 @@ add_executable(${APP_NAME}
 	src/ParticleSystem.cpp include/ParticleSystem.h
 	src/HelperFunctions.cpp include/HelperFunctions.h
 	src/World.cpp include/World.h
+	include/SoapBubble.h src/SoapBubble.cpp
 	include/Particle.h
 	include/Field.h
+	include/ObjSystem.h src/ObjSystem.cpp
 	src/Snow.cpp include/Snow.h
 	src/Gravity.cpp include/Gravity.h
 	src/Wind.cpp include/Wind.h

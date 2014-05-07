@@ -55,7 +55,7 @@ float Vortex::calcDistance(const Particle& p)
 	deltax = mPosition.x - p.mMatrix[3].x;
 	deltaz = mPosition.z - p.mMatrix[3].z;
 
-	return sqrt(pow(deltax, 2) + pow(deltaz, 2));
+	return sqrt(deltax*deltax + deltaz*deltaz);
 }
 
 void Vortex::printInfo()
