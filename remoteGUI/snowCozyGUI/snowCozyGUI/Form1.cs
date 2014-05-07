@@ -49,7 +49,7 @@ namespace snowCozyGUI
 
         private void connectButton_Click(object sender, EventArgs e)
         {
-            if (mClient.connection != null)
+            if (!mClient.connection.valid)
             {
                 //get the ip address string from the textbox
                 mClient.ip = this.ipTextBox.Text;
