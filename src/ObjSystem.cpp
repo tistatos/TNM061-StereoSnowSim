@@ -288,7 +288,7 @@ void Object::draw()
 	sgct::ShaderManager::instance()->bindShaderProgram( "object" );
 	
 	glUniformMatrix4fv(mMatrixLocation, 1, GL_FALSE, &MVP[0][0]);
-	glUniformMatrix4fv(mTransformLocation, 1, GL_FALSE, &P[0][0]);
+	glUniformMatrix4fv(mTransformLocation, 1, GL_FALSE, &transMatrix[0][0]);
 	glBindVertexArray(vertexArrayObject);
 	glDrawElements(GL_TRIANGLES, 3 * nTriangles, GL_UNSIGNED_INT, (void*)0);
 	// (mode, vertex count, type, element array buffer offset)

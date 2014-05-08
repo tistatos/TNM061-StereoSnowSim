@@ -7,10 +7,10 @@ layout(location = 2) in vec3 vertexPositions;
 //model, view, projection
 uniform mat4 MVP;
 
-out vec2 UV;
+out vec4 UV;
 
 void main()
 {
 	gl_Position = MVP * vec4(vertexPositions, 1.0);
-	UV = textureCoordinates;
+	UV = vec4(vertexPositions, 1.0);
 }
