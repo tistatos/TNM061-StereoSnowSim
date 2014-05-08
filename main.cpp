@@ -27,6 +27,7 @@ sgct::SharedBool showGraph(false);
 sgct::SharedDouble sizeFactorX(0.0);
 sgct::SharedDouble sizeFactorY(0.0);
 sgct::SharedDouble sizeFactorZ(0.0);
+sgct::SharedDouble gravFactor(0.0);
 sgct::SharedDouble curr_time(0.0);
 
 
@@ -154,6 +155,7 @@ void myEncodeFun()
 	sgct::SharedData::instance()->writeDouble(&sizeFactorX);
 	sgct::SharedData::instance()->writeDouble(&sizeFactorY);
 	sgct::SharedData::instance()->writeDouble(&sizeFactorZ);
+	sgct::SharedData::instance()->writeDouble(&gravFactor);
 	sgct::SharedData::instance()->writeBool(&showStats);
 	sgct::SharedData::instance()->writeBool(&showGraph);
 }
@@ -165,6 +167,7 @@ void myDecodeFun()
 	sgct::SharedData::instance()->readDouble(&sizeFactorX);
 	sgct::SharedData::instance()->readDouble(&sizeFactorY);
 	sgct::SharedData::instance()->readDouble(&sizeFactorZ);
+	sgct::SharedData::instance()->readDouble(&gravFactor);
 	sgct::SharedData::instance()->readBool(&showStats);
 	sgct::SharedData::instance()->readBool(&showGraph);
 }
@@ -214,6 +217,13 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			sizeFactorZ.setVal(tmpValZ);
 			wind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 			cout << sizeFactorZ.getVal();
+		}
+
+		else if(size >= 6 && strncmp(receivedChars, "grav", 4) == 0)
+		{
+			//We need an int.
+			int tmpVal = atoi(receivedChars + 5);
+			grav->init(tmpVal);
 		}
 	}
 }
