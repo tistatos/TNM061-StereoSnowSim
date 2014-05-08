@@ -4,7 +4,7 @@
  * initialize the wind field, sets acc to -9.81 by default
  * @param acc
  */
-void Wind::init(float x, float y, float z)
+void Wind::setAcceleration(float x, float y, float z)
 {
 	acceleration = glm::vec3(x, y, z);
 }

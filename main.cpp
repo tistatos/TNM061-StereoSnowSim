@@ -18,11 +18,12 @@ Snow* gParticles;
 World* gWorld;
 Object* gObject;
 SoapBubble* gBubble;
+Wind* wind;
 
 
 sgct::SharedBool showStats(false);
 sgct::SharedBool showGraph(false);
-sgct::SharedDouble size_factor(0.5);
+sgct::SharedDouble size_factor(0.0);
 sgct::SharedDouble curr_time(0.0);
 
 
@@ -60,14 +61,15 @@ int main(int argc, char *argv[])
 	grav->init(-9.81f);
 	gParticles->addField(grav);
 
-	Wind* wind = new Wind();
+	wind = new Wind();
 	//wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
+	wind->setAcceleration(0.0f, 0.0f, 0.0f);
 	gParticles->addField(wind);
 
 	Vortex* turbine = new Vortex();
-	turbine->init(0.0f, -4.0f, 5.0f);
-	turbine->setForce(-10.0f, 0.0f, -1.0f);
-	gParticles->addField(turbine);
+	//turbine->init(0.0f, -4.0f, 5.0f);
+	//turbine->setForce(-10.0f, 0.0f, -1.0f);
+	//gParticles->addField(turbine);
 
 	cout << "---- Fields active on gParticles ----" << endl;
 	gParticles->printFields();
@@ -174,12 +176,14 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			showGraph.setVal(true);
 		}
 
-		else if(size >= 6 && strncmp(receivedChars, "size", 4) == 0)
+		else if(size >= 6 && strncmp(receivedChars, "windX", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 
 			size_factor.setVal(tmpVal);
+			wind->setAcceleration((size_factor.getVal()*0.1f), 0.0f, 0.0f);
+			cout << size_factor.getVal();
 		}
 	}
 }
