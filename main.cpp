@@ -223,7 +223,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			grav->init(tmpVal);
+			grav->init(-tmpVal);
 		}
 	}
 }

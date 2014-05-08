@@ -79,7 +79,7 @@ namespace snowCozyGUI
                 this.connectButton.Text = "Disconnect";
                 this.statusMessage.Text = "Connected to " + mClient.ip;
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0");
+                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=0");
             }
             else
             {
@@ -101,6 +101,8 @@ namespace snowCozyGUI
             this.windYForce.Text = "0";
             this.windZTrackBar.Value = 0;
             this.windZForce.Text = "0";
+            this.gravityTrackBar.Value = 0;
+            this.gravityForce.Text = "0";
 
             if (mClient.connection != null)
             {
@@ -118,23 +120,23 @@ namespace snowCozyGUI
 
         private void windXTrackBar_Scroll(object sender, EventArgs e)
         {
-            TrackBar tXBar = (TrackBar)sender;
-            this.windXForce.Text = tXBar.Value.ToString();
+            TrackBar xBar = (TrackBar)sender;
+            this.windXForce.Text = xBar.Value.ToString();
 
             if (mClient.connection.valid)
             {
-                mClient.connection.Send("winX=" + tXBar.Value.ToString());
+                mClient.connection.Send("winX=" + xBar.Value.ToString());
             }
         }
 
         private void windYTrackBar_Scroll(object sender, EventArgs e)
         {
-            TrackBar tYBar = (TrackBar)sender;
-            this.windYForce.Text = tYBar.Value.ToString();
+            TrackBar yBar = (TrackBar)sender;
+            this.windYForce.Text = yBar.Value.ToString();
 
             if (mClient.connection.valid)
             {
-                mClient.connection.Send("winY=" + tYBar.Value.ToString());
+                mClient.connection.Send("winY=" + yBar.Value.ToString());
 
                 //System.Console.Write(tYBar.Value.ToString());
             }
@@ -142,23 +144,24 @@ namespace snowCozyGUI
 
         private void windZTrackBar_Scroll(object sender, EventArgs e)
         {
-            TrackBar tZBar = (TrackBar)sender;
-            this.windZForce.Text = tZBar.Value.ToString();
+            TrackBar zBar = (TrackBar)sender;
+            this.windZForce.Text = zBar.Value.ToString();
 
             if (mClient.connection.valid)
             {
-                mClient.connection.Send("winZ=" + tZBar.Value.ToString());
+                mClient.connection.Send("winZ=" + zBar.Value.ToString());
             }
         }
 
-        private void adress_Click(object sender, EventArgs e)
+        private void gravityTrackBar_Scroll(object sender, EventArgs e)
         {
-
-        }
-
-        private void networkGroupBox_Enter(object sender, EventArgs e)
-        {
-
+            TrackBar gravBar = (TrackBar)sender;
+            this.gravityForce.Text = gravBar.Value.ToString();
+            
+            if (mClient.connection.valid)
+            {
+                mClient.connection.Send("grav=" + gravBar.Value.ToString());
+            }
         }
     }
 }

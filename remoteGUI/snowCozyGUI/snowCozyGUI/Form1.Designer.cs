@@ -33,6 +33,11 @@
             this.networkGroupBox = new System.Windows.Forms.GroupBox();
             this.adress = new System.Windows.Forms.Label();
             this.propertiesGroupBox = new System.Windows.Forms.GroupBox();
+            this.windZForce = new System.Windows.Forms.Label();
+            this.windZ = new System.Windows.Forms.Label();
+            this.windZTrackBar = new System.Windows.Forms.TrackBar();
+            this.windYForce = new System.Windows.Forms.Label();
+            this.windY = new System.Windows.Forms.Label();
             this.windYTrackBar = new System.Windows.Forms.TrackBar();
             this.windXForce = new System.Windows.Forms.Label();
             this.windX = new System.Windows.Forms.Label();
@@ -40,22 +45,21 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.windY = new System.Windows.Forms.Label();
-            this.windYForce = new System.Windows.Forms.Label();
-            this.windZTrackBar = new System.Windows.Forms.TrackBar();
-            this.windZ = new System.Windows.Forms.Label();
-            this.windZForce = new System.Windows.Forms.Label();
+            this.gravityTrackBar = new System.Windows.Forms.TrackBar();
+            this.gravity = new System.Windows.Forms.Label();
+            this.gravityForce = new System.Windows.Forms.Label();
             this.networkGroupBox.SuspendLayout();
             this.propertiesGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.windZTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.windYTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.windXTrackBar)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.windZTrackBar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gravityTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // connectButton
             // 
-            this.connectButton.Location = new System.Drawing.Point(199, 15);
+            this.connectButton.Location = new System.Drawing.Point(210, 16);
             this.connectButton.Name = "connectButton";
             this.connectButton.Size = new System.Drawing.Size(76, 20);
             this.connectButton.TabIndex = 0;
@@ -67,7 +71,7 @@
             // 
             this.ipTextBox.Location = new System.Drawing.Point(56, 16);
             this.ipTextBox.Name = "ipTextBox";
-            this.ipTextBox.Size = new System.Drawing.Size(137, 20);
+            this.ipTextBox.Size = new System.Drawing.Size(148, 20);
             this.ipTextBox.TabIndex = 1;
             this.ipTextBox.Text = "127.0.0.1";
             // 
@@ -78,11 +82,10 @@
             this.networkGroupBox.Controls.Add(this.connectButton);
             this.networkGroupBox.Location = new System.Drawing.Point(12, 12);
             this.networkGroupBox.Name = "networkGroupBox";
-            this.networkGroupBox.Size = new System.Drawing.Size(281, 49);
+            this.networkGroupBox.Size = new System.Drawing.Size(292, 49);
             this.networkGroupBox.TabIndex = 2;
             this.networkGroupBox.TabStop = false;
             this.networkGroupBox.Text = "Network";
-            this.networkGroupBox.Enter += new System.EventHandler(this.networkGroupBox_Enter);
             // 
             // adress
             // 
@@ -92,10 +95,12 @@
             this.adress.Size = new System.Drawing.Size(42, 13);
             this.adress.TabIndex = 2;
             this.adress.Text = "Adress:";
-            this.adress.Click += new System.EventHandler(this.adress_Click);
             // 
             // propertiesGroupBox
             // 
+            this.propertiesGroupBox.Controls.Add(this.gravityForce);
+            this.propertiesGroupBox.Controls.Add(this.gravity);
+            this.propertiesGroupBox.Controls.Add(this.gravityTrackBar);
             this.propertiesGroupBox.Controls.Add(this.windZForce);
             this.propertiesGroupBox.Controls.Add(this.windZ);
             this.propertiesGroupBox.Controls.Add(this.windZTrackBar);
@@ -107,10 +112,54 @@
             this.propertiesGroupBox.Controls.Add(this.windXTrackBar);
             this.propertiesGroupBox.Location = new System.Drawing.Point(12, 67);
             this.propertiesGroupBox.Name = "propertiesGroupBox";
-            this.propertiesGroupBox.Size = new System.Drawing.Size(281, 336);
+            this.propertiesGroupBox.Size = new System.Drawing.Size(292, 336);
             this.propertiesGroupBox.TabIndex = 4;
             this.propertiesGroupBox.TabStop = false;
             this.propertiesGroupBox.Text = "Properties";
+            // 
+            // windZForce
+            // 
+            this.windZForce.AutoSize = true;
+            this.windZForce.Location = new System.Drawing.Point(262, 104);
+            this.windZForce.Name = "windZForce";
+            this.windZForce.Size = new System.Drawing.Size(13, 13);
+            this.windZForce.TabIndex = 8;
+            this.windZForce.Text = "0";
+            // 
+            // windZ
+            // 
+            this.windZ.AutoSize = true;
+            this.windZ.Location = new System.Drawing.Point(11, 104);
+            this.windZ.Name = "windZ";
+            this.windZ.Size = new System.Drawing.Size(39, 13);
+            this.windZ.TabIndex = 7;
+            this.windZ.Text = "WindZ";
+            // 
+            // windZTrackBar
+            // 
+            this.windZTrackBar.Location = new System.Drawing.Point(56, 104);
+            this.windZTrackBar.Name = "windZTrackBar";
+            this.windZTrackBar.Size = new System.Drawing.Size(204, 45);
+            this.windZTrackBar.TabIndex = 6;
+            this.windZTrackBar.Scroll += new System.EventHandler(this.windZTrackBar_Scroll);
+            // 
+            // windYForce
+            // 
+            this.windYForce.AutoSize = true;
+            this.windYForce.Location = new System.Drawing.Point(262, 62);
+            this.windYForce.Name = "windYForce";
+            this.windYForce.Size = new System.Drawing.Size(13, 13);
+            this.windYForce.TabIndex = 5;
+            this.windYForce.Text = "0";
+            // 
+            // windY
+            // 
+            this.windY.AutoSize = true;
+            this.windY.Location = new System.Drawing.Point(11, 62);
+            this.windY.Name = "windY";
+            this.windY.Size = new System.Drawing.Size(39, 13);
+            this.windY.TabIndex = 4;
+            this.windY.Text = "WindY";
             // 
             // windYTrackBar
             // 
@@ -153,7 +202,7 @@
             this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 406);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(305, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(316, 22);
             this.statusStrip1.TabIndex = 5;
             // 
             // statusMessage
@@ -166,55 +215,38 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
-            // windY
+            // gravityTrackBar
             // 
-            this.windY.AutoSize = true;
-            this.windY.Location = new System.Drawing.Point(11, 62);
-            this.windY.Name = "windY";
-            this.windY.Size = new System.Drawing.Size(39, 13);
-            this.windY.TabIndex = 4;
-            this.windY.Text = "WindY";
+            this.gravityTrackBar.Location = new System.Drawing.Point(56, 146);
+            this.gravityTrackBar.Maximum = 50;
+            this.gravityTrackBar.Name = "gravityTrackBar";
+            this.gravityTrackBar.Size = new System.Drawing.Size(204, 45);
+            this.gravityTrackBar.TabIndex = 9;
+            this.gravityTrackBar.Scroll += new System.EventHandler(this.gravityTrackBar_Scroll);
             // 
-            // windYForce
+            // gravity
             // 
-            this.windYForce.AutoSize = true;
-            this.windYForce.Location = new System.Drawing.Point(262, 62);
-            this.windYForce.Name = "windYForce";
-            this.windYForce.Size = new System.Drawing.Size(13, 13);
-            this.windYForce.TabIndex = 5;
-            this.windYForce.Text = "0";
+            this.gravity.AutoSize = true;
+            this.gravity.Location = new System.Drawing.Point(14, 146);
+            this.gravity.Name = "gravity";
+            this.gravity.Size = new System.Drawing.Size(40, 13);
+            this.gravity.TabIndex = 10;
+            this.gravity.Text = "Gravity";
             // 
-            // windZTrackBar
+            // gravityForce
             // 
-            this.windZTrackBar.Location = new System.Drawing.Point(56, 104);
-            this.windZTrackBar.Name = "windZTrackBar";
-            this.windZTrackBar.Size = new System.Drawing.Size(204, 45);
-            this.windZTrackBar.TabIndex = 6;
-            this.windZTrackBar.Scroll += new System.EventHandler(this.windZTrackBar_Scroll);
-            // 
-            // windZ
-            // 
-            this.windZ.AutoSize = true;
-            this.windZ.Location = new System.Drawing.Point(11, 104);
-            this.windZ.Name = "windZ";
-            this.windZ.Size = new System.Drawing.Size(39, 13);
-            this.windZ.TabIndex = 7;
-            this.windZ.Text = "WindZ";
-            // 
-            // windZForce
-            // 
-            this.windZForce.AutoSize = true;
-            this.windZForce.Location = new System.Drawing.Point(262, 104);
-            this.windZForce.Name = "windZForce";
-            this.windZForce.Size = new System.Drawing.Size(13, 13);
-            this.windZForce.TabIndex = 8;
-            this.windZForce.Text = "0";
+            this.gravityForce.AutoSize = true;
+            this.gravityForce.Location = new System.Drawing.Point(262, 146);
+            this.gravityForce.Name = "gravityForce";
+            this.gravityForce.Size = new System.Drawing.Size(13, 13);
+            this.gravityForce.TabIndex = 11;
+            this.gravityForce.Text = "0";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(305, 428);
+            this.ClientSize = new System.Drawing.Size(316, 428);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.propertiesGroupBox);
             this.Controls.Add(this.networkGroupBox);
@@ -225,11 +257,12 @@
             this.networkGroupBox.PerformLayout();
             this.propertiesGroupBox.ResumeLayout(false);
             this.propertiesGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.windZTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.windYTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.windXTrackBar)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.windZTrackBar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gravityTrackBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -254,6 +287,9 @@
         private System.Windows.Forms.Label windZForce;
         private System.Windows.Forms.Label windZ;
         private System.Windows.Forms.TrackBar windZTrackBar;
+        private System.Windows.Forms.Label gravityForce;
+        private System.Windows.Forms.Label gravity;
+        private System.Windows.Forms.TrackBar gravityTrackBar;
     }
 }
 
