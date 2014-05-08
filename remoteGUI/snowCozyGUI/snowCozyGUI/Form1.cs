@@ -33,6 +33,10 @@ namespace snowCozyGUI
             mClient.connection = new NetworkManager();
             mClient.port = 24250;
             mClient.bufferSize = 1024;
+            //default ip
+            mClient.ip = "127.0.0.1";
+
+            componentVisability(false);
 
             //add ip and message to the gui
             this.statusMessage.Text = "Disconnected";
@@ -75,7 +79,7 @@ namespace snowCozyGUI
                 this.connectButton.Text = "Disconnect";
                 this.statusMessage.Text = "Connected to " + mClient.ip;
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nwind=0");
+                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0");
             }
             else
             {
@@ -89,6 +93,14 @@ namespace snowCozyGUI
             componentVisability(false);
             this.connectButton.Text = "Connect";
             this.statusMessage.Text = "Disconnected";
+            
+            //set slider default value to 0
+            this.windXTrackBar.Value = 0;
+            this.windXForce.Text = "0";
+            this.windYTrackBar.Value = 0;
+            this.windYForce.Text = "0";
+            this.windZTrackBar.Value = 0;
+            this.windZForce.Text = "0";
 
             if (mClient.connection != null)
             {
@@ -104,14 +116,38 @@ namespace snowCozyGUI
             this.propertiesGroupBox.Enabled = status;
         }
 
-        private void windTrackBar_Scroll(object sender, EventArgs e)
+        private void windXTrackBar_Scroll(object sender, EventArgs e)
         {
-            TrackBar tBar = (TrackBar)sender;
-            this.windForce.Text = tBar.Value.ToString();
+            TrackBar tXBar = (TrackBar)sender;
+            this.windXForce.Text = tXBar.Value.ToString();
 
             if (mClient.connection.valid)
             {
-                mClient.connection.Send("wind=" + tBar.Value.ToString());
+                mClient.connection.Send("winX=" + tXBar.Value.ToString());
+            }
+        }
+
+        private void windYTrackBar_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tYBar = (TrackBar)sender;
+            this.windYForce.Text = tYBar.Value.ToString();
+
+            if (mClient.connection.valid)
+            {
+                mClient.connection.Send("winY=" + tYBar.Value.ToString());
+
+                //System.Console.Write(tYBar.Value.ToString());
+            }
+        }
+
+        private void windZTrackBar_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tZBar = (TrackBar)sender;
+            this.windZForce.Text = tZBar.Value.ToString();
+
+            if (mClient.connection.valid)
+            {
+                mClient.connection.Send("winZ=" + tZBar.Value.ToString());
             }
         }
 
