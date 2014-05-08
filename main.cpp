@@ -135,8 +135,8 @@ void myPreSyncFun()
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this?
 void myPostSyncPreDrawFun()
 {
-	gEngine->setDisplayInfoVisibility(&showStats);
-	gEngine->setStatsGraphVisibility(&showGraph);
+	//gEngine->setDisplayInfoVisibility(&showStats);
+	//gEngine->setStatsGraphVisibility(&showGraph);
 }
 
 //Encodes the data sent from GUI
