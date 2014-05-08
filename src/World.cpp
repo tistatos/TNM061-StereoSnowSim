@@ -47,7 +47,7 @@ void World::initializeWorld()
 	glFrontFace(GL_CW);
 
 	//add shaders
-	sgct::ShaderManager::instance()->addShaderProgram("world", "WorldVertex.vertexshader", "WorldFragment.fragmentshader");
+	sgct::ShaderManager::instance()->addShaderProgram("world", "shaders/WorldVertex.vertexshader", "shaders/WorldFragment.fragmentshader");
 
 	//retrieve matrix location
 	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram("world").getUniformLocation("MVP");

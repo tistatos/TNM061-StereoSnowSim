@@ -42,7 +42,8 @@ int main(int argc, char *argv[])
 	gParticles->addField(grav);
 
 	Wind* wind = new Wind();
-	//wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
+	wind->init(1.0f, 1.0f, -1.0f);
+	// wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
 	gParticles->addField(wind);
 
 	Vortex* turbine = new Vortex();
@@ -62,7 +63,6 @@ int main(int argc, char *argv[])
 
 	gEngine->render();
 
-
 	gParticles->destroy();
 	gObject->deleteObject();
 	delete gObject;
@@ -81,7 +81,7 @@ void initialize()
 
 	//gObject->initialize();
 	gObject->loadObj("lamppost.obj");
-	
+
 	gBubble->createSphere(1.5f, 100);
 }
 
@@ -95,6 +95,6 @@ void draw()
 
 	gParticles->move(delta);
 	gParticles->draw(delta);
-	
+
 	gObject->draw();
 }

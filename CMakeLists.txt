@@ -23,6 +23,7 @@ add_executable(${APP_NAME}
 	src/Gravity.cpp include/Gravity.h
 	src/Wind.cpp include/Wind.h
 	src/Vortex.cpp include/Vortex.h
+	src/DebugField.cpp include/DebugField.h
 	include/Texture.h
 	include/Shader.h
 	) # for example "main.cpp coolt.cpp kiss.cpp)"

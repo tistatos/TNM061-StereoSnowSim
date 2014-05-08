@@ -28,3 +28,8 @@ void Wind::printInfo()
 {
 	std::cout << "Wind direction: " << getAcceleration() << std::endl;
 }
+
+void Wind::showField()
+{
+	std::cout << "Showing wind." << std::endl;
+}

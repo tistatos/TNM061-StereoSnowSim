@@ -6,8 +6,6 @@
 #include "Field.h"
 #include "HelperFunctions.h"
 
-using namespace std;
-
 class Wind : public Field
 {
 	public:
@@ -16,6 +14,7 @@ class Wind : public Field
 		glm::vec3 getVelocity(double delta, Particle& p);
 		glm::vec3 getAcceleration();
 		void printInfo();
+		void showField();
 	private:
 		glm::vec3 acceleration;
 };

@@ -6,8 +6,8 @@ Snow::Snow(sgct::Engine* engine) : ParticleSystem(engine)
 {
 
 	mShader.mShaderName = "snow";
-	mShader.mVertexFile = "particle.vert";
-	mShader.mFragmentFile = "particle.frag";
+	mShader.mVertexFile = "shaders/particle.vert";
+	mShader.mFragmentFile = "shaders/particle.frag";
 
 	mTexture.mTextureName = "snow";
 	mTexture.mTextureFile = "snow.png";

@@ -60,5 +60,11 @@ float Vortex::calcDistance(const Particle& p)
 
 void Vortex::printInfo()
 {
-	std::cout << "Vortex with force " << mForce << " at " << mPosition << " with radius " << mRadius << std::endl;
+	std::cout << "Vortex with force " << mForce << " at " <<
+		mPosition << " with radius " << mRadius << std::endl;
+}
+
+void Vortex::showField()
+{
+	std::cout << "Showing vortex." << std::endl;
 }

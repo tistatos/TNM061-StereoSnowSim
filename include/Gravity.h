@@ -17,6 +17,7 @@ class Gravity : public Field
 		void init(float acc = -9.81);
 		glm::vec3 getVelocity(double delta, Particle& p);
 		void printInfo();
+		void showField() {};
 	private:
 		glm::vec3 acceleration;
 };

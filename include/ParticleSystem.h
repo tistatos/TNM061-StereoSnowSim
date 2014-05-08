@@ -26,6 +26,7 @@ public:
 
 	void addField(Field *f);
 	void printFields();
+	void showFields();
 	void setTexture(string name, string file);
 	void setShader(string name, string vertFile, string fragFile);
 

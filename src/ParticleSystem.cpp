@@ -128,7 +128,6 @@ void ParticleSystem::draw(double delta)
 {
 	if(mInitialized)
 	{
-
 		//limit the amount of particles created each frame
 		int newParticles = (int)(delta*10000.0);
 		if(newParticles > (int)(0.001f*10000.0))
@@ -141,15 +140,15 @@ void ParticleSystem::draw(double delta)
 			int particleIndex = findLastParticle();
 			if(particleIndex >= 0)
 				reset(particleIndex);
-
 		}
+
+		showFields();
 
 		sortParticles();
 		int particleCount = 0;
 		for(int i=0; i< MAX_PARTICLES; i++)
 		{
 			Particle &p = mParticles[i];
-
 
 			if(p.mLife > 0.0f)
 			{
@@ -175,8 +174,8 @@ void ParticleSystem::draw(double delta)
 				mParticlePositionData[16*particleCount+14] = p.mMatrix[3][2];
 				mParticlePositionData[16*particleCount+15] = p.mMatrix[3][3];
 			}
-			particleCount++;
 
+			particleCount++;
 		}
 
 		glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
@@ -336,7 +335,6 @@ void ParticleSystem::reset(int index)
 void ParticleSystem::reset(Particle& p)
 {
 	p.mLife = 5.0f;
-
 }
 
 void ParticleSystem::addField(Field *f)
@@ -353,8 +351,16 @@ void ParticleSystem::printFields()
 	}
 }
 
+void ParticleSystem::showFields()
+{
+	// loop through the fields, and show their arrows
+	for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
+	{
+		(*f)->showField();
+	}
+}
+
 void ParticleSystem::sortParticles()
 {
-
 	std::sort(&mParticles[0], &mParticles[MAX_PARTICLES]);
 }
