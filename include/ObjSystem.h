@@ -14,6 +14,9 @@ class Object
 		void loadObj(char* filename);
 		void deleteObject();
 		void draw();
+
+		void scale(float sx, float sy, float sz);
+		void translate(float tx, float ty, float tz);
 	private:
 		sgct::Engine* mEngine;
 		GLuint vertexArrayObject; //för Nvidia-kort
@@ -26,6 +29,8 @@ class Object
 		GLint mMatrixLocation;
 		GLint mTransformLocation; // Location of transformation matrix
 		size_t mTextureHandle;
+
+		glm::mat4 transMatrix;
 };
 
 #endif
