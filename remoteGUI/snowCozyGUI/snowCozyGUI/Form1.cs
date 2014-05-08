@@ -34,9 +34,8 @@ namespace snowCozyGUI
             mClient.port = 24250;
             mClient.bufferSize = 1024;
 
-            //this.toolStripStatusLabel.Text = "Disconnected";
-
-            //ipTextBox is the design name for the text box
+            //add ip and message to the gui
+            this.statusMessage.Text = "Disconnected";
             this.ipTextBox.Text = mClient.ip;
 
         }
@@ -74,10 +73,9 @@ namespace snowCozyGUI
             {
                 componentVisability(true);
                 this.connectButton.Text = "Disconnect";
-                //change label text if you have one
-
+                this.statusMessage.Text = "Connected to " + mClient.ip;
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nsize=50");
+                mClient.connection.Send("stats=0\r\ngraph=0\r\nwind=0");
             }
             else
             {
@@ -90,7 +88,7 @@ namespace snowCozyGUI
         {
             componentVisability(false);
             this.connectButton.Text = "Connect";
-            //change label text if you have one
+            this.statusMessage.Text = "Disconnected";
 
             if (mClient.connection != null)
             {
@@ -106,5 +104,25 @@ namespace snowCozyGUI
             this.propertiesGroupBox.Enabled = status;
         }
 
+        private void windTrackBar_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tBar = (TrackBar)sender;
+            this.windForce.Text = tBar.Value.ToString();
+
+            if (mClient.connection.valid)
+            {
+                mClient.connection.Send("wind=" + tBar.Value.ToString());
+            }
+        }
+
+        private void adress_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void networkGroupBox_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }
