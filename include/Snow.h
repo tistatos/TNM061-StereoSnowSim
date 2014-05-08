@@ -13,7 +13,7 @@ class Snow : public ParticleSystem
 {
 public:
 	Snow(sgct::Engine* engine);
-	void initialize();
+	bool initialize();
 
 	void reset(Particle& p);
 	void draw(double delta);

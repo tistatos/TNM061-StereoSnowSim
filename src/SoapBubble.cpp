@@ -161,10 +161,6 @@ void SoapBubble::createSphere(float radius, int segments)
 
 	}
 
-	// Enable depth test
-    glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
 
 	//generate one vertex array object and bind it
 	glGenVertexArrays(1, &vertexArrayObject);
@@ -215,10 +211,6 @@ void SoapBubble::createSphere(float radius, int segments)
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
-	// Enable depth test
-    glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
 }
 
 void SoapBubble::drawBubble()
