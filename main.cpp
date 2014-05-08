@@ -56,8 +56,9 @@ int main(int argc, char *argv[])
 
 	gParticles = new Snow(gEngine);
 	gWorld = new World(gEngine);
-	gObject = new Object(gEngine);
 	gBubble = new SoapBubble(gEngine);
+
+	gObject = new Object(gEngine);
 
 	Gravity* grav = new Gravity();
 	grav->init(-9.81f);
@@ -108,6 +109,8 @@ void initialize()
 
 	//gObject->initialize();
 	gObject->loadObj("road/road.obj");
+	gObject->scale(0.2f,0.2f,0.2f);
+	gObject->translate(0.0f, -2.0f, -1.0f);
 
 	gBubble->createSphere(1.5f, 100);
 }

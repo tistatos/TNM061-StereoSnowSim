@@ -14,6 +14,7 @@ Object::Object(sgct::Engine* engine)
 	vertexBuffer = 0;
 	indexBuffer = 0;
 	mMatrixLocation = -1;
+	transMatrix = glm::mat4(1.0f);
 }
 
 /* 
@@ -227,7 +228,7 @@ void Object::loadObj(char* filename)
 
 	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
 	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
-	sgct::TextureManager::instance()->loadTexure(mTextureHandle, "object", "bubble.png", true);
+	sgct::TextureManager::instance()->loadTexure(mTextureHandle, "object", "road/road.png", true);
 
 	//Create shader
 	sgct::ShaderManager::instance()->addShaderProgram("object", "object.vert", "object.frag");
@@ -246,19 +247,35 @@ void Object::loadObj(char* filename)
 	return;
 }
 
+void Object::scale(float sx, float sy, float sz)
+{
+	glm::mat4 s = glm::scale(sx,sy,sz);
+	transMatrix = s * transMatrix;
+
+	cout << "Scaled object" << endl;
+}
+
+void Object::translate(float tx, float ty, float tz)
+{
+	glm::mat4 t = glm::translate(tx,ty,tz);
+	transMatrix = t * transMatrix;
+}
+
 void Object::draw()
 {
 	//do depth comparisons and pdate the depth buffer
 	glEnable(GL_DEPTH_TEST);
 	//cull polygons not shown in window
 	glEnable(GL_CULL_FACE);
+	//Draws in other direction
+	glFrontFace(GL_CCW);
 
 	//create a scene matrix incase we want movement
 	glm::mat4 sceneMatrix = glm::mat4(1.0f);
 	
 	glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix() * sceneMatrix;
 	
-	glm::mat4 T = glm::translate(0.0f, 0.0f, -1.0f);
+	glm::mat4 T = glm::translate(0.0f, -7.0f, -0.0f);
 	glm::mat4 S = glm::scale(0.2f,0.2f,0.2f);
 
 	glm::mat4 P = S * T;
