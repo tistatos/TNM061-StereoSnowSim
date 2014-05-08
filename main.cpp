@@ -84,7 +84,7 @@ void initialize()
 	gWorld->initializeWorld();
 
 	//gObject->initialize();
-	gObject->loadObj("cube.obj");
+	gObject->loadObj("road/road.obj");
 
 	gBubble->createSphere(1.5f, 100);
 }
