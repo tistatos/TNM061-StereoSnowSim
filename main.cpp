@@ -111,7 +111,7 @@ void initialize()
 	//gObject->initialize();
 	gObject->loadObj("road/road.obj");
 	gObject->scale(0.2f,0.2f,0.2f);
-	gObject->translate(0.0f, -2.0f, -1.0f);
+	gObject->translate(0.0f, -2.0f, 5.0f);
 
 	gBubble->createSphere(1.5f, 100);
 }
@@ -121,12 +121,12 @@ void draw()
 	double delta = gEngine->getDt();
 
 	gWorld->drawWorld();
-	//gBubble->drawBubble();
-
+	gBubble->drawBubble();
+	//gObject->draw();
 	gParticles->move(delta);
 	gParticles->draw(delta);
 
-	gObject->draw();
+	
 }
 
 //Checking the time since the program started, not sure if we need this either.
