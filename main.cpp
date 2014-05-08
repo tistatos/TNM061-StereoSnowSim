@@ -23,7 +23,9 @@ Wind* wind;
 
 sgct::SharedBool showStats(false);
 sgct::SharedBool showGraph(false);
-sgct::SharedDouble size_factor(0.0);
+sgct::SharedDouble sizeFactorX(0.0);
+sgct::SharedDouble sizeFactorY(0.0);
+sgct::SharedDouble sizeFactorZ(0.0);
 sgct::SharedDouble curr_time(0.0);
 
 
@@ -145,7 +147,9 @@ void myPostSyncPreDrawFun()
 void myEncodeFun()
 {
 	sgct::SharedData::instance()->writeDouble(&curr_time);
-	sgct::SharedData::instance()->writeDouble(&size_factor);
+	sgct::SharedData::instance()->writeDouble(&sizeFactorX);
+	sgct::SharedData::instance()->writeDouble(&sizeFactorY);
+	sgct::SharedData::instance()->writeDouble(&sizeFactorZ);
 	sgct::SharedData::instance()->writeBool(&showStats);
 	sgct::SharedData::instance()->writeBool(&showGraph);
 }
@@ -154,7 +158,9 @@ void myEncodeFun()
 void myDecodeFun()
 {
 	sgct::SharedData::instance()->readDouble(&curr_time);
-	sgct::SharedData::instance()->readDouble(&size_factor);
+	sgct::SharedData::instance()->writeDouble(&sizeFactorX);
+	sgct::SharedData::instance()->writeDouble(&sizeFactorY);
+	sgct::SharedData::instance()->writeDouble(&sizeFactorZ);
 	sgct::SharedData::instance()->readBool(&showStats);
 	sgct::SharedData::instance()->readBool(&showGraph);
 }
@@ -179,11 +185,31 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		else if(size >= 6 && strncmp(receivedChars, "windX", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			int tmpValX = atoi(receivedChars + 5);
 
-			size_factor.setVal(tmpVal);
-			wind->setAcceleration((size_factor.getVal()*0.1f), 0.0f, 0.0f);
-			cout << size_factor.getVal();
+			sizeFactorX.setVal(tmpValX);
+			wind->setAcceleration((sizeFactorX.getVal()*0.1f), sizeFactorY.getVal()*0.1f, sizeFactorZ.getVal()*0.1f);
+			cout << sizeFactorX.getVal();
+		}
+
+		else if(size >= 6 && strncmp(receivedChars, "windY", 5) == 0)
+		{
+			//We need an int.
+			int tmpValY = atoi(receivedChars + 5);
+
+			sizeFactorY.setVal(tmpValY);
+			wind->setAcceleration((sizeFactorX.getVal()*0.1f), sizeFactorY.getVal()*0.1f, sizeFactorZ.getVal()*0.1f);
+			cout << sizeFactorY.getVal();
+		}
+
+		else if(size >= 6 && strncmp(receivedChars, "windZ", 5) == 0)
+		{
+			//We need an int.
+			int tmpValZ = atoi(receivedChars + 5);
+
+			sizeFactorZ.setVal(tmpValZ);
+			wind->setAcceleration((sizeFactorX.getVal()*0.1f), sizeFactorY.getVal()*0.1f, sizeFactorZ.getVal()*0.1f);
+			cout << sizeFactorZ.getVal();
 		}
 	}
 }
