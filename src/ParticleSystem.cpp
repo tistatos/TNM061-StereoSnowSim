@@ -14,6 +14,8 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mEngine = engine;
 	mInitialized = false;
 
+	mShowFields = false; // do not show fields by default
+
 	mVertexArray = 0;
 
 	mLastUsedParticle = 0;
@@ -99,7 +101,6 @@ int ParticleSystem::findLastParticle()
 {
 	for (int i = mLastUsedParticle; i < MAX_PARTICLES; ++i)
 	{
-
 		if(mParticles[i].mLife <= 0)
 		{
 			mLastUsedParticle = i;
@@ -142,6 +143,7 @@ void ParticleSystem::draw(double delta)
 				reset(particleIndex);
 		}
 
+		// show fields if mShowFields is true
 		showFields();
 
 		sortParticles();
@@ -353,11 +355,20 @@ void ParticleSystem::printFields()
 
 void ParticleSystem::showFields()
 {
-	// loop through the fields, and show their arrows
-	for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
+	if(mShowFields)
 	{
-		(*f)->showField();
+		// loop through the fields, and show their arrows
+		for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
+		{
+			(*f)->showField();
+		}
 	}
+}
+
+void ParticleSystem::toggleFields()
+{
+	mShowFields = !mShowFields;
+	std::cout << "Field view is " << (mShowFields ? "ON" : "OFF") << std::endl;
 }
 
 void ParticleSystem::sortParticles()
