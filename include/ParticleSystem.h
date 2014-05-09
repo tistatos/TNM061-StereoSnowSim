@@ -26,8 +26,10 @@ public:
 
 	void addField(Field *f);
 	void printFields();
+	void showFields();
 	void setTexture(string name, string file);
 	void setShader(string name, string vertFile, string fragFile);
+	void toggleFields();
 
 protected:
 	virtual void sortParticles();
@@ -37,6 +39,7 @@ protected:
 	virtual void reset(Particle& p);
 
 	bool mInitialized; /// Is the particle system initalized?
+	bool mShowFields; /// should we show the fields?
 
 	Shader mShader; //Struct with shader data
 	Texture mTexture; //Strcut with Texture data
