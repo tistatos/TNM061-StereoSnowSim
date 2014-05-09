@@ -47,7 +47,7 @@ void World::initializeWorld()
 	glFrontFace(GL_CW);
 
 	//add shaders
-	sgct::ShaderManager::instance()->addShaderProgram("world", "WorldVertex.vert", "WorldFragment.frag");
+	sgct::ShaderManager::instance()->addShaderProgram("world", "shaders/World.vert", "shaders/World.frag");
 
 	//retrieve matrix location
 	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram("world").getUniformLocation("MVP");
@@ -63,7 +63,7 @@ void World::drawWorld()
 	glEnable(GL_DEPTH_TEST);
 	//cull polygons not shown in window
 	glEnable(GL_CULL_FACE);
-	glFrontFace(GL_CCW);
+	glFrontFace(GL_CW);
 
 	//create a scene matrix incase we want movement
 	glm::mat4 sceneMatrix = glm::mat4(1.0f);

@@ -49,6 +49,7 @@ public:
 	glm::vec3 getVelocity(double delta, Particle &p);
 	void printInfo();
 	void setTime(double time);
+	void showField(){};
 private:
 	float octaveNoise3D(	const float octaves,
 							const float persistence,

@@ -14,6 +14,7 @@ Object::Object(sgct::Engine* engine)
 	vertexBuffer = 0;
 	indexBuffer = 0;
 	mMatrixLocation = -1;
+	transMatrix = glm::mat4(1.0f);
 }
 
 /*
@@ -170,6 +171,10 @@ void Object::loadObj(char* filename)
         cout << "Mesh read error. No mesh data generated";
 		return;
 	}
+	// Enable depth test
+    glEnable(GL_DEPTH_TEST);
+    // Accept fragment if it closer to the camera than the former one
+    glDepthFunc(GL_LESS);
 
 	// Generate one vertex array object (VAO) and bind it
 	glGenVertexArrays(1, &vertexArrayObject);
@@ -216,13 +221,17 @@ void Object::loadObj(char* filename)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
  	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+ 	//set up backface culling
+	glCullFace(GL_BACK);
+	//define frontfacing polygons
+	glFrontFace(GL_CW);
 
 	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
 	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
-	sgct::TextureManager::instance()->loadTexure(mTextureHandle, "object", "checker.png", true);
+	sgct::TextureManager::instance()->loadTexure(mTextureHandle, "object", "road/road.png", true);
 
 	//Create shader
-	sgct::ShaderManager::instance()->addShaderProgram("object", "object.vert", "object.frag");
+	sgct::ShaderManager::instance()->addShaderProgram("object", "shaders/object.vert", "shaders/object.frag");
 
 	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram( "object").getUniformLocation( "MVP" );
 	mTransformLocation = sgct::ShaderManager::instance()->getShaderProgram("object").getUniformLocation( "P" );
@@ -238,47 +247,50 @@ void Object::loadObj(char* filename)
 	return;
 }
 
+void Object::scale(float sx, float sy, float sz)
+{
+	glm::mat4 s = glm::scale(sx,sy,sz);
+	transMatrix = s * transMatrix;
+
+	cout << "Scaled object" << endl;
+}
+
+void Object::translate(float tx, float ty, float tz)
+{
+	glm::mat4 t = glm::translate(tx,ty,tz);
+	transMatrix = t * transMatrix;
+}
+
 void Object::draw()
 {
 	//do depth comparisons and pdate the depth buffer
 	glEnable(GL_DEPTH_TEST);
-	// Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
 	//cull polygons not shown in window
 	glEnable(GL_CULL_FACE);
+	//Draws in other direction
+	glFrontFace(GL_CCW);
 
 	//create a scene matrix incase we want movement
 	glm::mat4 sceneMatrix = glm::mat4(1.0f);
 
 	glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix() * sceneMatrix;
 
-	glm::mat4 T = glm::translate(0.0f, -0.0f, -2.0f);
-	glm::mat4 S = glm::scale(0.05f,0.05f,0.05f);
+	glm::mat4 T = glm::translate(0.0f, -7.0f, -0.0f);
+	glm::mat4 S = glm::scale(0.2f,0.2f,0.2f);
 
-	glm::mat4 P = T * S;
+	glm::mat4 P = S * T;
 
 	//select active texture unit
 	glActiveTexture(GL_TEXTURE0);
-
 	//bind a named texture to a texturing target
 	glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByHandle(mTextureHandle));
-
-
- 	//set up backface culling
-	glCullFace(GL_FRONT);
-	//define frontfacing polygons
-	glFrontFace(GL_CW);
-
 
 	sgct::ShaderManager::instance()->bindShaderProgram( "object" );
 
 	glUniformMatrix4fv(mMatrixLocation, 1, GL_FALSE, &MVP[0][0]);
-	glUniformMatrix4fv(mTransformLocation, 1, GL_FALSE, &P[0][0]);
+	glUniformMatrix4fv(mTransformLocation, 1, GL_FALSE, &transMatrix[0][0]);
 	glBindVertexArray(vertexArrayObject);
-
-
-	//glDrawArrays(GL_TRIANGLES, 0, nVertices);
-	glDrawElements(GL_TRIANGLES, nVertices, GL_UNSIGNED_INT, (void*)0);
+	glDrawElements(GL_TRIANGLES, 3 * nTriangles, GL_UNSIGNED_INT, (void*)0);
 	// (mode, vertex count, type, element array buffer offset)
 	glBindVertexArray(0);
 

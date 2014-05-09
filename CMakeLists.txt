@@ -18,11 +18,12 @@ add_executable(${APP_NAME}
 	include/SoapBubble.h src/SoapBubble.cpp
 	include/Particle.h
 	include/Field.h
-	include/ObjSystem.h src/objSystem.cpp
+	include/ObjSystem.h src/ObjSystem.cpp
 	src/Snow.cpp include/Snow.h
 	src/Gravity.cpp include/Gravity.h
 	src/Wind.cpp include/Wind.h
 	src/Vortex.cpp include/Vortex.h
+	src/DebugField.cpp include/DebugField.h
 	include/Texture.h
 	include/Shader.h
 	include/SimplexNoise.h src/SimplexNoise.cpp

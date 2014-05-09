@@ -123,7 +123,6 @@ void SoapBubble::createSphere(float radius, int segments)
 			vertexList[base+6] = (float)j/hSegments;
 			vertexList[base+7] = 1.0f - (float)(i + 1) / vSegments;
 		}
-
 	}
 
 	//index, top cap
@@ -158,7 +157,6 @@ void SoapBubble::createSphere(float radius, int segments)
 		triangleList[base+3*i] = nVertices - 1;
 		triangleList[base+3*i+1] = nVertices - 2 - i;
 		triangleList[base+3*i+2] = nVertices - 3 - i;
-
 	}
 
 
@@ -201,7 +199,7 @@ void SoapBubble::createSphere(float radius, int segments)
 	sgct::TextureManager::instance()->loadTexure(mTextureHandle, "bubble", "bubble.png", true);
 
 	//Create shader
-	sgct::ShaderManager::instance()->addShaderProgram("bubble", "bubble.vert", "bubble.frag");
+	sgct::ShaderManager::instance()->addShaderProgram("bubble", "shaders/bubble.vert", "shaders/bubble.frag");
 
 	//Bind shader and get location of MVP matrix
 	sgct::ShaderManager::instance()->bindShaderProgram("bubble");
@@ -210,7 +208,6 @@ void SoapBubble::createSphere(float radius, int segments)
 
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
-
 }
 
 void SoapBubble::drawBubble()

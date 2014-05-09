@@ -4,10 +4,9 @@ uniform sampler2D tex;
 
 in vec2 UV;
 
-out vec4 color;
+out vec4 skin;
 
 void main()
 {
-	color = texture(tex, UV.st);
-	color.a = 0.3;
+	skin = texture(tex, UV.st);
 }
