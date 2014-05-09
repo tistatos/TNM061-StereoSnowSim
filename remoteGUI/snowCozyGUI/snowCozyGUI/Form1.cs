@@ -15,6 +15,7 @@ namespace snowCozyGUI
         public string ip;
         public Int32 port;
         public int bufferSize;
+        public int choice; //0 for wind, 1 for vortex
     }
 
     public partial class Form1 : Form
@@ -79,7 +80,7 @@ namespace snowCozyGUI
                 this.connectButton.Text = "Disconnect";
                 this.statusMessage.Text = "Connected to " + mClient.ip;
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=0");
+                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=0\r\nvorX=0\r\nvorY=0\r\nvorZ=0");
             }
             else
             {
@@ -95,12 +96,12 @@ namespace snowCozyGUI
             this.statusMessage.Text = "Disconnected";
             
             //set slider default value to 0
-            this.windXTrackBar.Value = 0;
-            this.windXForce.Text = "0";
-            this.windYTrackBar.Value = 0;
-            this.windYForce.Text = "0";
-            this.windZTrackBar.Value = 0;
-            this.windZForce.Text = "0";
+            this.xTrackBar.Value = 0;
+            this.xForce.Text = "0";
+            this.yTrackBar.Value = 0;
+            this.yForce.Text = "0";
+            this.zTrackBar.Value = 0;
+            this.zForce.Text = "0";
             this.gravityTrackBar.Value = 0;
             this.gravityForce.Text = "0";
 
@@ -118,38 +119,66 @@ namespace snowCozyGUI
             this.propertiesGroupBox.Enabled = status;
         }
 
-        private void windXTrackBar_Scroll(object sender, EventArgs e)
+        private void xTrackBar_Scroll(object sender, EventArgs e)
         {
-            TrackBar xBar = (TrackBar)sender;
-            this.windXForce.Text = xBar.Value.ToString();
+            TrackBar tBar = (TrackBar)sender;
+            this.xForce.Text = tBar.Value.ToString();
 
             if (mClient.connection.valid)
             {
-                mClient.connection.Send("winX=" + xBar.Value.ToString());
+                System.Console.Write(mClient.choice);
+
+                if (mClient.choice == 0)
+                {
+                    mClient.connection.Send("winX=" + tBar.Value.ToString());
+                    System.Console.Write(tBar.Value.ToString());
+                }
+                else if (mClient.choice == 1)
+                {
+                    mClient.connection.Send("vorX=" + tBar.Value.ToString());
+                    System.Console.Write(tBar.Value.ToString());
+                }
             }
         }
 
-        private void windYTrackBar_Scroll(object sender, EventArgs e)
+        private void yTrackBar_Scroll(object sender, EventArgs e)
         {
-            TrackBar yBar = (TrackBar)sender;
-            this.windYForce.Text = yBar.Value.ToString();
+            TrackBar tBar = (TrackBar)sender;
+            this.yForce.Text = tBar.Value.ToString();
 
             if (mClient.connection.valid)
             {
-                mClient.connection.Send("winY=" + yBar.Value.ToString());
-
+                if (mClient.choice == 0)
+                {
+                    mClient.connection.Send("winY=" + tBar.Value.ToString());
+                    System.Console.Write(tBar.Value.ToString());
+                }
+                else if (mClient.choice == 1)
+                {
+                    mClient.connection.Send("vorY=" + tBar.Value.ToString());
+                    System.Console.Write(tBar.Value.ToString());
+                }
                 //System.Console.Write(tYBar.Value.ToString());
             }
         }
 
-        private void windZTrackBar_Scroll(object sender, EventArgs e)
+        private void zTrackBar_Scroll(object sender, EventArgs e)
         {
-            TrackBar zBar = (TrackBar)sender;
-            this.windZForce.Text = zBar.Value.ToString();
+            TrackBar tBar = (TrackBar)sender;
+            this.zForce.Text = tBar.Value.ToString();
 
             if (mClient.connection.valid)
             {
-                mClient.connection.Send("winZ=" + zBar.Value.ToString());
+                if (mClient.choice == 0)
+                {
+                    mClient.connection.Send("winY=" + tBar.Value.ToString());
+                    System.Console.Write(tBar.Value.ToString());
+                }
+                else if (mClient.choice == 1)
+                {
+                    mClient.connection.Send("vorY=" + tBar.Value.ToString());
+                    System.Console.Write(tBar.Value.ToString());
+                }
             }
         }
 
@@ -161,6 +190,28 @@ namespace snowCozyGUI
             if (mClient.connection.valid)
             {
                 mClient.connection.Send("grav=" + gravBar.Value.ToString());
+            }
+        }
+
+        private void windRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rButt = (RadioButton)sender;
+
+            if (rButt.Checked)
+            {
+                mClient.choice = 0;
+                System.Console.Write(mClient.choice);
+            }
+        }
+
+        private void vortexRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rButt = (RadioButton)sender;
+
+            if (rButt.Checked)
+            {
+                mClient.choice = 1;
+                System.Console.Write(mClient.choice);
             }
         }
     }
