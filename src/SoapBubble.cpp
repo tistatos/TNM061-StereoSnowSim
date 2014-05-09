@@ -201,7 +201,7 @@ void SoapBubble::createSphere(float radius, int segments)
 	sgct::TextureManager::instance()->loadTexure(mTextureHandle, "bubble", "bubble.png", true);
 
 	//Create shader
-	sgct::ShaderManager::instance()->addShaderProgram("bubble", "bubble.vert", "bubble.frag");
+	sgct::ShaderManager::instance()->addShaderProgram("bubble", "shaders/bubble.vert", "shaders/bubble.frag");
 
 	//Bind shader and get location of MVP matrix
 	sgct::ShaderManager::instance()->bindShaderProgram("bubble");

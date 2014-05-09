@@ -59,7 +59,6 @@ int main(int argc, char *argv[])
 	sgct::SharedData::instance()->setEncodeFunction(myEncodeFun);
 	sgct::SharedData::instance()->setDecodeFunction(myDecodeFun);
 
-
 	gParticles = new Snow(gEngine);
 	gWorld = new World(gEngine);
 	gBubble = new SoapBubble(gEngine);
@@ -91,7 +90,6 @@ int main(int argc, char *argv[])
 	}
 
 	gEngine->render();
-
 
 	gParticles->destroy();
 	gObject->deleteObject();
@@ -130,8 +128,6 @@ void draw()
 	//gObject->draw();
 	gParticles->move(delta);
 	gParticles->draw(delta);
-
-	
 }
 
 //Checking the time since the program started, not sure if we need this either.
@@ -180,7 +176,7 @@ void myDecodeFun()
 	sgct::SharedData::instance()->readBool(&vortexBox);
 }
 
-//Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime! 
+//Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
 void externalControlCallback(const char * receivedChars, int size, int clientId)
 {
 	//Checks so the gEnginenode is actually the master.
@@ -241,7 +237,8 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			gGrav->init(tmpVal);
+			gGrav->init(-tmpVal);
+
 		}
 	}
 }
