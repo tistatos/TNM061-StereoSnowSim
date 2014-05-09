@@ -222,5 +222,4 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			grav->init(-tmpVal);
 		}
 	}
->>>>>>> 8de96c5a0cd0a4523f16bdcf1e88055a2a63f39e
 }
