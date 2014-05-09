@@ -123,7 +123,6 @@ void SoapBubble::createSphere(float radius, int segments)
 			vertexList[base+6] = (float)j/hSegments;
 			vertexList[base+7] = 1.0f - (float)(i + 1) / vSegments;
 		}
-
 	}
 
 	//index, top cap
@@ -158,7 +157,6 @@ void SoapBubble::createSphere(float radius, int segments)
 		triangleList[base+3*i] = nVertices - 1;
 		triangleList[base+3*i+1] = nVertices - 2 - i;
 		triangleList[base+3*i+2] = nVertices - 3 - i;
-
 	}
 
 
@@ -210,7 +208,6 @@ void SoapBubble::createSphere(float radius, int segments)
 
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
-
 }
 
 void SoapBubble::drawBubble()
