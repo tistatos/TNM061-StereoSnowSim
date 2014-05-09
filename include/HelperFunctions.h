@@ -3,6 +3,7 @@
 
 #include "sgct.h"
 #include <iostream>
+#define PI 3.14159265359
 
 std::ostream &operator<< (std::ostream &out, const glm::vec3 &vec);
 std::ostream &operator<< (std::ostream &out, const glm::vec2 &vec);

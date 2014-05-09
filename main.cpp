@@ -10,7 +10,7 @@
 #include "SoapBubble.h"
 #include "Vortex.h"
 #include <iostream>
-
+#include "SimplexNoise.h"
 
 //our beautiful global variables
 sgct::Engine* gEngine;
@@ -42,13 +42,19 @@ int main(int argc, char *argv[])
 	gParticles->addField(grav);
 
 	Wind* wind = new Wind();
-	//wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
+	wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
 	gParticles->addField(wind);
 
 	Vortex* turbine = new Vortex();
 	turbine->init(0.0f, -4.0f, 5.0f);
 	turbine->setForce(-10.0f, 0.0f, -1.0f);
 	gParticles->addField(turbine);
+
+	//Not working yet... :(
+	SimplexNoise* noise = new SimplexNoise();
+	noise->init(glm::vec3(0), glm::vec3(0));
+
+	//gParticles->addField(noise);
 
 	cout << "---- Fields active on gParticles ----" << endl;
 	gParticles->printFields();
@@ -84,7 +90,7 @@ void initialize()
 	gWorld->initializeWorld();
 
 	//gObject->initialize();
-	gObject->loadObj("cube.obj");
+	gObject->loadObj("lamppost.obj");
 
 	gBubble->createSphere(1.5f, 100);
 }
@@ -95,9 +101,9 @@ void draw()
 
 	gWorld->drawWorld();
 	//gBubble->drawBubble();
+	gObject->draw();
 
 	gParticles->move(delta);
 	gParticles->draw(delta);
 
-	gObject->draw();
 }
