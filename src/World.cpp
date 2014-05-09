@@ -63,6 +63,7 @@ void World::drawWorld()
 	glEnable(GL_DEPTH_TEST);
 	//cull polygons not shown in window
 	glEnable(GL_CULL_FACE);
+	glFrontFace(GL_CW);
 
 	//create a scene matrix incase we want movement
 	glm::mat4 sceneMatrix = glm::mat4(1.0f);
