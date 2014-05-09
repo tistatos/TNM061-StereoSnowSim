@@ -15,8 +15,17 @@ void SimplexNoise::setTime(double time)
 
 glm::vec3 SimplexNoise::getVelocity(double delta, Particle &p)
 {
-	float lol = octaveNoise3D(6, 0.5f, 10, p.position());
-	return glm::vec3(lol);
+	glm::vec3 pos = p.position();
+	pos.x = pos.x/100;
+	pos.y = pos.y/100;
+	pos.z = pos.z/100;
+	float x = octaveNoise3D(5, 5.0f, 1.0f, glm::vec3(pos.x));
+	float y = octaveNoise3D(5, 5.0f, 1.0f, glm::vec3(pos.y));
+	float z = octaveNoise3D(5, 5.0f, 1.0f, glm::vec3(pos.z));
+
+	// if(x < 0 || y < 0 || z < 0)
+	// 	cout << glm::vec3(x,y,z) << endl;
+	return glm::vec3(x,y,z)*0.05f*(float)delta;
 }
 
 float SimplexNoise::rawNoise3D( const float x, const float y, const float z )
@@ -126,7 +135,6 @@ float SimplexNoise::rawNoise3D( const float x, const float y, const float z )
     	n3 = t3 *t3 * dot(grad3[gi3], x3 ,y3, z3);
     }
 
-
 	return 32.0*(n0+n1+n2+n3);
 }
 
@@ -149,11 +157,10 @@ float SimplexNoise::octaveNoise3D(	const float octaves,
 
 		amplitude *= persistence;
 	}
-	cout <<"pos:" << pos.x << " "<< pos.y << " " << pos.z << " Total: " << total << endl;
 	return total/maxAmplitude;
 }
 
-int SimplexNoise::fastfloor( const float x) { return x > 0 ? (int) x : (int)x-1; }
+int SimplexNoise::fastfloor( const float x) { return (x > 0) ? (int)x : (int)x-1; }
 float SimplexNoise::dot(const int* g, const float x, const float y, const float z) { return g[0]*x+g[1]*y+g[2]*z;}
 
 

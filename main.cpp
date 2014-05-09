@@ -78,23 +78,23 @@ int main(int argc, char *argv[])
 	gTurbine = new Vortex();
 	gTurbine->init(0.0f, 0.0f, 0.0f);
 	//turbine->setForce(-10.0f, 0.0f, -1.0f);
-	gParticles->addField(gTurbine);
+	//gParticles->addField(gTurbine);
 
 	//Not working yet... :(
 	SimplexNoise* noise = new SimplexNoise();
 	noise->init(glm::vec3(0), glm::vec3(0));
 
-	//gParticles->addField(noise);
-
-	cout << "---- Fields active on gParticles ----" << endl;
-	gParticles->printFields();
-	cout << "---------------" << endl << endl;
+	gParticles->addField(noise);
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
 		delete gEngine;
 		return EXIT_FAILURE;
 	}
+
+	cout << "---- Fields active on gParticles ----" << endl;
+	gParticles->printFields();
+	cout << "---------------" << endl << endl;
 
 	gEngine->render();
 

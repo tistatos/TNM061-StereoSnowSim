@@ -3,7 +3,7 @@
 
 #include "sgct.h"
 #include "Field.h"
-
+#include "HelperFunctions.h"
 
 static const int grad3[12][3] = {
     	{1,1,0}, {-1,1,0}, {1,-1,0}, {-1,-1,0},
