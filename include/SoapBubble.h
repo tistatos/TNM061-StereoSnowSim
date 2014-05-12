@@ -2,8 +2,7 @@
 #define __SOAP_BUBBLE_H__
 
 #include "sgct.h"
-
-const double PI = 3.141592;
+#include "HelperFunctions.h"
 
 class SoapBubble
 {

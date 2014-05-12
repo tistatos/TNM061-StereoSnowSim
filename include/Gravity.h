@@ -8,7 +8,7 @@
 
 using namespace std;
 
-const float DAMPENING = 0.01f;
+const float DAMPENING = 0.008f;
 
 class Gravity : public Field
 {
