@@ -4,6 +4,7 @@
 #include "World.h"
 #include "HelperFunctions.h"
 #include "Field.h"
+#include "DebugField.h"
 #include "Gravity.h"
 #include "Wind.h"
 #include "ObjSystem.h"
@@ -16,6 +17,7 @@
 sgct::Engine* gEngine;
 Snow* gParticles;
 World* gWorld;
+DebugField* gDebugField;
 Object* gObject;
 SoapBubble* gBubble;
 Wind* gWind;
@@ -38,7 +40,7 @@ sgct::SharedDouble curr_time(0.0);
 void initialize();
 void draw();
 void myPreSyncFun();
-void statsDrawfun();
+void statsDrawFun();
 void myEncodeFun();
 void myDecodeFun();
 void externalControlCallback(const char * receivedChars, int size, int clientId);
@@ -53,7 +55,7 @@ int main(int argc, char *argv[])
 	gEngine->setInitOGLFunction(initialize);
 	gEngine->setDrawFunction(draw);
 	gEngine->setPreSyncFunction(myPreSyncFun);
-	gEngine->setPostSyncPreDrawFunction(statsDrawfun);
+	gEngine->setPostSyncPreDrawFunction(statsDrawFun);
 	gEngine->setExternalControlCallback(externalControlCallback);
 
 	sgct::SharedData::instance()->setEncodeFunction(myEncodeFun);
@@ -61,6 +63,8 @@ int main(int argc, char *argv[])
 
 	gParticles = new Snow(gEngine);
 	gWorld = new World(gEngine);
+	gDebugField = new DebugField(gEngine);
+
 	gBubble = new SoapBubble(gEngine);
 
 	gObject = new Object(gEngine);
@@ -111,6 +115,8 @@ void initialize()
 	}
 	gWorld->initializeWorld();
 
+	gDebugField->init();
+
 	//gObject->initialize();
 	gObject->loadObj("road/road.obj");
 	gObject->scale(0.2f,0.2f,0.2f);
@@ -142,10 +148,10 @@ void myPreSyncFun()
 }
 
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this?
-void statsDrawfun()
+void statsDrawFun()
 {
-	//gEngine->setDisplayInfoVisibility(&windBox);
-	//gEngine->setStatsGraphVisibility(&vortexBox);
+	// gEngine->setDisplayInfoVisibility(&windBox);
+	// gEngine->setStatsGraphVisibility(&vortexBox);
 }
 
 //Encodes the data sent from GUI
@@ -205,7 +211,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 				gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 			else
 				gTurbine->setForce((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-			
+
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winY", 4) == 0)
@@ -218,7 +224,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 				gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 			else
 				gTurbine->setForce((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-	
+
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winZ", 4) == 0)

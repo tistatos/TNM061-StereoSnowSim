@@ -5,6 +5,7 @@
 
 #include "ParticleSystem.h"
 #include "sgct.h"
+#include "HelperFunctions.h"
 
 
 using namespace std;

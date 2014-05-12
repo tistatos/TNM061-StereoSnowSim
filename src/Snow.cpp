@@ -1,3 +1,4 @@
+#include "ParticleSystem.h"
 #include "Snow.h"
 #include "HelperFunctions.h"
 
@@ -21,7 +22,6 @@ void Snow::move(double delta)
 {
 	ParticleSystem::move(delta);
 }
-
 
 void Snow::draw(double delta)
 {
