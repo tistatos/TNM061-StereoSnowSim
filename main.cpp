@@ -136,9 +136,9 @@ void draw()
 	double delta = gEngine->getDt();
 
 	gWorld->drawWorld();
-	//gBubble->drawBubble();
-	gObject->draw();
-	tree->draw();
+	gBubble->drawBubble();
+	//gObject->draw();
+	//tree->draw();
 	gParticles->move(delta);
 	gParticles->draw(delta);
 }
