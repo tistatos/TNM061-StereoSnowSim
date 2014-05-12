@@ -14,6 +14,8 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mEngine = engine;
 	mInitialized = false;
 
+	mShowFields = false; // do not show fields by default
+
 	mVertexArray = 0;
 
 	mLastUsedParticle = 0;
@@ -106,7 +108,6 @@ int ParticleSystem::findLastParticle()
 {
 	for (int i = mLastUsedParticle; i < MAX_PARTICLES; ++i)
 	{
-
 		if(mParticles[i].mLife <= 0)
 		{
 			mLastUsedParticle = i;
@@ -135,7 +136,6 @@ void ParticleSystem::draw(double delta)
 {
 	if(mInitialized)
 	{
-
 		//limit the amount of particles created each frame
 		int newParticles = (int)(delta*10000.0);
 		if(newParticles > (int)(0.001f*10000.0))
@@ -148,15 +148,16 @@ void ParticleSystem::draw(double delta)
 			int particleIndex = findLastParticle();
 			if(particleIndex >= 0)
 				reset(particleIndex);
-
 		}
+
+		// show fields if mShowFields is true
+		showFields();
 
 		sortParticles();
 		int particleCount = 0;
 		for(int i=0; i< MAX_PARTICLES; i++)
 		{
 			Particle &p = mParticles[i];
-
 
 			if(p.mLife > 0.0f)
 			{
@@ -181,8 +182,8 @@ void ParticleSystem::draw(double delta)
 				mParticlePositionData[16*particleCount+13] = p.mMatrix[3][1];
 				mParticlePositionData[16*particleCount+14] = p.mMatrix[3][2];
 				mParticlePositionData[16*particleCount+15] = p.mMatrix[3][3];
-				particleCount++;
 
+				particleCount++;
 			}
 		}
 
@@ -343,7 +344,6 @@ void ParticleSystem::reset(int index)
 void ParticleSystem::reset(Particle& p)
 {
 	p.mLife = 5.0f;
-
 }
 
 void ParticleSystem::addField(Field *f)
@@ -360,8 +360,25 @@ void ParticleSystem::printFields()
 	}
 }
 
+void ParticleSystem::showFields()
+{
+	if(mShowFields)
+	{
+		// loop through the fields, and show their arrows
+		for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
+		{
+			(*f)->showField();
+		}
+	}
+}
+
+void ParticleSystem::toggleFields()
+{
+	mShowFields = !mShowFields;
+	std::cout << "Field view is " << (mShowFields ? "ON" : "OFF") << std::endl;
+}
+
 void ParticleSystem::sortParticles()
 {
-
 	std::sort(&mParticles[0], &mParticles[MAX_PARTICLES]);
 }

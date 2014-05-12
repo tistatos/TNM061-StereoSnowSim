@@ -23,8 +23,10 @@ add_executable(${APP_NAME}
 	src/Gravity.cpp include/Gravity.h
 	src/Wind.cpp include/Wind.h
 	src/Vortex.cpp include/Vortex.h
+	src/DebugField.cpp include/DebugField.h
 	include/Texture.h
 	include/Shader.h
+	include/SimplexNoise.h src/SimplexNoise.cpp
 	) # for example "main.cpp coolt.cpp kiss.cpp)"
 
 option(SGCT_PLACE_TARGETS_IN_SOURCE_TREE "Place targets in source tree" OFF)

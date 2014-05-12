@@ -1,7 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include "ObjSystem.h"
-#include <glm/gtc/matrix_transform.hpp> 
+#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include <algorithm>
 
@@ -21,7 +21,7 @@ Object::Object(sgct::Engine* engine)
 	transMatrix = glm::mat4(1.0f);
 }
 
-/* 
+/*
 	Taken from https://code.google.com/p/opengl-tutorial-org/source/browse/common/objloader.cpp
 	and from   https://code.google.com/p/opengl-tutorial-org/source/browse/tutorial07_model_loading/tutorial07.cpp
 	Inputs:
@@ -247,7 +247,7 @@ void Object::loadObj(char* filename, string texture)
 	//Create shader if it doesn't exist
 	if(!sgct::ShaderManager::instance()->shaderProgramExists("object"))
 	{
-		sgct::ShaderManager::instance()->addShaderProgram("object", "object.vert", "object.frag");
+		sgct::ShaderManager::instance()->addShaderProgram("object", "shaders/object.vert", "shaders/object.frag");
 	}
 
 	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram( "object" ).getUniformLocation( "MVP" );
@@ -259,7 +259,7 @@ void Object::loadObj(char* filename, string texture)
 	// Enable depth test
     glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);	
+    glDepthFunc(GL_LESS);
 
 	return;
 }
@@ -294,23 +294,23 @@ void Object::draw()
 
 	//create a scene matrix incase we want movement
 	glm::mat4 sceneMatrix = glm::mat4(1.0f);
-	
+
 	glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix() * sceneMatrix;
 
 	//select active texture unit
 	glActiveTexture(GL_TEXTURE0);
 	//bind a named texture to a texturing target
 	glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByHandle(mTextureHandle));
-	
+
 	sgct::ShaderManager::instance()->bindShaderProgram( "object" );
-	
+
 	glUniformMatrix4fv(mMatrixLocation, 1, GL_FALSE, &MVP[0][0]);
 	glUniformMatrix4fv(mTransformLocation, 1, GL_FALSE, &transMatrix[0][0]);
 	glBindVertexArray(vertexArrayObject);
 	glDrawElements(GL_TRIANGLES, 3 * nTriangles, GL_UNSIGNED_INT, (void*)0);
 	// (mode, vertex count, type, element array buffer offset)
 	glBindVertexArray(0);
-	
+
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
 	glDisable(GL_DEPTH_TEST);
