@@ -22,18 +22,11 @@ Wind* gWind;
 Gravity* gGrav;
 Vortex* gTurbine;
 
-
-sgct::SharedBool windBox(false);
-sgct::SharedBool vortexBox(false);
 sgct::SharedDouble sizeFactorX(0.0);
 sgct::SharedDouble sizeFactorY(0.0);
 sgct::SharedDouble sizeFactorZ(0.0);
 sgct::SharedDouble gravFactor(0.0);
-sgct::SharedDouble vortexPosX(0.0);
-sgct::SharedDouble vortexPosY(0.0);
-sgct::SharedDouble vortexPosZ(0.0);
 sgct::SharedDouble curr_time(0.0);
-
 
 void initialize();
 void draw();
@@ -77,7 +70,6 @@ int main(int argc, char *argv[])
 
 	gTurbine = new Vortex();
 	gTurbine->init(0.0f, 0.0f, 0.0f);
-	//turbine->setForce(-10.0f, 0.0f, -1.0f);
 	//gParticles->addField(gTurbine);
 
 	//Not working yet... :(
@@ -105,6 +97,8 @@ int main(int argc, char *argv[])
 	delete gParticles;
 	delete gWorld;
 	delete gBubble;
+	delete gWind;
+	delete gTurbine;
 
 	exit(EXIT_SUCCESS);
 }
@@ -149,39 +143,32 @@ void myPreSyncFun()
 	}
 }
 
-//Shows stats and graph depending on if the variables are true or not. Dont know if we need this?
+//Shows stats and graph depending on if the variables are true or not. Dont know if we need this? Currently set to false.
 void statsDrawfun()
 {
-	//gEngine->setDisplayInfoVisibility(&windBox);
-	//gEngine->setStatsGraphVisibility(&vortexBox);
+	gEngine->setDisplayInfoVisibility(false);
+	gEngine->setStatsGraphVisibility(false);
+	gEngine->setWireframe(false);
 }
 
 //Encodes the data sent from GUI
 void myEncodeFun()
 {
-	sgct::SharedData::instance()->writeBool(&windBox);
-	sgct::SharedData::instance()->writeBool(&vortexBox);
 	sgct::SharedData::instance()->writeDouble(&curr_time);
 	sgct::SharedData::instance()->writeDouble(&sizeFactorX);
 	sgct::SharedData::instance()->writeDouble(&sizeFactorY);
 	sgct::SharedData::instance()->writeDouble(&sizeFactorZ);
 	sgct::SharedData::instance()->writeDouble(&gravFactor);
-	sgct::SharedData::instance()->writeBool(&windBox);
-	sgct::SharedData::instance()->writeBool(&vortexBox);
 }
 
 //Decodes the data sent from GUI
 void myDecodeFun()
 {
-	sgct::SharedData::instance()->readBool(&windBox);
-	sgct::SharedData::instance()->readBool(&vortexBox);
 	sgct::SharedData::instance()->readDouble(&curr_time);
 	sgct::SharedData::instance()->readDouble(&sizeFactorX);
 	sgct::SharedData::instance()->readDouble(&sizeFactorY);
 	sgct::SharedData::instance()->readDouble(&sizeFactorZ);
 	sgct::SharedData::instance()->readDouble(&gravFactor);
-	sgct::SharedData::instance()->readBool(&windBox);
-	sgct::SharedData::instance()->readBool(&vortexBox);
 }
 
 //Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
@@ -190,55 +177,56 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 	//Checks so the gEnginenode is actually the master.
 	if(gEngine->isMaster())
 	{
-		//Compares the length of the strings so no weird runtime errors occur
-		if(size == 7 &&  strncmp(receivedChars, "stats", 5) == 0)
-		{
-			windBox.setVal(true);
-			vortexBox.setVal(false);
-		}
-
-		else if(size == 7 &&  strncmp(receivedChars, "graph", 5) == 0)
-		{
-			vortexBox.setVal(true);
-			windBox.setVal(false);
-		}
-
-		else if(size >= 6 && strncmp(receivedChars, "winX", 4) == 0)
+		if(size >= 6 && strncmp(receivedChars, "winX", 4) == 0)
 		{
 			//We need an int.
-			int tmpValX = atoi(receivedChars + 5);
-
-			sizeFactorX.setVal(tmpValX);
-			if(windBox.getVal())
-				gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-			else
-				gTurbine->setForce((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-
+			int tmpVal = atoi(receivedChars + 5);
+			sizeFactorX.setVal(tmpVal);
+			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+			
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winY", 4) == 0)
 		{
 			//We need an int.
-			int tmpValY = atoi(receivedChars + 5);
-
-			sizeFactorY.setVal(tmpValY);
-			if(windBox.getVal())
-				gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-			else
-				gTurbine->setForce((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-
+			int tmpVal = atoi(receivedChars + 5);
+			sizeFactorY.setVal(tmpVal);
+			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+		
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winZ", 4) == 0)
 		{
 			//We need an int.
-			int tmpValZ = atoi(receivedChars + 5);
+			int tmpVal = atoi(receivedChars + 5);
+			sizeFactorZ.setVal(tmpVal);
+			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+		}
 
-			sizeFactorZ.setVal(tmpValZ);
-			if(windBox.getVal())
-				gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-			else
-				gTurbine->setForce((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+		else if(size >= 6 && strncmp(receivedChars, "vorX", 4) == 0)
+		{
+			//We need an int.
+			int tmpVal = atoi(receivedChars + 5);
+			sizeFactorX.setVal(tmpVal);
+			gTurbine->setForce((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+			
+		}
+
+		else if(size >= 6 && strncmp(receivedChars, "vorY", 4) == 0)
+		{
+			//We need an int.
+			int tmpVal = atoi(receivedChars + 5);
+			sizeFactorY.setVal(tmpVal);
+			gTurbine->setForce((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+		
+		}
+
+		else if(size >= 6 && strncmp(receivedChars, "vorZ", 4) == 0)
+		{
+			//We need an int.
+			int tmpVal = atoi(receivedChars + 5);
+			sizeFactorZ.setVal(tmpVal);
+			gTurbine->setForce((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "grav", 4) == 0)
