@@ -10,6 +10,7 @@
 #include "SoapBubble.h"
 #include "Vortex.h"
 #include <iostream>
+#include "math.h"
 
 
 //our beautiful global variables
@@ -17,6 +18,7 @@ sgct::Engine* gEngine;
 Snow* gParticles;
 World* gWorld;
 Object* gObject;
+Object* tree;
 SoapBubble* gBubble;
 Wind* wind;
 
@@ -59,6 +61,7 @@ int main(int argc, char *argv[])
 	gBubble = new SoapBubble(gEngine);
 
 	gObject = new Object(gEngine);
+	tree = new Object(gEngine);
 
 	Gravity* grav = new Gravity();
 	grav->init(-9.81f);
@@ -107,10 +110,13 @@ void initialize()
 	}
 	gWorld->initializeWorld();
 
-	//gObject->initialize();
-	gObject->loadObj("road/road.obj");
+	gObject->loadObj("road/road.obj", "road/road.png");
 	gObject->scale(0.2f,0.2f,0.2f);
 	gObject->translate(0.0f, -2.0f, 5.0f);
+
+	tree->loadObj("road/tree.obj","road/tree.png");
+	tree->scale(0.05f,0.05f,0.05f);
+	tree->translate(0.0f, -1.0f, -6.0f);
 
 	gBubble->createSphere(1.5f, 100);
 }
@@ -120,8 +126,9 @@ void draw()
 	double delta = gEngine->getDt();
 
 	gWorld->drawWorld();
-	gBubble->drawBubble();
-	//gObject->draw();
+	//gBubble->drawBubble();
+	gObject->draw();
+	tree->draw();
 	gParticles->move(delta);
 	gParticles->draw(delta);
 
