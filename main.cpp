@@ -24,19 +24,14 @@ Wind* gWind;
 Gravity* gGrav;
 Vortex* gTurbine;
 
-sgct::SharedDouble sizeFactorX(0.0);
-sgct::SharedDouble sizeFactorY(0.0);
-sgct::SharedDouble sizeFactorZ(0.0);
-sgct::SharedDouble gravFactor(0.0);
 sgct::SharedDouble curr_time(0.0);
 
 void initialize();
 void draw();
 void myPreSyncFun();
 void statsDrawFun();
-void myEncodeFun();
-void myDecodeFun();
 void externalControlCallback(const char * receivedChars, int size, int clientId);
+void sendMessageToExternalControl(void * data, int length);
 
 
 int main(int argc, char *argv[])
@@ -50,9 +45,6 @@ int main(int argc, char *argv[])
 	gEngine->setPreSyncFunction(myPreSyncFun);
 	gEngine->setPostSyncPreDrawFunction(statsDrawFun);
 	gEngine->setExternalControlCallback(externalControlCallback);
-
-	sgct::SharedData::instance()->setEncodeFunction(myEncodeFun);
-	sgct::SharedData::instance()->setDecodeFunction(myDecodeFun);
 
 	gParticles = new Snow(gEngine);
 	gWorld = new World(gEngine);
@@ -74,7 +66,7 @@ int main(int argc, char *argv[])
 
 	gTurbine = new Vortex();
 	gTurbine->init(0.0f, 0.0f, 0.0f);
-	//gParticles->addField(gTurbine);
+	gParticles->addField(gTurbine);
 
 	//Not working yet... :(
 	SimplexNoise* noise = new SimplexNoise();
@@ -130,7 +122,6 @@ void initialize()
 void draw()
 {
 	double delta = gEngine->getDt();
-
 	gWorld->drawWorld();
 	gBubble->drawBubble();
 	//gObject->draw();
@@ -158,26 +149,6 @@ void statsDrawFun()
 	gEngine->setWireframe(false);
 }
 
-//Encodes the data sent from GUI
-void myEncodeFun()
-{
-	sgct::SharedData::instance()->writeDouble(&curr_time);
-	sgct::SharedData::instance()->writeDouble(&sizeFactorX);
-	sgct::SharedData::instance()->writeDouble(&sizeFactorY);
-	sgct::SharedData::instance()->writeDouble(&sizeFactorZ);
-	sgct::SharedData::instance()->writeDouble(&gravFactor);
-}
-
-//Decodes the data sent from GUI
-void myDecodeFun()
-{
-	sgct::SharedData::instance()->readDouble(&curr_time);
-	sgct::SharedData::instance()->readDouble(&sizeFactorX);
-	sgct::SharedData::instance()->readDouble(&sizeFactorY);
-	sgct::SharedData::instance()->readDouble(&sizeFactorZ);
-	sgct::SharedData::instance()->readDouble(&gravFactor);
-}
-
 //Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
 void externalControlCallback(const char * receivedChars, int size, int clientId)
 {
@@ -188,49 +159,41 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			sizeFactorX.setVal(tmpVal);
-			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-
+			gWind->setAcceleration((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winY", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			sizeFactorY.setVal(tmpVal);
-			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-
+			gWind->setAcceleration((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winZ", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			sizeFactorZ.setVal(tmpVal);
-			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+			gWind->setAcceleration((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
 		}
 		else if(size >= 6 && strncmp(receivedChars, "vorX", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			sizeFactorX.setVal(tmpVal);
-			gTurbine->setForce((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+			gTurbine->setForce((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "vorY", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			sizeFactorY.setVal(tmpVal);
-			gTurbine->setForce((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+			gTurbine->setForce((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "vorZ", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			sizeFactorZ.setVal(tmpVal);
-			gTurbine->setForce((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+			gTurbine->setForce((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "grav", 4) == 0)
@@ -238,7 +201,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			gGrav->init(-tmpVal);
-
 		}
 	}
 }
