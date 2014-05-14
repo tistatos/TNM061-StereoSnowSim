@@ -14,6 +14,7 @@
 #include "HelperFunctions.h"
 
 class Field;
+class DebugField;
 
 const int MAX_PARTICLES = 1000;
 const float PARTICLE_SIZE = 0.1f;
@@ -31,10 +32,14 @@ public:
 
 	void addField(Field *f);
 	void printFields();
-	void showFields();
 	void setTexture(string name, string file);
 	void setShader(string name, string vertFile, string fragFile);
-	void toggleDebug();
+	void enableFieldDebug();
+	void toggleFieldDebug();
+	void pauseControl(bool status);
+	void togglePause();
+
+	std::vector<Field*> getFields() {return mFields;};
 
 protected:
 	virtual void sortParticles();
@@ -44,6 +49,7 @@ protected:
 	virtual void reset(Particle& p);
 
 	bool mInitialized; /// Is the particle system initalized?
+	bool mPaused;
 
 	DebugField* mDebugField; /// the debug field stuff
 

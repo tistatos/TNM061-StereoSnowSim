@@ -5,13 +5,18 @@
 #include "sgct.h"
 #include "Field.h"
 #include "HelperFunctions.h"
+#include "ParticleSystem.h"
+
+class ParticleSystem;
 
 class DebugField
 {
 	public:
 		DebugField(sgct::Engine* engine);
 		void init();
-		void draw(Field &f);
+		void draw(Field* f);
+		void draw(Field& f);
+		void draw(ParticleSystem* p);
 		void toggleDebug() { mShowDebug = !mShowDebug; };
 		void enableDebug() { mShowDebug = true; };
 		void disableDebug() { mShowDebug = false; };

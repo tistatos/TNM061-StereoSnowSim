@@ -17,7 +17,6 @@
 sgct::Engine* gEngine;
 Snow* gParticles;
 World* gWorld;
-DebugField* gDebugField;
 Object* gObject;
 Object* tree;
 SoapBubble* gBubble;
@@ -63,7 +62,6 @@ int main(int argc, char *argv[])
 
 	gParticles = new Snow(gEngine);
 	gWorld = new World(gEngine);
-	gDebugField = new DebugField(gEngine);
 
 	gBubble = new SoapBubble(gEngine);
 
@@ -123,8 +121,6 @@ void initialize()
 		exit(EXIT_FAILURE);
 	}
 	gWorld->initializeWorld();
-
-	gDebugField->init();
 
 	gObject->loadObj("road/road.obj", "road/road.png");
 	gObject->scale(0.2f,0.2f,0.2f);
