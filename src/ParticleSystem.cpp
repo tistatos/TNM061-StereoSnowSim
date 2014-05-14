@@ -1,8 +1,4 @@
 #include "ParticleSystem.h"
-#include <iostream>
-#include <algorithm>
-#include "HelperFunctions.h"
-#include "Field.h"
 
 /**
  * Constructor for particle field
@@ -14,7 +10,7 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mEngine = engine;
 	mInitialized = false;
 
-	mShowFields = false; // do not show fields by default
+	mDebugField = new DebugField(engine);
 
 	mVertexArray = 0;
 
@@ -31,6 +27,9 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
  */
 bool ParticleSystem::initialize()
 {
+	// initialize debug field
+	mDebugField->init();
+
 	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
 	{
@@ -38,7 +37,6 @@ bool ParticleSystem::initialize()
 		1.0f, -1.0f, 0.0f,
 		-1.0f, 1.0f, 0.0f,
 		1.0f, 1.0f, 0.0f,
-
 	};
 
 	// Enable depth test
@@ -64,7 +62,6 @@ bool ParticleSystem::initialize()
 
 	glBindVertexArray(0);
 
-
 	size_t handle;
 
 	//add texture for snowflake
@@ -80,9 +77,9 @@ bool ParticleSystem::initialize()
 		return false;
 	}
 	//Bind shader and get location of MVP matrix
-	sgct::ShaderManager::instance()->bindShaderProgram( mShader.mShaderName );
+	sgct::ShaderManager::instance()->bindShaderProgram(mShader.mShaderName);
 
-	mViewProjectionLoc = sgct::ShaderManager::instance()->getShaderProgram( mShader.mShaderName ).getUniformLocation( "VP" );
+	mViewProjectionLoc = sgct::ShaderManager::instance()->getShaderProgram(mShader.mShaderName).getUniformLocation( "VP" );
 
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
@@ -91,8 +88,6 @@ bool ParticleSystem::initialize()
     glEnable(GL_DEPTH_TEST);
     // Accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
-
-
 
     //Particle shader is now initialized
 	mInitialized = true;
@@ -297,7 +292,7 @@ void ParticleSystem::move(double delta)
 		{
 			glm::vec3 tempVelo;
 			// loop through the fields, and sum the fields' velocities
-			for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
+			for(std::vector<Field*>::iterator f = mFields.begin(); f != mFields.end(); ++f)
 			{
 				tempVelo += (*f)->getVelocity(delta, p);
 			}
@@ -347,13 +342,13 @@ void ParticleSystem::reset(Particle& p)
 
 void ParticleSystem::addField(Field *f)
 {
-	fields.push_back(f);
+	mFields.push_back(f);
 }
 
 void ParticleSystem::printFields()
 {
 	// loop through the fields, and print the fields' info
-	for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
+	for(std::vector<Field*>::iterator f = mFields.begin(); f != mFields.end(); ++f)
 	{
 		(*f)->printInfo();
 	}
@@ -361,20 +356,20 @@ void ParticleSystem::printFields()
 
 void ParticleSystem::showFields()
 {
-	if(mShowFields)
-	{
-		// loop through the fields, and show their arrows
-		for(std::vector<Field*>::iterator f = fields.begin(); f != fields.end(); ++f)
-		{
-			(*f)->showField();
-		}
-	}
+	// if(mShowFields)
+	// {
+	// 	// loop through the fields, and show their arrows
+	// 	for(std::vector<Field*>::iterator f = mFields.begin(); f != mFields.end(); ++f)
+	// 	{
+	// 		(*f)->showField();
+	// 	}
+	// }
 }
 
-void ParticleSystem::toggleFields()
+void ParticleSystem::toggleDebug()
 {
-	mShowFields = !mShowFields;
-	std::cout << "Field view is " << (mShowFields ? "ON" : "OFF") << std::endl;
+	// mShowFields = !mShowFields;
+	// std::cout << "Field view is " << (mShowFields ? "ON" : "OFF") << std::endl;
 }
 
 void ParticleSystem::sortParticles()

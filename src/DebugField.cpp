@@ -1,13 +1,10 @@
-#include <iostream>
 #include "DebugField.h"
-#include "sgct.h"
-#include "Field.h"
-#include "HelperFunctions.h"
 
 DebugField::DebugField(sgct::Engine* engine)
 {
 	mEngine = engine;
 	mMatrixLocation = -1;
+	mShowDebug = true; // default
 }
 
 void DebugField::init()
@@ -52,4 +49,10 @@ void DebugField::init()
     sgct::ShaderManager::instance()->unBindShaderProgram();
 
     // glDrawArrays(GL_LINES);
+}
+
+void DebugField::draw(Field &f)
+{
+	std::cout << "Drawing field" << std::endl;
+	f.printInfo();
 }

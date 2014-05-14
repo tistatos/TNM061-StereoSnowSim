@@ -16,6 +16,12 @@ namespace snowCozyGUI
         public Int32 port;
         public int bufferSize;
         public int choice; //0 for wind, 1 for vortex
+        public string windX;
+        public string windY;
+        public string windZ;
+        public string vortexX;
+        public string vortexY;
+        public string vortexZ;
     }
 
     public partial class Form1 : Form
@@ -36,6 +42,12 @@ namespace snowCozyGUI
             mClient.bufferSize = 1024;
             //default ip
             mClient.ip = "127.0.0.1";
+            mClient.windX = "0";
+            mClient.windY = "0";
+            mClient.windZ = "0";
+            mClient.vortexX = "0";
+            mClient.vortexY = "0";
+            mClient.vortexZ = "0";
 
             componentVisability(false);
 
@@ -66,25 +78,20 @@ namespace snowCozyGUI
             }
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void connect()
         {
             //if connection is successfull
             if (mClient.connection.ConnectIP(mClient.ip, mClient.port, mClient.bufferSize))
             {
-                componentVisability(true);
                 this.connectButton.Text = "Disconnect";
                 this.statusMessage.Text = "Connected to " + mClient.ip;
+                this.fieldGroupBox.Enabled = true;
+
                 //send defaults
                 mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=0\r\nvorX=0\r\nvorY=0\r\nvorZ=0");
             }
             else
             {
-                componentVisability(false);
                 this.connectButton.Text = "Connect";
             }
         }
@@ -116,7 +123,9 @@ namespace snowCozyGUI
         private void componentVisability(bool status)
         {
             //group box for properties should be grayed out when not connected
+            this.fieldGroupBox.Enabled = status;
             this.propertiesGroupBox.Enabled = status;
+            this.gravityGroupBox.Enabled = status;
         }
 
         private void xTrackBar_Scroll(object sender, EventArgs e)
@@ -126,17 +135,19 @@ namespace snowCozyGUI
 
             if (mClient.connection.valid)
             {
-                System.Console.Write(mClient.choice);
+                //System.Console.Write(mClient.choice);
 
                 if (mClient.choice == 0)
                 {
-                    mClient.connection.Send("winX=" + tBar.Value.ToString());
-                    System.Console.Write(tBar.Value.ToString());
+                    mClient.windX = tBar.Value.ToString();
+                    mClient.connection.Send("winX=" + mClient.windX);
+                    //System.Console.Write(tBar.Value.ToString());
                 }
                 else if (mClient.choice == 1)
                 {
-                    mClient.connection.Send("vorX=" + tBar.Value.ToString());
-                    System.Console.Write(tBar.Value.ToString());
+                    mClient.vortexX = tBar.Value.ToString();
+                    mClient.connection.Send("vorX=" + mClient.vortexX);
+                    //System.Console.Write(tBar.Value.ToString());
                 }
             }
         }
@@ -150,13 +161,15 @@ namespace snowCozyGUI
             {
                 if (mClient.choice == 0)
                 {
-                    mClient.connection.Send("winY=" + tBar.Value.ToString());
-                    System.Console.Write(tBar.Value.ToString());
+                    mClient.windY = tBar.Value.ToString();
+                    mClient.connection.Send("winY=" + mClient.windY);
+                    //System.Console.Write(tBar.Value.ToString());
                 }
                 else if (mClient.choice == 1)
                 {
-                    mClient.connection.Send("vorY=" + tBar.Value.ToString());
-                    System.Console.Write(tBar.Value.ToString());
+                    mClient.vortexY = tBar.Value.ToString();
+                    mClient.connection.Send("vorY=" + mClient.vortexY);
+                    //System.Console.Write(tBar.Value.ToString());
                 }
                 //System.Console.Write(tYBar.Value.ToString());
             }
@@ -171,13 +184,15 @@ namespace snowCozyGUI
             {
                 if (mClient.choice == 0)
                 {
-                    mClient.connection.Send("winY=" + tBar.Value.ToString());
-                    System.Console.Write(tBar.Value.ToString());
+                    mClient.windZ = tBar.Value.ToString();
+                    mClient.connection.Send("winY=" + mClient.windZ);
+                    //System.Console.Write(tBar.Value.ToString());
                 }
                 else if (mClient.choice == 1)
                 {
-                    mClient.connection.Send("vorY=" + tBar.Value.ToString());
-                    System.Console.Write(tBar.Value.ToString());
+                    mClient.vortexZ = tBar.Value.ToString();
+                    mClient.connection.Send("vorY=" + mClient.vortexZ);
+                    //System.Console.Write(tBar.Value.ToString());
                 }
             }
         }
@@ -200,7 +215,20 @@ namespace snowCozyGUI
             if (rButt.Checked)
             {
                 mClient.choice = 0;
-                System.Console.Write(mClient.choice);
+
+                this.xTrackBar.Value = Convert.ToInt32(mClient.windX);
+                this.xForce.Text = mClient.windX;
+                this.yTrackBar.Value = Convert.ToInt32(mClient.windY);
+                this.yForce.Text = mClient.windY;
+                this.zTrackBar.Value = Convert.ToInt32(mClient.windZ);
+                this.zForce.Text = mClient.windZ;
+
+                this.propertiesGroupBox.Enabled = true;
+                this.gravityGroupBox.Enabled = false;
+
+                this.statusMessage.Text = "change the value of wind";
+
+               //System.Console.Write(mClient.choice);
             }
         }
 
@@ -211,7 +239,33 @@ namespace snowCozyGUI
             if (rButt.Checked)
             {
                 mClient.choice = 1;
+
+                this.xTrackBar.Value = Convert.ToInt32(mClient.vortexX);
+                this.xForce.Text = mClient.vortexX;
+                this.yTrackBar.Value = Convert.ToInt32(mClient.vortexY);
+                this.yForce.Text = mClient.vortexY;
+                this.zTrackBar.Value = Convert.ToInt32(mClient.vortexZ);
+                this.zForce.Text = mClient.vortexZ;
+
+                this.propertiesGroupBox.Enabled = true;
+                this.gravityGroupBox.Enabled = false;
+
+                this.statusMessage.Text = "change the value of vortex";
+
                 System.Console.Write(mClient.choice);
+            }
+        }
+
+        private void gravityButton_CheckedChanged(object sender, EventArgs e)
+        {
+            RadioButton rButt = (RadioButton)sender;
+
+            if (rButt.Checked)
+            {
+                this.propertiesGroupBox.Enabled = false;
+                this.gravityGroupBox.Enabled = true;
+
+                this.statusMessage.Text = "change the value of gravity";
             }
         }
     }

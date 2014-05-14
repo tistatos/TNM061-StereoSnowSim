@@ -3,10 +3,14 @@
 #include "ObjSystem.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+#include <algorithm>
 
 Object::Object(sgct::Engine* engine)
 {
 	mEngine = engine;
+	mTexture.mTextureName = "";
+	mTexture.mTextureFile = "";
+
 	nVertices = 0;
 	nTriangles = 0;
 	vertexList = nullptr;
@@ -23,7 +27,7 @@ Object::Object(sgct::Engine* engine)
 	Inputs:
 		filename, the obj-file.
 */
-void Object::loadObj(char* filename)
+void Object::loadObj(char* filename, string texture)
 {
 	FILE *objfile;
 
@@ -226,15 +230,28 @@ void Object::loadObj(char* filename)
 	//define frontfacing polygons
 	glFrontFace(GL_CW);
 
+	// Fix filename and texturename
+	string name = filename;
+	char chars[] = "/\-.";
+
+	for (unsigned int i = 0; i < strlen(chars); ++i)
+	{
+		// you need include <algorithm> to use general algorithms like std::remove()
+		name.erase (std::remove(name.begin(), name.end(), chars[i]), name.end());
+	}
+
 	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
 	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
-	sgct::TextureManager::instance()->loadTexure(mTextureHandle, "object", "road/road.png", true);
+	sgct::TextureManager::instance()->loadTexure(mTextureHandle, name, texture, true);
 
-	//Create shader
-	sgct::ShaderManager::instance()->addShaderProgram("object", "shaders/object.vert", "shaders/object.frag");
+	//Create shader if it doesn't exist
+	if(!sgct::ShaderManager::instance()->shaderProgramExists("object"))
+	{
+		sgct::ShaderManager::instance()->addShaderProgram("object", "shaders/object.vert", "shaders/object.frag");
+	}
 
-	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram( "object").getUniformLocation( "MVP" );
-	mTransformLocation = sgct::ShaderManager::instance()->getShaderProgram("object").getUniformLocation( "P" );
+	mMatrixLocation = sgct::ShaderManager::instance()->getShaderProgram( "object" ).getUniformLocation( "MVP" );
+	mTransformLocation = sgct::ShaderManager::instance()->getShaderProgram("object" ).getUniformLocation( "P" );
 
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
@@ -251,14 +268,19 @@ void Object::scale(float sx, float sy, float sz)
 {
 	glm::mat4 s = glm::scale(sx,sy,sz);
 	transMatrix = s * transMatrix;
-
-	cout << "Scaled object" << endl;
 }
 
 void Object::translate(float tx, float ty, float tz)
 {
 	glm::mat4 t = glm::translate(tx,ty,tz);
 	transMatrix = t * transMatrix;
+}
+
+void Object::rotate(float ang, float rx, float ry, float rz)
+{
+	glm::vec3 v = glm::vec3(rx,ry,rz);
+	glm::mat4 r = glm::rotate(ang, v);
+	transMatrix = r * transMatrix;
 }
 
 void Object::draw()
@@ -274,11 +296,6 @@ void Object::draw()
 	glm::mat4 sceneMatrix = glm::mat4(1.0f);
 
 	glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix() * sceneMatrix;
-
-	glm::mat4 T = glm::translate(0.0f, -7.0f, -0.0f);
-	glm::mat4 S = glm::scale(0.2f,0.2f,0.2f);
-
-	glm::mat4 P = S * T;
 
 	//select active texture unit
 	glActiveTexture(GL_TEXTURE0);

@@ -11,13 +11,17 @@ class DebugField
 	public:
 		DebugField(sgct::Engine* engine);
 		void init();
-		void draw(){};
+		void draw(Field &f);
+		void toggleDebug() { mShowDebug = !mShowDebug; };
+		void enableDebug() { mShowDebug = true; };
+		void disableDebug() { mShowDebug = false; };
 
 	private:
 		sgct::Engine* mEngine;
 		GLint mMatrixLocation;
 		GLint mTransformLocation;
-		GLint arrowVA[];
+		// GLint arrowVA[];
+		bool mShowDebug;
 };
 
-#endif // __VORTEX_H__
+#endif // __DEBUGFIELD_H__
