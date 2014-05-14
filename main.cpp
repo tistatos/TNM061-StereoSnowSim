@@ -187,7 +187,7 @@ void myDecodeFun()
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this? Currently set to false.
 void statsDrawFun()
 {
-	gEngine->setDisplayInfoVisibility(false);
+	gEngine->setDisplayInfoVisibility(true);
 	gEngine->setStatsGraphVisibility(false);
 	gEngine->setWireframe(false);
 }
