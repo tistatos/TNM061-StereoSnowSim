@@ -152,6 +152,9 @@ void draw()
 	tree->draw();
 	gParticles->move(delta);
 	gParticles->draw(delta);
+
+	//if(gEngine->isExternalControlConnected())
+	//	cout << "Connectad is very nice";
 }
 
 //Checking the time since the program started, not sure if we need this either.
@@ -274,7 +277,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			gTurbine->setPosition((positionX.getVal()*0.01f),(positionZ.getVal()*0.01f));
 		}
 
-		else if(size >= 6 && strcmp(receivedChars, "radius") != 0)
+		else if(size >= 6 && strncmp(receivedChars, "radi", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
@@ -282,7 +285,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			gTurbine->setRadius(radius.getVal());
 		}
 
-		else if(size >= 6 && strcmp(receivedChars, "pause") != 0)
+		else if(size >= 6 && strncmp(receivedChars, "paus", 4) == 0)
 		{
 			gParticles->togglePause();
 		}
@@ -294,26 +297,26 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			gGrav->init(-tmpVal);
 		}
 
-		else if(strcmp(receivedChars, "fadeDistance") != 0)
+		else if(strncmp(receivedChars, "fade", 1) == 0)
 		{
 			float tmpVal = atof(receivedChars + 5);
 			fadeDistance.setVal(tmpVal);
 			gParticles->setFadeDistance(fadeDistance.getVal());
 		}
 
-		else if(size >= 6 && strcmp(receivedChars, "display") != 0)
+		else if(size >= 6 && strncmp(receivedChars, "disp", 4) == 0)
 		{
-			gDisplayInfo = !gDisplayInfo;
+			//gDisplayInfo = !gDisplayInfo;
 		}
 
-		else if(size >= 6 && strcmp(receivedChars, "stats") != 0)
+		else if(size >= 6 && strncmp(receivedChars, "stat", 4) == 0)
 		{
-			gStatsGraph = !gStatsGraph;
+			//gStatsGraph = !gStatsGraph;
 		}
 
-		else if(size >= 6 && strcmp(receivedChars, "wire") != 0)
+		else if(size >= 6 && strncmp(receivedChars, "wire", 4) == 0)
 		{
-			gWireframe = !gWireframe;
+			//gWireframe = !gWireframe;
 		}
 	}
 }
