@@ -17,7 +17,7 @@
 sgct::Engine* gEngine;
 Snow* gParticles;
 World* gWorld;
-Object* gObject;
+Object* road;
 Object* tree;
 SoapBubble* gBubble;
 Wind* gWind;
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
 	gBubble = new SoapBubble(gEngine);
 
-	gObject = new Object(gEngine);
+	road = new Object(gEngine);
 	tree = new Object(gEngine);
 
 	gGrav = new Gravity();
@@ -106,8 +106,8 @@ int main(int argc, char *argv[])
 	gEngine->render();
 
 	gParticles->destroy();
-	gObject->deleteObject();
-	delete gObject;
+	road->deleteObject();
+	delete road;
 	delete gEngine;
 	delete gParticles;
 	delete gWorld;
@@ -127,9 +127,9 @@ void initialize()
 	}
 	gWorld->initializeWorld();
 
-	gObject->loadObj("road/road.obj", "road/road.png");
-	gObject->scale(0.2f,0.2f,0.2f);
-	gObject->translate(0.0f, -2.0f, 5.0f);
+	road->loadObj("road/road.obj", "road/road.png");
+	road->scale(0.2f,0.2f,0.2f);
+	road->translate(0.0f, -2.0f, 5.0f);
 
 	tree->loadObj("road/tree.obj","road/tree.png");
 	tree->scale(0.05f,0.05f,0.05f);
@@ -148,8 +148,8 @@ void draw()
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
 	gBubble->drawBubble();
-	//gObject->draw();
-	//tree->draw();
+	road->draw();
+	tree->draw();
 	gParticles->move(delta);
 	gParticles->draw(delta);
 }
