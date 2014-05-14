@@ -36,6 +36,9 @@ public:
 	void setShader(string name, string vertFile, string fragFile);
 	void enableFieldDebug();
 	void toggleFieldDebug();
+	void pauseControl(bool status);
+	void togglePause();
+
 	std::vector<Field*> getFields() {return mFields;};
 
 protected:
@@ -46,6 +49,7 @@ protected:
 	virtual void reset(Particle& p);
 
 	bool mInitialized; /// Is the particle system initalized?
+	bool mPaused;
 
 	DebugField* mDebugField; /// the debug field stuff
 

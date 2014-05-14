@@ -9,6 +9,7 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 {
 	mEngine = engine;
 	mInitialized = false;
+	mPaused = false;
 
 	mDebugField = new DebugField(engine);
 
@@ -282,36 +283,39 @@ void ParticleSystem::destroy()
 
 void ParticleSystem::move(double delta)
 {
-	// do gravity and shit on every particle
-	for (int i = 0; i < MAX_PARTICLES; i++)
+	if(mPaused)
 	{
-		// get ref to current particle
-		Particle& p = mParticles[i];
-
-		if(p.mLife > 0.0f)
+		// do gravity and shit on every particle
+		for (int i = 0; i < MAX_PARTICLES; i++)
 		{
-			glm::vec3 tempVelo;
-			// loop through the fields, and sum the fields' velocities
-			for(std::vector<Field*>::iterator f = mFields.begin(); f != mFields.end(); ++f)
+			// get ref to current particle
+			Particle& p = mParticles[i];
+
+			if(p.mLife > 0.0f)
 			{
-				tempVelo += (*f)->getVelocity(delta, p);
+				glm::vec3 tempVelo;
+				// loop through the fields, and sum the fields' velocities
+				for(std::vector<Field*>::iterator f = mFields.begin(); f != mFields.end(); ++f)
+				{
+					tempVelo += (*f)->getVelocity(delta, p);
+				}
+
+				p.mVelocity = tempVelo;
+
+				calculateLife(p, delta);
+				// apply the velocity
+				glm::mat4 tran = glm::translate(glm::mat4(1.0f), p.mVelocity*(float)delta);
+				//glm::mat4 rot =  glm::rotate( glm::mat4(1.0f), static_cast<float>(delta) * 10, glm::vec3(0.5f, 1.0f, 0.0f));
+				p.mMatrix = tran * p.mMatrix;
+
+				//distance is positions magnitude since camera is in the
+				p.mDistance = glm::dot(p.position(),p.position());
+
 			}
-
-			p.mVelocity = tempVelo;
-
-			calculateLife(p, delta);
-			// apply the velocity
-			glm::mat4 tran = glm::translate(glm::mat4(1.0f), p.mVelocity*(float)delta);
-			//glm::mat4 rot =  glm::rotate( glm::mat4(1.0f), static_cast<float>(delta) * 10, glm::vec3(0.5f, 1.0f, 0.0f));
-			p.mMatrix = tran * p.mMatrix;
-
-			//distance is positions magnitude since camera is in the
-			p.mDistance = glm::dot(p.position(),p.position());
-
-		}
-		else
-		{
-			reset(p); // reset particle
+			else
+			{
+				reset(p); // reset particle
+			}
 		}
 	}
 }
@@ -368,4 +372,14 @@ void ParticleSystem::toggleFieldDebug()
 void ParticleSystem::sortParticles()
 {
 	std::sort(&mParticles[0], &mParticles[MAX_PARTICLES]);
+}
+
+void ParticleSystem::pauseControl(bool status)
+{
+	mPaused = status;
+}
+
+void ParticleSystem::togglePause()
+{
+	mPaused = !mPaused;
 }
