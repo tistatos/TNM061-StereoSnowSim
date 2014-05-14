@@ -38,6 +38,7 @@ sgct::SharedDouble vortFactorZ(0.0);
 sgct::SharedDouble positionX(0.0);
 sgct::SharedDouble positionZ(0.0);
 sgct::SharedDouble radius(0.0);
+sgct::SharedDouble fadeDistance(0.0);
 
 
 void initialize();
@@ -177,6 +178,8 @@ void myEncodeFun()
  	sgct::SharedData::instance()->writeDouble(&positionX);
  	sgct::SharedData::instance()->writeDouble(&positionZ);
  	sgct::SharedData::instance()->writeDouble(&radius);
+ 	sgct::SharedData::instance()->writeDouble(&fadeDistance);
+
 }
 
 
@@ -192,6 +195,7 @@ void myDecodeFun()
 	sgct::SharedData::instance()->readDouble(&positionX);
 	sgct::SharedData::instance()->readDouble(&positionZ);
 	sgct::SharedData::instance()->readDouble(&radius);
+	sgct::SharedData::instance()->readDouble(&fadeDistance);
 }
 
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this? Currently set to false.
@@ -289,6 +293,13 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			gGrav->init(-tmpVal);
+		}
+
+		else if(strcmp(receivedChars, "fadeDistance") != 0)
+		{
+			float tmpVal = atof(receivedChars + 5);
+			fadeDistance.setVal(tmpVal);
+			gParticles->setFadeDistance(fadeDistance.getVal());
 		}
 
 		else if(size >= 6 && strcmp(receivedChars, "display") != 0)
