@@ -283,7 +283,7 @@ void ParticleSystem::destroy()
 
 void ParticleSystem::move(double delta)
 {
-	if(mPaused)
+	if(!mPaused)
 	{
 		// do gravity and shit on every particle
 		for (int i = 0; i < MAX_PARTICLES; i++)
