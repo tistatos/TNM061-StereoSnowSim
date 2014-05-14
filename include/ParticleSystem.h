@@ -16,7 +16,7 @@
 class Field;
 class DebugField;
 
-const int MAX_PARTICLES = 1000;
+const int MAX_PARTICLES = 2500;
 const float PARTICLE_SIZE = 0.1f;
 
 using namespace std;
@@ -34,6 +34,8 @@ public:
 	void printFields();
 	void setTexture(string name, string file);
 	void setShader(string name, string vertFile, string fragFile);
+	void toggleDebug();
+	void setFadeDistance(float d);
 	void enableFieldDebug();
 	void toggleFieldDebug();
 	void pauseControl(bool status);
@@ -48,6 +50,7 @@ protected:
 	virtual void calculateLife(Particle& p, double delta);
 	virtual void reset(Particle& p);
 
+	float mFadeDistance; /// Distance from camera when particles should fade away to not create crossedeye effect
 	bool mInitialized; /// Is the particle system initalized?
 	bool mPaused;
 

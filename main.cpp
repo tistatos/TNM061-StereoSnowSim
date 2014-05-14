@@ -17,7 +17,7 @@
 sgct::Engine* gEngine;
 Snow* gParticles;
 World* gWorld;
-Object* gObject;
+Object* road;
 Object* tree;
 SoapBubble* gBubble;
 Wind* gWind;
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
 	gBubble = new SoapBubble(gEngine);
 
-	gObject = new Object(gEngine);
+	road = new Object(gEngine);
 	tree = new Object(gEngine);
 
 	gGrav = new Gravity();
@@ -79,12 +79,12 @@ int main(int argc, char *argv[])
 
 	gWind = new Wind();
 	//wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
-	gWind->setAcceleration(0.0f, 0.0f, 0.0f);
-	gParticles->addField(gWind);
+	gWind->setAcceleration(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
+	//gParticles->addField(gWind);
 
 	gTurbine = new Vortex();
 	gTurbine->init(0.0f, 0.0f, 0.0f);
-	gParticles->addField(gTurbine);
+	// gParticles->addField(gTurbine);
 
 	//Not working yet... :(
 	SimplexNoise* noise = new SimplexNoise();
@@ -98,6 +98,12 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
+	//Not working yet... :(
+	SimplexNoise* noise = new SimplexNoise();
+	noise->init(glm::vec3(0), glm::vec3(0), gEngine->getTime());
+
+	// gParticles->addField(noise);
+
 	cout << "---- Fields active on gParticles ----" << endl;
 	gParticles->printFields();
 	cout << "---------------" << endl << endl;
@@ -105,8 +111,8 @@ int main(int argc, char *argv[])
 	gEngine->render();
 
 	gParticles->destroy();
-	gObject->deleteObject();
-	delete gObject;
+	road->deleteObject();
+	delete road;
 	delete gEngine;
 	delete gParticles;
 	delete gWorld;
@@ -126,9 +132,9 @@ void initialize()
 	}
 	gWorld->initializeWorld();
 
-	gObject->loadObj("road/road.obj", "road/road.png");
-	gObject->scale(0.2f,0.2f,0.2f);
-	gObject->translate(0.0f, -2.0f, 5.0f);
+	road->loadObj("road/road.obj", "road/road.png");
+	road->scale(0.2f,0.2f,0.2f);
+	road->translate(0.0f, -2.0f, 5.0f);
 
 	tree->loadObj("road/tree.obj","road/tree.png");
 	tree->scale(0.05f,0.05f,0.05f);
@@ -147,8 +153,8 @@ void draw()
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
 	gBubble->drawBubble();
-	//gObject->draw();
-	//tree->draw();
+	road->draw();
+	tree->draw();
 	gParticles->move(delta);
 	gParticles->draw(delta);
 }
@@ -270,7 +276,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			gTurbine->setPosition((positionX.getVal()*0.01f),(positionZ.getVal()*0.01f));
 		}
 
-		else if(size >= 6 && strncmp(receivedChars, "r", 1) == 0)
+		else if(size >= 6 && strcmp(receivedChars, "radius") != 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
@@ -288,6 +294,21 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			gGrav->init(-tmpVal);
+		}
+
+		else if(size >= 6 && strcmp(receivedChars, "display") != 0)
+		{
+			gDisplayInfo = !gDisplayInfo;
+		}
+
+		else if(size >= 6 && strcmp(receivedChars, "stats") != 0)
+		{
+			gStatsGraph = !gStatsGraph;
+		}
+
+		else if(size >= 6 && strcmp(receivedChars, "wire") != 0)
+		{
+			gWireframe = !gWireframe;
 		}
 	}
 }

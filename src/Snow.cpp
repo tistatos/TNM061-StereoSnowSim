@@ -35,8 +35,11 @@ void Snow::destroy()
 
 void Snow::calculateLife(Particle& p, double delta)
 {
-	if(p.mMatrix[3][1] < -2.0f)
+	glm::vec3 pos = p.position();
+	if(pos.y < -2.0f || abs(pos.x)>20.0f || abs(pos.z)>20.0f || abs(pos.y) >20.0f)
+	{
 		p.mLife -= delta;
+	}
 }
 
 /**
@@ -49,7 +52,7 @@ void Snow::reset(Particle& p)
 
 
 	float xval = getRandom(-10.0f, 10.0f);
-	float yval = getRandom(2.0f, 10.0f);
+	float yval = getRandom(4.0f, 18.0f);
 	float zval = getRandom(-10.0f, 10.0f);
 
 	// std::cout << xval << " " << yval << std::endl;
@@ -72,6 +75,7 @@ void Snow::reset(Particle& p)
 	zval = getRandom(-0.3f, 0.3f);
 
 	p.mVelocity = glm::vec3(xval,yval,zval);
+	p.mVelocity = glm::vec3(0);
 
     p.mSize = 0.000025f; // FIXME the size is set in the shader atm
 }
