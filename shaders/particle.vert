@@ -7,6 +7,9 @@ layout(location = 1) in mat4 transformmatrix;
 out vec2 UV;
 out float camDistance;
 uniform mat4 VP; // Model-View-Projection matrix, but without the Model (the position is in BillboardPos; the orientation depends on the camera)
+uniform float fadeDistanceIn; //distance where particles should fade off
+
+out float fadeDistance;
 
 void main()
 {
@@ -21,7 +24,8 @@ void main()
 		squareVertices * particleSize;
 	// Output position of the vertex
 	gl_Position = VP * M * vec4(vertexPosition_worldspace, 1.0f);
-	camDistance = length(vec3(xyzs));
+	camDistance = length(vec3(xyzs.xyz));
 	// UV of the vertex. No special space for this one.
 	UV = squareVertices.xy;// + vec2(0.5, 0.5);
+	fadeDistance = fadeDistanceIn;
 }

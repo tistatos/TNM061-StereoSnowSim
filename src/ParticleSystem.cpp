@@ -19,6 +19,7 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mBillBoardVB = 0;
 	mParticlePositionBuffer = 0;
 	mParticlePositionData = new GLfloat[MAX_PARTICLES * 4 * 4];
+	mFadeDistance = 4.0f;
 }
 
 /**
@@ -196,8 +197,9 @@ void ParticleSystem::draw(double delta)
 		glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByName(mTexture.mTextureName));
 
 		glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix();
-
+		int fadeDistanceLoc = sgct::ShaderManager::instance()->getShaderProgram(mShader.mShaderName).getUniformLocation("fadeDistanceIn");
 		glUniformMatrix4fv(mViewProjectionLoc, 1, GL_FALSE, &MVP[0][0]);
+		glUniform1f(fadeDistanceLoc,mFadeDistance);
 
 		glBindVertexArray(mVertexArray);
 
@@ -375,4 +377,9 @@ void ParticleSystem::toggleDebug()
 void ParticleSystem::sortParticles()
 {
 	std::sort(&mParticles[0], &mParticles[MAX_PARTICLES]);
+}
+
+void ParticleSystem::setFadeDistance(float d)
+{
+	mFadeDistance = d;
 }

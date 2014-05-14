@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
 	gGrav = new Gravity();
 	gGrav->init(-9.81f);
-	//gParticles->addField(gGrav);
+	gParticles->addField(gGrav);
 
 
 	gWind = new Wind();
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 
 	gTurbine = new Vortex();
 	gTurbine->init(0.0f, 0.0f, 0.0f);
-	gParticles->addField(gTurbine);
+	// gParticles->addField(gTurbine);
 
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 	SimplexNoise* noise = new SimplexNoise();
 	noise->init(glm::vec3(0), glm::vec3(0), gEngine->getTime());
 
-	gParticles->addField(noise);
+	// gParticles->addField(noise);
 
 	cout << "---- Fields active on gParticles ----" << endl;
 	gParticles->printFields();

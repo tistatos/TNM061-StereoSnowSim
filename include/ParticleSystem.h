@@ -35,6 +35,7 @@ public:
 	void setTexture(string name, string file);
 	void setShader(string name, string vertFile, string fragFile);
 	void toggleDebug();
+	void setFadeDistance(float d);
 
 protected:
 	virtual void sortParticles();
@@ -43,7 +44,8 @@ protected:
 	virtual void calculateLife(Particle& p, double delta);
 	virtual void reset(Particle& p);
 
-	bool mInitialized; /// Is the particle system initalized?
+	float mFadeDistance; /// Distance from camera when particles should fade away to not create crossedeye effect
+	bool mInitialized; /// Is the particle system iinitalized?
 
 	DebugField* mDebugField; /// the debug field stuff
 
