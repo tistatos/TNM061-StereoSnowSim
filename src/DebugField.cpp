@@ -51,8 +51,33 @@ void DebugField::init()
     // glDrawArrays(GL_LINES);
 }
 
-void DebugField::draw(Field &f)
+// FIXME
+// i crash
+// segmentation fauls osv
+void DebugField::draw(Field* f)
 {
-	std::cout << "Drawing field" << std::endl;
-	f.printInfo();
+	if(mShowDebug)
+	{
+		std::cout << "[POINTER] Drawing field" << std::endl;
+		f->printInfo();
+	}
+}
+void DebugField::draw(Field& f)
+{
+	if(mShowDebug)
+	{
+		std::cout << "[REF] Drawing field" << std::endl;
+		f.printInfo();
+	}
+}
+
+void DebugField::draw(ParticleSystem* p)
+{
+	if(mShowDebug)
+	{
+		for(std::vector<Field*>::iterator f = p->getFields().begin(); f != p->getFields().end(); ++f)
+		{
+			draw((*f));
+		}
+	}
 }

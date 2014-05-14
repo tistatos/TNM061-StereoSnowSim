@@ -14,6 +14,7 @@
 #include "HelperFunctions.h"
 
 class Field;
+class DebugField;
 
 const int MAX_PARTICLES = 2500;
 const float PARTICLE_SIZE = 0.1f;
@@ -31,11 +32,16 @@ public:
 
 	void addField(Field *f);
 	void printFields();
-	void showFields();
 	void setTexture(string name, string file);
 	void setShader(string name, string vertFile, string fragFile);
 	void toggleDebug();
 	void setFadeDistance(float d);
+	void enableFieldDebug();
+	void toggleFieldDebug();
+	void pauseControl(bool status);
+	void togglePause();
+
+	std::vector<Field*> getFields() {return mFields;};
 
 protected:
 	virtual void sortParticles();
@@ -45,7 +51,8 @@ protected:
 	virtual void reset(Particle& p);
 
 	float mFadeDistance; /// Distance from camera when particles should fade away to not create crossedeye effect
-	bool mInitialized; /// Is the particle system iinitalized?
+	bool mInitialized; /// Is the particle system initalized?
+	bool mPaused;
 
 	DebugField* mDebugField; /// the debug field stuff
 
