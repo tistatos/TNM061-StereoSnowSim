@@ -145,8 +145,8 @@ void ParticleSystem::draw(double delta)
 				reset(particleIndex);
 		}
 
-		// show fields if mShowFields is true
-		showFields();
+		// this lovely row is broken
+		// mDebugField->draw(this);
 
 		sortParticles();
 		int particleCount = 0;
@@ -355,22 +355,14 @@ void ParticleSystem::printFields()
 	}
 }
 
-void ParticleSystem::showFields()
+void ParticleSystem::enableFieldDebug()
 {
-	// if(mShowFields)
-	// {
-	// 	// loop through the fields, and show their arrows
-	// 	for(std::vector<Field*>::iterator f = mFields.begin(); f != mFields.end(); ++f)
-	// 	{
-	// 		(*f)->showField();
-	// 	}
-	// }
+	mDebugField->enableDebug();
 }
 
-void ParticleSystem::toggleDebug()
+void ParticleSystem::toggleFieldDebug()
 {
-	// mShowFields = !mShowFields;
-	// std::cout << "Field view is " << (mShowFields ? "ON" : "OFF") << std::endl;
+	mDebugField->toggleDebug();
 }
 
 void ParticleSystem::sortParticles()
