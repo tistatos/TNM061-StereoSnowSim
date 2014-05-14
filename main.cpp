@@ -24,6 +24,10 @@ Wind* gWind;
 Gravity* gGrav;
 Vortex* gTurbine;
 
+bool gDisplayInfo;
+bool gStatsGraph;
+bool gWireframe;
+
 sgct::SharedDouble curr_time(0.0);
 
 void initialize();
@@ -117,6 +121,11 @@ void initialize()
 	tree->translate(0.0f, -1.0f, -6.0f);
 
 	gBubble->createSphere(1.5f, 100);
+
+
+	gDisplayInfo = false;
+	gStatsGraph = false;
+	gWireframe = false;
 }
 
 void draw()
@@ -144,9 +153,9 @@ void myPreSyncFun()
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this? Currently set to false.
 void statsDrawFun()
 {
-	gEngine->setDisplayInfoVisibility(false);
-	gEngine->setStatsGraphVisibility(false);
-	gEngine->setWireframe(false);
+	gEngine->setDisplayInfoVisibility(gDisplayInfo);
+	gEngine->setStatsGraphVisibility(gStatsGraph);
+	gEngine->setWireframe(gWireframe);
 }
 
 //Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
