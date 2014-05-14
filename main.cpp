@@ -87,12 +87,6 @@ int main(int argc, char *argv[])
 	gTurbine->init(0.0f, 0.0f, 0.0f);
 	// gParticles->addField(gTurbine);
 
-	//Not working yet... :(
-	SimplexNoise* noise = new SimplexNoise();
-	noise->init(glm::vec3(0), glm::vec3(0));
-
-	//gParticles->addField(noise);
-
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
 		delete gEngine;
