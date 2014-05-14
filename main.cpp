@@ -271,7 +271,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			gTurbine->setPosition((positionX.getVal()*0.01f),(positionZ.getVal()*0.01f));
 		}
 
-		else if(size >= 6 && strncmp(receivedChars, "r", 1) == 0)
+		else if(size >= 6 && strcmp(receivedChars, "radius") != 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
@@ -289,6 +289,21 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			gGrav->init(-tmpVal);
+		}
+
+		else if(size >= 6 && strcmp(receivedChars, "display") != 0)
+		{
+			gDisplayInfo = !gDisplayInfo;
+		}
+
+		else if(size >= 6 && strcmp(receivedChars, "stats") != 0)
+		{
+			gStatsGraph = !gStatsGraph;
+		}
+
+		else if(size >= 6 && strcmp(receivedChars, "wire") != 0)
+		{
+			gWireframe = !gWireframe;
 		}
 	}
 }
