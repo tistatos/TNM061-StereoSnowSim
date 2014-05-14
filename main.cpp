@@ -26,11 +26,23 @@ Gravity* gGrav;
 Vortex* gTurbine;
 
 sgct::SharedDouble curr_time(0.0);
+sgct::SharedDouble sizeFactorX(0.0);
+sgct::SharedDouble sizeFactorY(0.0);
+sgct::SharedDouble sizeFactorZ(0.0);
+sgct::SharedDouble vortFactorX(0.0);
+sgct::SharedDouble vortFactorY(0.0);
+sgct::SharedDouble vortFactorZ(0.0);
+sgct::SharedDouble positionX(0.0);
+sgct::SharedDouble positionZ(0.0);
+sgct::SharedDouble radius(0.0);
+
 
 void initialize();
 void draw();
 void myPreSyncFun();
 void statsDrawFun();
+void myEncodeFun();
+void myDecodeFun();
 void externalControlCallback(const char * receivedChars, int size, int clientId);
 void sendMessageToExternalControl(void * data, int length);
 
@@ -46,6 +58,8 @@ int main(int argc, char *argv[])
 	gEngine->setPreSyncFunction(myPreSyncFun);
 	gEngine->setPostSyncPreDrawFunction(statsDrawFun);
 	gEngine->setExternalControlCallback(externalControlCallback);
+	sgct::SharedData::instance()->setEncodeFunction(myEncodeFun);
+	sgct::SharedData::instance()->setDecodeFunction(myDecodeFun);
 
 	gParticles = new Snow(gEngine);
 	gWorld = new World(gEngine);
@@ -145,6 +159,35 @@ void myPreSyncFun()
 	}
 }
 
+void myEncodeFun()
+{
+	sgct::SharedData::instance()->writeDouble(&curr_time);
+ 	sgct::SharedData::instance()->writeDouble(&sizeFactorX);
+ 	sgct::SharedData::instance()->writeDouble(&sizeFactorY);
+ 	sgct::SharedData::instance()->writeDouble(&sizeFactorZ);
+ 	sgct::SharedData::instance()->writeDouble(&vortFactorX);
+ 	sgct::SharedData::instance()->writeDouble(&vortFactorY);
+ 	sgct::SharedData::instance()->writeDouble(&vortFactorZ);
+ 	sgct::SharedData::instance()->writeDouble(&positionX);
+ 	sgct::SharedData::instance()->writeDouble(&positionZ);
+ 	sgct::SharedData::instance()->writeDouble(&radius);
+}
+
+
+void myDecodeFun()
+{
+	sgct::SharedData::instance()->readDouble(&curr_time);
+	sgct::SharedData::instance()->readDouble(&sizeFactorX);
+	sgct::SharedData::instance()->readDouble(&sizeFactorY);
+	sgct::SharedData::instance()->readDouble(&sizeFactorZ);
+	sgct::SharedData::instance()->readDouble(&vortFactorX);
+	sgct::SharedData::instance()->readDouble(&vortFactorY);
+	sgct::SharedData::instance()->readDouble(&vortFactorZ);
+	sgct::SharedData::instance()->readDouble(&positionX);
+	sgct::SharedData::instance()->readDouble(&positionZ);
+	sgct::SharedData::instance()->readDouble(&radius);
+}
+
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this? Currently set to false.
 void statsDrawFun()
 {
@@ -162,22 +205,26 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		if(size >= 6 && strncmp(receivedChars, "winX", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
-			gWind->setAcceleration((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
+ 			int tmpVal = atoi(receivedChars + 5);
+ 			sizeFactorX.setVal(tmpVal);
+			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winY", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			gWind->setAcceleration((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
+ 			sizeFactorY.setVal(tmpVal);
+			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winZ", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			gWind->setAcceleration((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
+ 			sizeFactorZ.setVal(tmpVal);
+			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 		}
 		else if(size >= 6 && strncmp(receivedChars, "vorX", 4) == 0)
 		{
@@ -190,14 +237,45 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			gTurbine->setForce((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
+			vortFactorY.setVal(tmpVal);
+			gTurbine->setForce((vortFactorX.getVal()*0.01f), (vortFactorY.getVal()*0.01f), (vortFactorZ.getVal()*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "vorZ", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			gTurbine->setForce((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
+			vortFactorZ.setVal(tmpVal);
+			gTurbine->setForce((vortFactorX.getVal()*0.01f), (vortFactorY.getVal()*0.01f), (vortFactorZ.getVal()*0.01f));
+		}
+
+		else if(size >= 6 && strncmp(receivedChars, "posX", 4) == 0)
+		{
+			//We need an int.
+			int tmpVal = atoi(receivedChars + 5);
+			positionX.setVal(tmpVal);
+			gTurbine->setPosition((positionX.getVal()*0.01f),(positionZ.getVal()*0.01f));
+		}
+
+		else if(size >= 6 && strncmp(receivedChars, "posZ", 4) == 0)
+		{
+			//We need an int.
+			int tmpVal = atoi(receivedChars + 5);
+			positionZ.setVal(tmpVal);
+			gTurbine->setPosition((positionX.getVal()*0.01f),(positionZ.getVal()*0.01f));
+		}
+
+		else if(size >= 6 && strncmp(receivedChars, "r", 1) == 0)
+		{
+			//We need an int.
+			int tmpVal = atoi(receivedChars + 5);
+			radius.setVal(tmpVal);
+			gTurbine->setRadius(radius.getVal());
+		}
+
+		else if(size >= 6 && strcmp(receivedChars, "pause") != 0)
+		{
+			gParticles->togglePause();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "grav", 4) == 0)
