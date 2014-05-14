@@ -10,7 +10,7 @@
 
 class Field;
 
-const int MAX_PARTICLES = 1000;
+const int MAX_PARTICLES = 2500;
 const float PARTICLE_SIZE = 0.1f;
 
 using namespace std;

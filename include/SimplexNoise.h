@@ -45,10 +45,9 @@ class SimplexNoise : public Field
 {
 public:
 	SimplexNoise();
-	void init(glm::vec3 pos, glm::vec3 dim);
+	void init(glm::vec3 pos, glm::vec3 dim, float time);
 	glm::vec3 getVelocity(double delta, Particle &p);
 	void printInfo();
-	void setTime(double time);
 	void showField(){};
 private:
 	float octaveNoise3D(	const float octaves,
@@ -62,7 +61,7 @@ private:
 	int fastfloor(const float x);
 
 	float dot(const int* g, const float x, const float y, const float z);
-
+    float mTime;
 };
 
 #endif

@@ -5,41 +5,36 @@ SimplexNoise::SimplexNoise()
 {
 }
 
-void SimplexNoise::init(glm::vec3 pos, glm::vec3 dim)
+void SimplexNoise::init(glm::vec3 pos, glm::vec3 dim, float time)
 {
+	mTime = time;
 }
 
-void SimplexNoise::setTime(double time)
-{
-}
 
 glm::vec3 SimplexNoise::getVelocity(double delta, Particle &p)
 {
-	glm::vec3 pos = p.position();
-	pos.x = pos.x/100;
-	pos.y = pos.y/100;
-	pos.z = pos.z/100;
-	float x = octaveNoise3D(5, 5.0f, 1.0f, glm::vec3(pos.x));
-	float y = octaveNoise3D(5, 5.0f, 1.0f, glm::vec3(pos.y));
-	float z = octaveNoise3D(5, 5.0f, 1.0f, glm::vec3(pos.z));
+	mTime+=delta;
+	glm::vec3 pos = p.position()+(float)delta;
+	pos /= glm::length(pos);
+	float x = octaveNoise3D(6, 0.4f, 0.01f, glm::vec3(pos.x));
+	float y = octaveNoise3D(6, 0.4f, 0.01f, glm::vec3(pos.y));
+	float z = octaveNoise3D(6, 0.4f, 0.01f, glm::vec3(pos.z));
 
-	// if(x < 0 || y < 0 || z < 0)
-	// 	cout << glm::vec3(x,y,z) << endl;
-	return glm::vec3(x,y,z)*0.05f*(float)delta;
+	return glm::normalize(glm::vec3(x,y,z)*float(delta));
 }
 
 float SimplexNoise::rawNoise3D( const float x, const float y, const float z )
 {
 	float n0, n1, n2, n3;
 
-	float F3 = 1.0/3.0;
+	float F3 = 1.0f/3.0f;
 	float s = (x+y+z)*F3;
 
 	int i = fastfloor(x+s);
-	int j = fastfloor(x+s);
-	int k = fastfloor(x+s);
+	int j = fastfloor(y+s);
+	int k = fastfloor(z+s);
 
-	float G3 = 1.0/6.0;
+	float G3 = 1.0f/6.0f;
 	float t = (i+j+k)*G3;
 	float X0 = i-t;
 	float Y0 = j-t;
@@ -91,49 +86,47 @@ float SimplexNoise::rawNoise3D( const float x, const float y, const float z )
     int gi2 = perm[ii+i2+perm[jj+j2+perm[kk+k2]]] % 12;
     int gi3 = perm[ii+1+perm[jj+1+perm[kk+1]]] % 12;
 
-    float t0 = 0.5 - x0*y0 - y0*y0 - z0*z0;
+    float t0 = 0.5 - x0*x0 - y0*y0 - z0*z0;
     if(t0<0)
     {
     	n0 = 0.0;
     }
     else
     {
-    	t0 *= t0;
     	n0 = t0 *t0 * dot(grad3[gi0], x0 ,y0, z0);
     }
 
-    float t1 = 0.5 - x1*y1 - y1*y1 - z1*z1;
+    float t1 = 0.5 - x1*x1 - y1*y1 - z1*z1;
     if(t1<0)
     {
     	n1 = 0.0;
     }
     else
     {
-    	t1 *= t1;
     	n1 = t1 *t1 * dot(grad3[gi1], x1 ,y1, z1);
     }
 
-    float t2 = 0.5 - x2*y2 - y2*y2 - z2*z2;
+    float t2 = 0.5 - x2*x2 - y2*y2 - z2*z2;
     if(t2<0)
     {
     	n2 = 0.0;
     }
     else
     {
-    	t2 *= t2;
     	n2 = t2 *t2 * dot(grad3[gi2], x2 ,y2, z2);
     }
 
-    float t3 = 0.5 - x3*y3 - y3*y3 - z3*z3;
+    float t3 = 0.5 - x3*x3 - y3*y3 - z3*z3;
     if(t3<0)
     {
     	n3 = 0.0;
     }
     else
     {
-    	t3 *= t3;
     	n3 = t3 *t3 * dot(grad3[gi3], x3 ,y3, z3);
     }
+
+	// cout << 32.0*(n0+n1+n2+n3) << endl;
 
 	return 32.0*(n0+n1+n2+n3);
 }
@@ -157,10 +150,14 @@ float SimplexNoise::octaveNoise3D(	const float octaves,
 
 		amplitude *= persistence;
 	}
-	return total/maxAmplitude;
+	return total / maxAmplitude;
 }
 
-int SimplexNoise::fastfloor( const float x) { return (x > 0) ? (int)x : (int)x-1; }
+int SimplexNoise::fastfloor( const float x)
+{
+	int xi = (int)x;
+	return (x < xi ) ? xi-1 : xi;
+}
 float SimplexNoise::dot(const int* g, const float x, const float y, const float z) { return g[0]*x+g[1]*y+g[2]*z;}
 
 

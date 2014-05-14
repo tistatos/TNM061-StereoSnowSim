@@ -67,30 +67,31 @@ int main(int argc, char *argv[])
 
 	gGrav = new Gravity();
 	gGrav->init(-9.81f);
-	gParticles->addField(gGrav);
+	//gParticles->addField(gGrav);
 
 
 	gWind = new Wind();
 	//wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
-	gWind->setAcceleration(0.0f, 0.0f, 0.0f);
-	gParticles->addField(gWind);
+	gWind->setAcceleration(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
+	//gParticles->addField(gWind);
 
 	gTurbine = new Vortex();
 	gTurbine->init(0.0f, 0.0f, 0.0f);
 	//turbine->setForce(-10.0f, 0.0f, -1.0f);
 	//gParticles->addField(gTurbine);
 
-	//Not working yet... :(
-	SimplexNoise* noise = new SimplexNoise();
-	noise->init(glm::vec3(0), glm::vec3(0));
-
-	gParticles->addField(noise);
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
 		delete gEngine;
 		return EXIT_FAILURE;
 	}
+
+	//Not working yet... :(
+	SimplexNoise* noise = new SimplexNoise();
+	noise->init(glm::vec3(0), glm::vec3(0), gEngine->getTime());
+
+	gParticles->addField(noise);
 
 	cout << "---- Fields active on gParticles ----" << endl;
 	gParticles->printFields();

@@ -303,7 +303,6 @@ void ParticleSystem::move(double delta)
 			}
 
 			p.mVelocity = tempVelo;
-
 			calculateLife(p, delta);
 			// apply the velocity
 			glm::mat4 tran = glm::translate(glm::mat4(1.0f), p.mVelocity*(float)delta);
