@@ -22,6 +22,10 @@ namespace snowCozyGUI
         public string vortexX;
         public string vortexY;
         public string vortexZ;
+        public string vortexRadius;
+        public string vortexPosX;
+        public string vortexPosZ;
+        public string pause; //0 for go, 1 for pause
     }
 
     public partial class Form1 : Form
@@ -48,6 +52,10 @@ namespace snowCozyGUI
             mClient.vortexX = "0";
             mClient.vortexY = "0";
             mClient.vortexZ = "0";
+            mClient.vortexRadius = "1";
+            mClient.vortexPosX = "0";
+            mClient.vortexPosZ = "-1";
+            mClient.pause = "0";
 
             componentVisability(false);
 
@@ -86,9 +94,16 @@ namespace snowCozyGUI
                 this.connectButton.Text = "Disconnect";
                 this.statusMessage.Text = "Connected to " + mClient.ip;
                 this.fieldGroupBox.Enabled = true;
+                this.programGroupBox.Enabled = true;
+
+                //set default values
+                this.radiusTextBox.Text = mClient.vortexRadius;
+                this.posXTextBox.Text = mClient.vortexPosX;
+                this.posZTextBox.Text = mClient.vortexPosZ;
 
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=0\r\nvorX=0\r\nvorY=0\r\nvorZ=0");
+                mClient.connection.Send(
+                    "stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=0\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradius=1");
             }
             else
             {
@@ -124,8 +139,10 @@ namespace snowCozyGUI
         {
             //group box for properties should be grayed out when not connected
             this.fieldGroupBox.Enabled = status;
-            this.propertiesGroupBox.Enabled = status;
+            this.forceGroupBox.Enabled = status;
             this.gravityGroupBox.Enabled = status;
+            this.propertiesGroupBox.Enabled = status;
+            this.programGroupBox.Enabled = status;
         }
 
         private void xTrackBar_Scroll(object sender, EventArgs e)
@@ -223,7 +240,7 @@ namespace snowCozyGUI
                 this.zTrackBar.Value = Convert.ToInt32(mClient.windZ);
                 this.zForce.Text = mClient.windZ;
 
-                this.propertiesGroupBox.Enabled = true;
+                this.forceGroupBox.Enabled = true;
                 this.gravityGroupBox.Enabled = false;
 
                 this.statusMessage.Text = "change the value of wind";
@@ -247,6 +264,7 @@ namespace snowCozyGUI
                 this.zTrackBar.Value = Convert.ToInt32(mClient.vortexZ);
                 this.zForce.Text = mClient.vortexZ;
 
+                this.forceGroupBox.Enabled = true;
                 this.propertiesGroupBox.Enabled = true;
                 this.gravityGroupBox.Enabled = false;
 
@@ -262,11 +280,51 @@ namespace snowCozyGUI
 
             if (rButt.Checked)
             {
-                this.propertiesGroupBox.Enabled = false;
+                this.forceGroupBox.Enabled = false;
                 this.gravityGroupBox.Enabled = true;
 
                 this.statusMessage.Text = "change the value of gravity";
             }
         }
+
+        private void pausButton_Click(object sender, EventArgs e)
+        {
+            if (mClient.pause == "0")
+            {
+                mClient.pause = "1";
+                this.pausButton.Text = "Start";
+                this.statusMessage.Text = "Program is paused";
+
+                mClient.connection.Send("paus=" + mClient.pause);
+            }
+            else
+            {
+                mClient.pause = "0";
+                this.pausButton.Text = "Pause";
+                this.statusMessage.Text = "Program is paused";
+
+                mClient.connection.Send("paus=" + mClient.pause);
+            }
+
+        }
+
+        private void radiusTextBox_TextChanged(object sender, EventArgs e)
+        {
+            mClient.vortexRadius = radiusTextBox.Text;
+            mClient.connection.Send("radius=" + mClient.vortexRadius);
+        }
+
+        private void posXTextBox_TextChanged(object sender, EventArgs e)
+        {
+            mClient.vortexPosX = posXTextBox.Text;
+            mClient.connection.Send("posX=" + mClient.vortexPosX);
+        }
+
+        private void posZTextBox_TextChanged(object sender, EventArgs e)
+        {
+            mClient.vortexPosZ = posZTextBox.Text;
+            mClient.connection.Send("posZ=" + mClient.vortexPosZ);
+        }
+
     }
 }

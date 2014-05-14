@@ -32,7 +32,7 @@
             this.ipTextBox = new System.Windows.Forms.TextBox();
             this.networkGroupBox = new System.Windows.Forms.GroupBox();
             this.adress = new System.Windows.Forms.Label();
-            this.propertiesGroupBox = new System.Windows.Forms.GroupBox();
+            this.forceGroupBox = new System.Windows.Forms.GroupBox();
             this.zForce = new System.Windows.Forms.Label();
             this.zLabel = new System.Windows.Forms.Label();
             this.zTrackBar = new System.Windows.Forms.TrackBar();
@@ -53,8 +53,17 @@
             this.vortexRadio = new System.Windows.Forms.RadioButton();
             this.windRadio = new System.Windows.Forms.RadioButton();
             this.gravityGroupBox = new System.Windows.Forms.GroupBox();
+            this.propertiesGroupBox = new System.Windows.Forms.GroupBox();
+            this.posZTextBox = new System.Windows.Forms.TextBox();
+            this.posXTextBox = new System.Windows.Forms.TextBox();
+            this.zPosLabel = new System.Windows.Forms.Label();
+            this.xPosLabel = new System.Windows.Forms.Label();
+            this.radiusLabel = new System.Windows.Forms.Label();
+            this.radiusTextBox = new System.Windows.Forms.TextBox();
+            this.pausButton = new System.Windows.Forms.Button();
+            this.programGroupBox = new System.Windows.Forms.GroupBox();
             this.networkGroupBox.SuspendLayout();
-            this.propertiesGroupBox.SuspendLayout();
+            this.forceGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xTrackBar)).BeginInit();
@@ -62,6 +71,8 @@
             this.statusStrip1.SuspendLayout();
             this.fieldGroupBox.SuspendLayout();
             this.gravityGroupBox.SuspendLayout();
+            this.propertiesGroupBox.SuspendLayout();
+            this.programGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // connectButton
@@ -103,23 +114,23 @@
             this.adress.TabIndex = 2;
             this.adress.Text = "Adress:";
             // 
-            // propertiesGroupBox
+            // forceGroupBox
             // 
-            this.propertiesGroupBox.Controls.Add(this.zForce);
-            this.propertiesGroupBox.Controls.Add(this.zLabel);
-            this.propertiesGroupBox.Controls.Add(this.zTrackBar);
-            this.propertiesGroupBox.Controls.Add(this.yForce);
-            this.propertiesGroupBox.Controls.Add(this.yLabel);
-            this.propertiesGroupBox.Controls.Add(this.yTrackBar);
-            this.propertiesGroupBox.Controls.Add(this.xForce);
-            this.propertiesGroupBox.Controls.Add(this.xLabel);
-            this.propertiesGroupBox.Controls.Add(this.xTrackBar);
-            this.propertiesGroupBox.Location = new System.Drawing.Point(12, 134);
-            this.propertiesGroupBox.Name = "propertiesGroupBox";
-            this.propertiesGroupBox.Size = new System.Drawing.Size(292, 139);
-            this.propertiesGroupBox.TabIndex = 4;
-            this.propertiesGroupBox.TabStop = false;
-            this.propertiesGroupBox.Text = "Properties xyz";
+            this.forceGroupBox.Controls.Add(this.zForce);
+            this.forceGroupBox.Controls.Add(this.zLabel);
+            this.forceGroupBox.Controls.Add(this.zTrackBar);
+            this.forceGroupBox.Controls.Add(this.yForce);
+            this.forceGroupBox.Controls.Add(this.yLabel);
+            this.forceGroupBox.Controls.Add(this.yTrackBar);
+            this.forceGroupBox.Controls.Add(this.xForce);
+            this.forceGroupBox.Controls.Add(this.xLabel);
+            this.forceGroupBox.Controls.Add(this.xTrackBar);
+            this.forceGroupBox.Location = new System.Drawing.Point(326, 12);
+            this.forceGroupBox.Name = "forceGroupBox";
+            this.forceGroupBox.Size = new System.Drawing.Size(292, 151);
+            this.forceGroupBox.TabIndex = 4;
+            this.forceGroupBox.TabStop = false;
+            this.forceGroupBox.Text = "Force";
             // 
             // zForce
             // 
@@ -142,6 +153,7 @@
             // zTrackBar
             // 
             this.zTrackBar.Location = new System.Drawing.Point(56, 95);
+            this.zTrackBar.Minimum = -10;
             this.zTrackBar.Name = "zTrackBar";
             this.zTrackBar.Size = new System.Drawing.Size(204, 45);
             this.zTrackBar.TabIndex = 6;
@@ -168,6 +180,7 @@
             // yTrackBar
             // 
             this.yTrackBar.Location = new System.Drawing.Point(56, 53);
+            this.yTrackBar.Minimum = -10;
             this.yTrackBar.Name = "yTrackBar";
             this.yTrackBar.Size = new System.Drawing.Size(204, 45);
             this.yTrackBar.TabIndex = 3;
@@ -194,6 +207,7 @@
             // xTrackBar
             // 
             this.xTrackBar.Location = new System.Drawing.Point(56, 11);
+            this.xTrackBar.Minimum = -10;
             this.xTrackBar.Name = "xTrackBar";
             this.xTrackBar.Size = new System.Drawing.Size(204, 45);
             this.xTrackBar.TabIndex = 0;
@@ -231,9 +245,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusMessage,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 406);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 322);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(319, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(640, 22);
             this.statusStrip1.TabIndex = 5;
             // 
             // statusMessage
@@ -251,7 +265,7 @@
             this.fieldGroupBox.Controls.Add(this.gravityButton);
             this.fieldGroupBox.Controls.Add(this.vortexRadio);
             this.fieldGroupBox.Controls.Add(this.windRadio);
-            this.fieldGroupBox.Location = new System.Drawing.Point(12, 67);
+            this.fieldGroupBox.Location = new System.Drawing.Point(12, 201);
             this.fieldGroupBox.Name = "fieldGroupBox";
             this.fieldGroupBox.Size = new System.Drawing.Size(292, 61);
             this.fieldGroupBox.TabIndex = 6;
@@ -303,29 +317,117 @@
             this.gravityGroupBox.Controls.Add(this.gravityTrackBar);
             this.gravityGroupBox.Controls.Add(this.gravityForce);
             this.gravityGroupBox.Controls.Add(this.gravity);
-            this.gravityGroupBox.Location = new System.Drawing.Point(12, 280);
+            this.gravityGroupBox.Location = new System.Drawing.Point(326, 243);
             this.gravityGroupBox.Name = "gravityGroupBox";
             this.gravityGroupBox.Size = new System.Drawing.Size(292, 70);
             this.gravityGroupBox.TabIndex = 7;
             this.gravityGroupBox.TabStop = false;
-            this.gravityGroupBox.Text = "Properties y";
+            this.gravityGroupBox.Text = "Acceleration";
+            // 
+            // propertiesGroupBox
+            // 
+            this.propertiesGroupBox.Controls.Add(this.posZTextBox);
+            this.propertiesGroupBox.Controls.Add(this.posXTextBox);
+            this.propertiesGroupBox.Controls.Add(this.zPosLabel);
+            this.propertiesGroupBox.Controls.Add(this.xPosLabel);
+            this.propertiesGroupBox.Controls.Add(this.radiusLabel);
+            this.propertiesGroupBox.Controls.Add(this.radiusTextBox);
+            this.propertiesGroupBox.Location = new System.Drawing.Point(326, 169);
+            this.propertiesGroupBox.Name = "propertiesGroupBox";
+            this.propertiesGroupBox.Size = new System.Drawing.Size(292, 68);
+            this.propertiesGroupBox.TabIndex = 8;
+            this.propertiesGroupBox.TabStop = false;
+            this.propertiesGroupBox.Text = "Properties";
+            // 
+            // posZTextBox
+            // 
+            this.posZTextBox.Location = new System.Drawing.Point(244, 32);
+            this.posZTextBox.Name = "posZTextBox";
+            this.posZTextBox.Size = new System.Drawing.Size(42, 20);
+            this.posZTextBox.TabIndex = 6;
+            this.posZTextBox.TextChanged += new System.EventHandler(this.posZTextBox_TextChanged);
+            // 
+            // posXTextBox
+            // 
+            this.posXTextBox.Location = new System.Drawing.Point(150, 32);
+            this.posXTextBox.Name = "posXTextBox";
+            this.posXTextBox.Size = new System.Drawing.Size(42, 20);
+            this.posXTextBox.TabIndex = 5;
+            this.posXTextBox.TextChanged += new System.EventHandler(this.posXTextBox_TextChanged);
+            // 
+            // zPosLabel
+            // 
+            this.zPosLabel.AutoSize = true;
+            this.zPosLabel.Location = new System.Drawing.Point(203, 35);
+            this.zPosLabel.Name = "zPosLabel";
+            this.zPosLabel.Size = new System.Drawing.Size(35, 13);
+            this.zPosLabel.TabIndex = 4;
+            this.zPosLabel.Text = "Pos Z";
+            // 
+            // xPosLabel
+            // 
+            this.xPosLabel.AutoSize = true;
+            this.xPosLabel.Location = new System.Drawing.Point(109, 35);
+            this.xPosLabel.Name = "xPosLabel";
+            this.xPosLabel.Size = new System.Drawing.Size(35, 13);
+            this.xPosLabel.TabIndex = 3;
+            this.xPosLabel.Text = "Pos X";
+            // 
+            // radiusLabel
+            // 
+            this.radiusLabel.AutoSize = true;
+            this.radiusLabel.Location = new System.Drawing.Point(6, 35);
+            this.radiusLabel.Name = "radiusLabel";
+            this.radiusLabel.Size = new System.Drawing.Size(40, 13);
+            this.radiusLabel.TabIndex = 1;
+            this.radiusLabel.Text = "Radius";
+            // 
+            // radiusTextBox
+            // 
+            this.radiusTextBox.Location = new System.Drawing.Point(52, 32);
+            this.radiusTextBox.Name = "radiusTextBox";
+            this.radiusTextBox.Size = new System.Drawing.Size(40, 20);
+            this.radiusTextBox.TabIndex = 0;
+            this.radiusTextBox.TextChanged += new System.EventHandler(this.radiusTextBox_TextChanged);
+            // 
+            // pausButton
+            // 
+            this.pausButton.Location = new System.Drawing.Point(238, 19);
+            this.pausButton.Name = "pausButton";
+            this.pausButton.Size = new System.Drawing.Size(48, 23);
+            this.pausButton.TabIndex = 9;
+            this.pausButton.Text = "Pause";
+            this.pausButton.UseVisualStyleBackColor = true;
+            this.pausButton.Click += new System.EventHandler(this.pausButton_Click);
+            // 
+            // programGroupBox
+            // 
+            this.programGroupBox.Controls.Add(this.pausButton);
+            this.programGroupBox.Location = new System.Drawing.Point(12, 74);
+            this.programGroupBox.Name = "programGroupBox";
+            this.programGroupBox.Size = new System.Drawing.Size(292, 55);
+            this.programGroupBox.TabIndex = 10;
+            this.programGroupBox.TabStop = false;
+            this.programGroupBox.Text = "Program";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(319, 428);
+            this.ClientSize = new System.Drawing.Size(640, 344);
+            this.Controls.Add(this.programGroupBox);
+            this.Controls.Add(this.propertiesGroupBox);
             this.Controls.Add(this.gravityGroupBox);
             this.Controls.Add(this.fieldGroupBox);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.propertiesGroupBox);
+            this.Controls.Add(this.forceGroupBox);
             this.Controls.Add(this.networkGroupBox);
             this.Name = "Form1";
             this.Text = "SnowCozyShietRemote";
             this.networkGroupBox.ResumeLayout(false);
             this.networkGroupBox.PerformLayout();
-            this.propertiesGroupBox.ResumeLayout(false);
-            this.propertiesGroupBox.PerformLayout();
+            this.forceGroupBox.ResumeLayout(false);
+            this.forceGroupBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.yTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xTrackBar)).EndInit();
@@ -336,6 +438,9 @@
             this.fieldGroupBox.PerformLayout();
             this.gravityGroupBox.ResumeLayout(false);
             this.gravityGroupBox.PerformLayout();
+            this.propertiesGroupBox.ResumeLayout(false);
+            this.propertiesGroupBox.PerformLayout();
+            this.programGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -347,7 +452,7 @@
         private System.Windows.Forms.TextBox ipTextBox;
         private System.Windows.Forms.GroupBox networkGroupBox;
         private System.Windows.Forms.Label adress;
-        private System.Windows.Forms.GroupBox propertiesGroupBox;
+        private System.Windows.Forms.GroupBox forceGroupBox;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel statusMessage;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
@@ -368,6 +473,15 @@
         private System.Windows.Forms.RadioButton vortexRadio;
         private System.Windows.Forms.GroupBox gravityGroupBox;
         private System.Windows.Forms.RadioButton gravityButton;
+        private System.Windows.Forms.GroupBox propertiesGroupBox;
+        private System.Windows.Forms.TextBox posZTextBox;
+        private System.Windows.Forms.TextBox posXTextBox;
+        private System.Windows.Forms.Label zPosLabel;
+        private System.Windows.Forms.Label xPosLabel;
+        private System.Windows.Forms.Label radiusLabel;
+        private System.Windows.Forms.TextBox radiusTextBox;
+        private System.Windows.Forms.Button pausButton;
+        private System.Windows.Forms.GroupBox programGroupBox;
     }
 }
 

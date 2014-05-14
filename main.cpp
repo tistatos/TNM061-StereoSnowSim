@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
 	SimplexNoise* noise = new SimplexNoise();
 	noise->init(glm::vec3(0), glm::vec3(0));
 
-	gParticles->addField(noise);
+	//gParticles->addField(noise);
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
