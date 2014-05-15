@@ -14,13 +14,22 @@ void SimplexNoise::init(glm::vec3 pos, glm::vec3 dim, float time)
 glm::vec3 SimplexNoise::getVelocity(double delta, Particle &p)
 {
 	mTime+=delta;
-	glm::vec3 pos = p.position()+(float)delta;
-	pos /= glm::length(pos);
-	float x = octaveNoise3D(6, 0.4f, 0.01f, glm::vec3(pos.x));
-	float y = octaveNoise3D(6, 0.4f, 0.01f, glm::vec3(pos.y));
-	float z = octaveNoise3D(6, 0.4f, 0.01f, glm::vec3(pos.z));
+	glm::vec3 pos = p.position();
+	//pos /= glm::length(pos);
+	float x = octaveNoise3D(6, 0.6f, 0.1f, glm::vec3(pos.x));
+	float y = octaveNoise3D(6, 0.6f, 0.1f, glm::vec3(pos.y));
+	float z = octaveNoise3D(6, 0.6f, 0.1f, glm::vec3(pos.z));
 
-	return glm::normalize(glm::vec3(x,y,z)*float(delta));
+	if(glm::length(glm::vec3(x,y,z))>0)
+	{
+		// cout << glm::vec3(x,y,z) << endl;
+		return glm::normalize(glm::vec3(x,y,z));
+
+	}
+	else
+	{
+		return glm::vec3(0);
+	}
 }
 
 float SimplexNoise::rawNoise3D( const float x, const float y, const float z )
@@ -164,5 +173,5 @@ float SimplexNoise::dot(const int* g, const float x, const float y, const float 
 
 void SimplexNoise::printInfo()
 {
-	cout << "CURLNOIZE!!!!!!!" << endl;
+	cout << "SimplexNoise, 6 Octaves and .4 persistance" << endl;
 }
