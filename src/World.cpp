@@ -8,7 +8,7 @@ World::World(sgct::Engine* engine)
 	mMatrixLocation = -1;
 	mSize = 25;
 	mName = "sky";
-	mTextureFile = "skybox.png";
+	mTextureFile = "img/skybox.png";
 }
 
 void World::setBoxSize(float boxSize)
@@ -33,7 +33,7 @@ void World::loadTexture()
 {
 	//NOTE: missing a t in loadTexure
 	sgct::TextureManager::instance()->loadTexure(mTextureHandle, mName, mTextureFile, true);
-	//sgct::TextureManager::instance()->loadTexure(mTextureHandle, "einar", "einar.png", true);
+	//sgct::TextureManager::instance()->loadTexure(mTextureHandle, "einar", "img/einar.png", true);
 }
 
 void World::initializeWorld()
