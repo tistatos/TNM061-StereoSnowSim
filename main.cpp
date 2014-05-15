@@ -314,8 +314,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			int tmpVal = atoi(receivedChars + 6);
 			if(tmpVal);
 				gDisplayInfo = !gDisplayInfo;
-
-
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "stats", 5) == 0)
