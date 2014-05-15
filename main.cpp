@@ -28,6 +28,8 @@ bool gDisplayInfo;
 bool gStatsGraph;
 bool gWireframe;
 
+int mParticlesAmount;
+
 sgct::SharedDouble curr_time(0.0);
 sgct::SharedDouble sizeFactorX(0.0);
 sgct::SharedDouble sizeFactorY(0.0);
@@ -288,7 +290,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 
 		else if(size >= 6 && strncmp(receivedChars, "paus", 4) == 0)
 		{
-			int tmpVal = atoi(receivedChars + 4);
+			int tmpVal = atoi(receivedChars + 5);
 			gParticles->pauseControl(tmpVal);
 		}
 
@@ -307,14 +309,27 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			cout << tmpVal;
 		}
 
-		else if(size >= 6 && strncmp(receivedChars, "disp", 4) == 0)
+		else if(size >= 6 && strncmp(receivedChars, "graph", 5) == 0)
 		{
-			//gDisplayInfo = !gDisplayInfo;
+			int tmpVal = atoi(receivedChars + 6);
+			if(tmpVal);
+				gDisplayInfo = !gDisplayInfo;
+
+				
 		}
 
-		else if(size >= 6 && strncmp(receivedChars, "stat", 4) == 0)
+		else if(size >= 6 && strncmp(receivedChars, "stats", 5) == 0)
 		{
-			//gStatsGraph = !gStatsGraph;
+			int tmpVal = atoi(receivedChars + 6);
+			if(tmpVal);
+				gStatsGraph = !gStatsGraph;
+
+		}
+
+		else if(size >= 6 && strncmp(receivedChars, "fade", 4) == 0)
+		{
+			int tmpVal = atoi(receivedChars + 5);
+					
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "wire", 4) == 0)
