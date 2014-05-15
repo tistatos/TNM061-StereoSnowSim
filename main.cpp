@@ -152,9 +152,9 @@ void draw()
 {
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
-	gBubble->drawBubble();
-	road->draw();
-	tree->draw();
+	//gBubble->drawBubble();
+	//road->draw();
+	//tree->draw();
 	gParticles->move(delta);
 	gParticles->draw(delta);
 
@@ -315,7 +315,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			if(tmpVal);
 				gDisplayInfo = !gDisplayInfo;
 
-				
+
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "stats", 5) == 0)
@@ -329,7 +329,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		else if(size >= 6 && strncmp(receivedChars, "fade", 4) == 0)
 		{
 			int tmpVal = atoi(receivedChars + 5);
-					
+
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "wire", 4) == 0)
