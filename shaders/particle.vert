@@ -14,7 +14,7 @@ out float fadeDistance;
 void main()
 {
 	mat4 M = transformmatrix;
-	float particleSize = .3;
+	float particleSize = .1;
 	vec4 xyzs = transformmatrix[3];
 	vec3 particleCenter_wordspace = xyzs.xyz;
 	vec3 CameraRight_worldspace = vec3(1.0f,0.0,0.0);
@@ -26,6 +26,6 @@ void main()
 	gl_Position = VP * M * vec4(vertexPosition_worldspace, 1.0f);
 	camDistance = length(vec3(xyzs.xyz));
 	// UV of the vertex. No special space for this one.
-	UV = squareVertices.xy;// + vec2(0.5, 0.5);
+	UV = squareVertices.xy * vec2(0.5, 0.5)+vec2(0.5, 0.5);
 	fadeDistance = fadeDistanceIn;
 }

@@ -10,7 +10,7 @@ Snow::Snow(sgct::Engine* engine) : ParticleSystem(engine)
 	mShader.mFragmentFile = "shaders/particle.frag";
 
 	mTexture.mTextureName = "snow";
-	mTexture.mTextureFile = "snow.png";
+	mTexture.mTextureFile = "flaky.png";
 }
 
 bool Snow::initialize()
