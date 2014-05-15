@@ -62,11 +62,14 @@
             this.radiusTextBox = new System.Windows.Forms.TextBox();
             this.pausButton = new System.Windows.Forms.Button();
             this.programGroupBox = new System.Windows.Forms.GroupBox();
+            this.graphCheckBox = new System.Windows.Forms.CheckBox();
+            this.statsCheckBox = new System.Windows.Forms.CheckBox();
             this.fadeDistTrackBar = new System.Windows.Forms.TrackBar();
             this.fadeDistGroupBox = new System.Windows.Forms.GroupBox();
-            this.statsCheckBox = new System.Windows.Forms.CheckBox();
-            this.graphCheckBox = new System.Windows.Forms.CheckBox();
             this.fadeDist = new System.Windows.Forms.Label();
+            this.partGroupBox = new System.Windows.Forms.GroupBox();
+            this.particles = new System.Windows.Forms.Label();
+            this.partTrackBar = new System.Windows.Forms.TrackBar();
             this.networkGroupBox.SuspendLayout();
             this.forceGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zTrackBar)).BeginInit();
@@ -80,6 +83,8 @@
             this.programGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fadeDistTrackBar)).BeginInit();
             this.fadeDistGroupBox.SuspendLayout();
+            this.partGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.partTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // connectButton
@@ -133,7 +138,7 @@
             this.forceGroupBox.Controls.Add(this.xForce);
             this.forceGroupBox.Controls.Add(this.xLabel);
             this.forceGroupBox.Controls.Add(this.xTrackBar);
-            this.forceGroupBox.Location = new System.Drawing.Point(326, 12);
+            this.forceGroupBox.Location = new System.Drawing.Point(326, 67);
             this.forceGroupBox.Name = "forceGroupBox";
             this.forceGroupBox.Size = new System.Drawing.Size(292, 151);
             this.forceGroupBox.TabIndex = 4;
@@ -254,7 +259,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusMessage,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 322);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 371);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(640, 22);
             this.statusStrip1.TabIndex = 5;
@@ -274,7 +279,7 @@
             this.fieldGroupBox.Controls.Add(this.gravityButton);
             this.fieldGroupBox.Controls.Add(this.vortexRadio);
             this.fieldGroupBox.Controls.Add(this.windRadio);
-            this.fieldGroupBox.Location = new System.Drawing.Point(12, 207);
+            this.fieldGroupBox.Location = new System.Drawing.Point(326, 0);
             this.fieldGroupBox.Name = "fieldGroupBox";
             this.fieldGroupBox.Size = new System.Drawing.Size(292, 61);
             this.fieldGroupBox.TabIndex = 6;
@@ -326,7 +331,7 @@
             this.gravityGroupBox.Controls.Add(this.gravityTrackBar);
             this.gravityGroupBox.Controls.Add(this.gravityForce);
             this.gravityGroupBox.Controls.Add(this.gravity);
-            this.gravityGroupBox.Location = new System.Drawing.Point(326, 243);
+            this.gravityGroupBox.Location = new System.Drawing.Point(326, 298);
             this.gravityGroupBox.Name = "gravityGroupBox";
             this.gravityGroupBox.Size = new System.Drawing.Size(292, 70);
             this.gravityGroupBox.TabIndex = 7;
@@ -341,7 +346,7 @@
             this.propertiesGroupBox.Controls.Add(this.xPosLabel);
             this.propertiesGroupBox.Controls.Add(this.radiusLabel);
             this.propertiesGroupBox.Controls.Add(this.radiusTextBox);
-            this.propertiesGroupBox.Location = new System.Drawing.Point(326, 169);
+            this.propertiesGroupBox.Location = new System.Drawing.Point(326, 224);
             this.propertiesGroupBox.Name = "propertiesGroupBox";
             this.propertiesGroupBox.Size = new System.Drawing.Size(292, 68);
             this.propertiesGroupBox.TabIndex = 8;
@@ -421,6 +426,30 @@
             this.programGroupBox.TabStop = false;
             this.programGroupBox.Text = "Program";
             // 
+            // graphCheckBox
+            // 
+            this.graphCheckBox.AutoSize = true;
+            this.graphCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.graphCheckBox.Location = new System.Drawing.Point(92, 23);
+            this.graphCheckBox.Name = "graphCheckBox";
+            this.graphCheckBox.Size = new System.Drawing.Size(55, 17);
+            this.graphCheckBox.TabIndex = 11;
+            this.graphCheckBox.Text = "Graph";
+            this.graphCheckBox.UseVisualStyleBackColor = true;
+            this.graphCheckBox.CheckedChanged += new System.EventHandler(this.graphCheckBox_CheckedChanged);
+            // 
+            // statsCheckBox
+            // 
+            this.statsCheckBox.AutoSize = true;
+            this.statsCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.statsCheckBox.Location = new System.Drawing.Point(17, 23);
+            this.statsCheckBox.Name = "statsCheckBox";
+            this.statsCheckBox.Size = new System.Drawing.Size(50, 17);
+            this.statsCheckBox.TabIndex = 10;
+            this.statsCheckBox.Text = "Stats";
+            this.statsCheckBox.UseVisualStyleBackColor = true;
+            this.statsCheckBox.CheckedChanged += new System.EventHandler(this.statsCheckBox_CheckedChanged);
+            // 
             // fadeDistTrackBar
             // 
             this.fadeDistTrackBar.BackColor = System.Drawing.SystemColors.Control;
@@ -444,30 +473,6 @@
             this.fadeDistGroupBox.TabStop = false;
             this.fadeDistGroupBox.Text = "Fade Distance";
             // 
-            // statsCheckBox
-            // 
-            this.statsCheckBox.AutoSize = true;
-            this.statsCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.statsCheckBox.Location = new System.Drawing.Point(17, 23);
-            this.statsCheckBox.Name = "statsCheckBox";
-            this.statsCheckBox.Size = new System.Drawing.Size(50, 17);
-            this.statsCheckBox.TabIndex = 10;
-            this.statsCheckBox.Text = "Stats";
-            this.statsCheckBox.UseVisualStyleBackColor = true;
-            this.statsCheckBox.CheckedChanged += new System.EventHandler(this.statsCheckBox_CheckedChanged);
-            // 
-            // graphCheckBox
-            // 
-            this.graphCheckBox.AutoSize = true;
-            this.graphCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.graphCheckBox.Location = new System.Drawing.Point(92, 23);
-            this.graphCheckBox.Name = "graphCheckBox";
-            this.graphCheckBox.Size = new System.Drawing.Size(55, 17);
-            this.graphCheckBox.TabIndex = 11;
-            this.graphCheckBox.Text = "Graph";
-            this.graphCheckBox.UseVisualStyleBackColor = true;
-            this.graphCheckBox.CheckedChanged += new System.EventHandler(this.graphCheckBox_CheckedChanged);
-            // 
             // fadeDist
             // 
             this.fadeDist.AutoSize = true;
@@ -477,11 +482,42 @@
             this.fadeDist.TabIndex = 12;
             this.fadeDist.Text = "4.0";
             // 
+            // partGroupBox
+            // 
+            this.partGroupBox.Controls.Add(this.particles);
+            this.partGroupBox.Controls.Add(this.partTrackBar);
+            this.partGroupBox.Location = new System.Drawing.Point(12, 207);
+            this.partGroupBox.Name = "partGroupBox";
+            this.partGroupBox.Size = new System.Drawing.Size(292, 65);
+            this.partGroupBox.TabIndex = 12;
+            this.partGroupBox.TabStop = false;
+            this.partGroupBox.Text = "Particles";
+            // 
+            // particles
+            // 
+            this.particles.AutoSize = true;
+            this.particles.Location = new System.Drawing.Point(249, 33);
+            this.particles.Name = "particles";
+            this.particles.Size = new System.Drawing.Size(31, 13);
+            this.particles.TabIndex = 1;
+            this.particles.Text = "2500";
+            // 
+            // partTrackBar
+            // 
+            this.partTrackBar.Location = new System.Drawing.Point(6, 20);
+            this.partTrackBar.Maximum = 10000;
+            this.partTrackBar.Name = "partTrackBar";
+            this.partTrackBar.Size = new System.Drawing.Size(248, 45);
+            this.partTrackBar.TabIndex = 0;
+            this.partTrackBar.Value = 2500;
+            this.partTrackBar.Scroll += new System.EventHandler(this.partTrackBar_Scroll);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 344);
+            this.ClientSize = new System.Drawing.Size(640, 393);
+            this.Controls.Add(this.partGroupBox);
             this.Controls.Add(this.fadeDistGroupBox);
             this.Controls.Add(this.programGroupBox);
             this.Controls.Add(this.propertiesGroupBox);
@@ -513,6 +549,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.fadeDistTrackBar)).EndInit();
             this.fadeDistGroupBox.ResumeLayout(false);
             this.fadeDistGroupBox.PerformLayout();
+            this.partGroupBox.ResumeLayout(false);
+            this.partGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.partTrackBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -559,6 +598,9 @@
         private System.Windows.Forms.TrackBar fadeDistTrackBar;
         private System.Windows.Forms.GroupBox fadeDistGroupBox;
         private System.Windows.Forms.Label fadeDist;
+        private System.Windows.Forms.GroupBox partGroupBox;
+        private System.Windows.Forms.Label particles;
+        private System.Windows.Forms.TrackBar partTrackBar;
     }
 }
 

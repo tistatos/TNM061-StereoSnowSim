@@ -99,6 +99,7 @@ namespace snowCozyGUI
                 this.fieldGroupBox.Enabled = true;
                 this.programGroupBox.Enabled = true;
                 this.fadeDistGroupBox.Enabled = true;
+                this.partGroupBox.Enabled = true;
 
                 //set default values
                 this.radiusTextBox.Text = mClient.vortexRadius;
@@ -106,7 +107,7 @@ namespace snowCozyGUI
                 this.posZTextBox.Text = mClient.vortexPosZ;
 
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradius=1\r\nfade=40");
+                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradius=1\r\nfade=40\r\npart=2500");
             }
             else
             {
@@ -147,6 +148,7 @@ namespace snowCozyGUI
             this.propertiesGroupBox.Enabled = status;
             this.programGroupBox.Enabled = status;
             this.fadeDistGroupBox.Enabled = status;
+            this.partGroupBox.Enabled = status;
         }
 
         private void xTrackBar_Scroll(object sender, EventArgs e)
@@ -317,7 +319,7 @@ namespace snowCozyGUI
             mClient.vortexRadius = radiusTextBox.Text;
             mClient.connection.Send("radius=" + mClient.vortexRadius);
 
-            System.Console.Write(mClient.vortexRadius);
+            //System.Console.Write(mClient.vortexRadius);
         }
 
         private void posXTextBox_TextChanged(object sender, EventArgs e)
@@ -341,7 +343,7 @@ namespace snowCozyGUI
             if (mClient.connection.valid)
             {
                 mClient.connection.Send("fade=" + tBar.Value.ToString());
-                System.Console.Write(tBar.Value.ToString());
+                //System.Console.Write(tBar.Value.ToString());
             }
         }
 
@@ -376,6 +378,18 @@ namespace snowCozyGUI
                 {
                     mClient.connection.Send("graph=0");
                 }
+            }
+        }
+
+        private void partTrackBar_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tBar = (TrackBar)sender;
+            this.particles.Text = tBar.Value.ToString();
+
+            if (mClient.connection.valid)
+            {
+                mClient.connection.Send("part=" + tBar.Value.ToString());
+                //System.Console.Write(tBar.Value.ToString());
             }
         }
 
