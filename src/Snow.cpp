@@ -52,7 +52,7 @@ void Snow::reset(Particle& p)
 
 
 	float xval = getRandom(-10.0f, 10.0f);
-	float yval = getRandom(4.0f, 18.0f);
+	float yval = getRandom(1.0f, 18.0f);
 	float zval = getRandom(-10.0f, 10.0f);
 
 	// std::cout << xval << " " << yval << std::endl;
