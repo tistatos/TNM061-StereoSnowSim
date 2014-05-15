@@ -309,7 +309,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			cout << tmpVal;
 		}
 
-		else if(size >= 6 && strncmp(receivedChars, "graph", 5) == 0)
+		/*else if(size >= 6 && strncmp(receivedChars, "graph", 5) == 0)
 		{
 			int tmpVal = atoi(receivedChars + 6);
 			if(tmpVal);
@@ -324,7 +324,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			if(tmpVal);
 				gStatsGraph = !gStatsGraph;
 
-		}
+		}*/
 
 		else if(size >= 6 && strncmp(receivedChars, "fade", 4) == 0)
 		{
