@@ -219,7 +219,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		if(size >= 6 && strncmp(receivedChars, "winX", 4) == 0)
 		{
 			//We need an int.
- 			int tmpVal = atoi(receivedChars + 5);
+ 			int tmpVal = atof(receivedChars + 5);
  			sizeFactorX.setVal(tmpVal);
 			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 		}
@@ -227,7 +227,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		else if(size >= 6 && strncmp(receivedChars, "winY", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			int tmpVal = atof(receivedChars + 5);
  			sizeFactorY.setVal(tmpVal);
 			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 		}
@@ -288,7 +288,8 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 
 		else if(size >= 6 && strncmp(receivedChars, "paus", 4) == 0)
 		{
-			gParticles->togglePause();
+			if(atoi(receivedChars + 5))
+				gParticles->togglePause();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "grav", 4) == 0)
@@ -298,7 +299,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			gGrav->init(-tmpVal);
 		}
 
-		else if(strncmp(receivedChars, "fade", 1) == 0)
+		else if(size >= strncmp(receivedChars, "fade", 4) == 0)
 		{
 			float tmpVal = atof(receivedChars + 5);
 			fadeDistance.setVal(tmpVal);
