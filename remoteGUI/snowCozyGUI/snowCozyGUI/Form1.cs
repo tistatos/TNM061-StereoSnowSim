@@ -307,7 +307,7 @@ namespace snowCozyGUI
             {
                 mClient.pause = "0";
                 this.pausButton.Text = "Pause";
-                this.statusMessage.Text = "Program is paused";
+                this.statusMessage.Text = "Program is unpaused";
 
                 mClient.connection.Send("paus=" + mClient.pause);
             }
