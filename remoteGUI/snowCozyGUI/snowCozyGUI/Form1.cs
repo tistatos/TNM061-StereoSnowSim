@@ -106,7 +106,7 @@ namespace snowCozyGUI
                 this.posZTextBox.Text = mClient.vortexPosZ;
 
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradius=1\r\nfade=40");
+                mClient.connection.Send("stats=1\r\ngraph=1\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradius=1\r\nfade=40");
             }
             else
             {
@@ -353,11 +353,11 @@ namespace snowCozyGUI
 
                 if (cb.Checked)
                 {
-                    mClient.connection.Send("stats=1");
+                    mClient.connection.Send("stats=0");
                 }
                 else
                 {
-                    mClient.connection.Send("stats=0");
+                    mClient.connection.Send("stats=1");
                 }
             }
         }
@@ -370,11 +370,11 @@ namespace snowCozyGUI
 
                 if (cb.Checked)
                 {
-                    mClient.connection.Send("graph=1");
+                    mClient.connection.Send("graph=0");
                 }
                 else
                 {
-                    mClient.connection.Send("graph=0");
+                    mClient.connection.Send("graph=1");
                 }
             }
         }
