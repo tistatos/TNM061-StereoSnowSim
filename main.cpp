@@ -42,7 +42,7 @@ sgct::SharedDouble positionX(0.0);
 sgct::SharedDouble positionZ(0.0);
 sgct::SharedDouble radius(0.0);
 sgct::SharedDouble fadeDistance(0.0);
-sgct::SharedBool pause(false);
+sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
 sgct::SharedBool showGraph(false);
 
@@ -193,7 +193,7 @@ void myEncodeFun()
  	sgct::SharedData::instance()->writeDouble(&positionZ);
  	sgct::SharedData::instance()->writeDouble(&radius);
  	sgct::SharedData::instance()->writeDouble(&fadeDistance);
-	sgct::SharedData::instance()->writeBool(&pause);
+	sgct::SharedData::instance()->writeBool(&sharedPause);
 	sgct::SharedData::instance()->writeBool(&showGraph);
 	sgct::SharedData::instance()->writeBool(&showStats);
 }
@@ -213,7 +213,7 @@ void myDecodeFun()
 	sgct::SharedData::instance()->readDouble(&positionZ);
 	sgct::SharedData::instance()->readDouble(&radius);
 	sgct::SharedData::instance()->readDouble(&fadeDistance);
-	sgct::SharedData::instance()->readBool(&pause);
+	sgct::SharedData::instance()->readBool(&sharedPause);
 	sgct::SharedData::instance()->readBool(&showGraph);
 	sgct::SharedData::instance()->readBool(&showStats);
 }
@@ -224,7 +224,7 @@ void statsDrawFun()
 	gEngine->setDisplayInfoVisibility(showGraph.getVal());
 	gEngine->setStatsGraphVisibility(showStats.getVal());
 	gEngine->setWireframe(gWireframe);
-	gParticles->pauseControl(pause.getVal());
+	gParticles->pauseControl(sharedPause.getVal());
 	gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 	gTurbine->setForce((vortFactorX.getVal()*0.01f), (vortFactorY.getVal()*0.01f), (vortFactorZ.getVal()*0.01f));
 	gTurbine->setPosition((positionX.getVal()*0.01f), (positionZ.getVal()*0.01f));
@@ -304,7 +304,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		else if(size >= 6 && strncmp(receivedChars, "paus", 4) == 0)
 		{
 			int tmpVal = atoi(receivedChars + 5);
-			pause.setVal(tmpVal);
+			sharedPause.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "grav", 4) == 0)
