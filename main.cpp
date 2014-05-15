@@ -288,8 +288,8 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 
 		else if(size >= 6 && strncmp(receivedChars, "paus", 4) == 0)
 		{
-			if(atoi(receivedChars + 5))
-				gParticles->togglePause();
+			int tmpVal = atoi(receivedChars + 4);
+			gParticles->pauseControl(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "grav", 4) == 0)
@@ -299,11 +299,12 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			gGrav->init(-tmpVal);
 		}
 
-		else if(size >= strncmp(receivedChars, "fade", 4) == 0)
+		else if(size >= 6 && strncmp(receivedChars, "fade", 4) == 0)
 		{
-			float tmpVal = atof(receivedChars + 5);
+			int tmpVal = atoi(receivedChars + 5);
 			fadeDistance.setVal(tmpVal);
-			gParticles->setFadeDistance(fadeDistance.getVal());
+			gParticles->setFadeDistance(fadeDistance.getVal()*0.1f);
+			cout << tmpVal;
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "disp", 4) == 0)
