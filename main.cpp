@@ -287,7 +287,8 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 
 		else if(size >= 6 && strncmp(receivedChars, "paus", 4) == 0)
 		{
-			gParticles->togglePause();
+			if(atoi(receivedChars + 5))
+				gParticles->togglePause();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "grav", 4) == 0)
@@ -306,17 +307,17 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 
 		else if(size >= 6 && strncmp(receivedChars, "disp", 4) == 0)
 		{
-			gDisplayInfo = !gDisplayInfo;
+			//gDisplayInfo = !gDisplayInfo;
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "stat", 4) == 0)
 		{
-			gStatsGraph = !gStatsGraph;
+			//gStatsGraph = !gStatsGraph;
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "wire", 4) == 0)
 		{
-			gWireframe = !gWireframe;
+			//gWireframe = !gWireframe;
 		}
 	}
 }
