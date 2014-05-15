@@ -11,6 +11,8 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mInitialized = false;
 	mPaused = false;
 
+	setAmount(2500);
+
 	mDebugField = new DebugField(engine);
 
 	mVertexArray = 0;
@@ -19,7 +21,7 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 
 	mBillBoardVB = 0;
 	mParticlePositionBuffer = 0;
-	mParticlePositionData = new GLfloat[MAX_PARTICLES * 4 * 4];
+	mParticlePositionData = new GLfloat[mParticlesAmount * 4 * 4];
 	mFadeDistance = 4.0f;
 }
 
@@ -59,7 +61,7 @@ bool ParticleSystem::initialize()
 	//Prepare for position buffers
 	glGenBuffers(1, &mParticlePositionBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
-	glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES*4*4*sizeof(GLfloat),
+	glBufferData(GL_ARRAY_BUFFER, mParticlesAmount*4*4*sizeof(GLfloat),
 				 NULL, GL_STREAM_DRAW);
 
 	glBindVertexArray(0);
@@ -103,7 +105,7 @@ bool ParticleSystem::initialize()
  */
 int ParticleSystem::findLastParticle()
 {
-	for (int i = mLastUsedParticle; i < MAX_PARTICLES; ++i)
+	for (int i = mLastUsedParticle; i < mParticlesAmount; ++i)
 	{
 		if(mParticles[i].mLife <= 0)
 		{
@@ -112,7 +114,7 @@ int ParticleSystem::findLastParticle()
 		}
 	}
 
-	for (int i = 0; i < MAX_PARTICLES; ++i)
+	for (int i = 0; i < mParticlesAmount; ++i)
 	{
 		if(mParticles[i].mLife <= 0)
 		{
@@ -152,7 +154,7 @@ void ParticleSystem::draw(double delta)
 
 		sortParticles();
 		int particleCount = 0;
-		for(int i=0; i< MAX_PARTICLES; i++)
+		for(int i=0; i< mParticlesAmount; i++)
 		{
 			Particle &p = mParticles[i];
 
@@ -185,7 +187,7 @@ void ParticleSystem::draw(double delta)
 		}
 
 		glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
-        glBufferData(GL_ARRAY_BUFFER, MAX_PARTICLES * 4 * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, mParticlesAmount * 4 * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
         glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * sizeof(GLfloat) * 4 * 4, mParticlePositionData);
 
 		glEnable(GL_BLEND);
@@ -293,7 +295,7 @@ void ParticleSystem::move(double delta)
 	if(!mPaused)
 	{
 		// do gravity and shit on every particle
-		for (int i = 0; i < MAX_PARTICLES; i++)
+		for (int i = 0; i < mParticlesAmount; i++)
 		{
 			// get ref to current particle
 			Particle& p = mParticles[i];
@@ -395,4 +397,9 @@ void ParticleSystem::pauseControl(bool status)
 void ParticleSystem::togglePause()
 {
 	mPaused = !mPaused;
+}
+
+void ParticleSystem::setAmount(int amount)
+{
+	mParticlesAmount = (amount > MAX_PARTICLES ? MAX_PARTICLES : amount);
 }

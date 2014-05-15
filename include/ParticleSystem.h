@@ -16,7 +16,7 @@
 class Field;
 class DebugField;
 
-const int MAX_PARTICLES = 2500;
+const int MAX_PARTICLES = 10000;
 const float PARTICLE_SIZE = 0.1f;
 
 using namespace std;
@@ -40,6 +40,7 @@ public:
 	void toggleFieldDebug();
 	void pauseControl(bool status);
 	void togglePause();
+	void setAmount(int amount);
 
 	std::vector<Field*> getFields() {return mFields;};
 
@@ -53,6 +54,8 @@ protected:
 	float mFadeDistance; /// Distance from camera when particles should fade away to not create crossedeye effect
 	bool mInitialized; /// Is the particle system initalized?
 	bool mPaused;
+
+	int mParticlesAmount; /// the number of particles we want
 
 	DebugField* mDebugField; /// the debug field stuff
 

@@ -28,6 +28,8 @@ bool gDisplayInfo;
 bool gStatsGraph;
 bool gWireframe;
 
+int mParticlesAmount;
+
 sgct::SharedDouble curr_time(0.0);
 sgct::SharedDouble sizeFactorX(0.0);
 sgct::SharedDouble sizeFactorY(0.0);
