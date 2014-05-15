@@ -81,11 +81,11 @@ int main(int argc, char *argv[])
 	gWind = new Wind();
 	//wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
 	gWind->setAcceleration(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
-	//gParticles->addField(gWind);
+	gParticles->addField(gWind);
 
 	gTurbine = new Vortex();
 	gTurbine->init(0.0f, 0.0f, 0.0f);
-	// gParticles->addField(gTurbine);
+	gParticles->addField(gTurbine);
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
@@ -217,7 +217,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		if(size >= 6 && strncmp(receivedChars, "winX", 4) == 0)
 		{
 			//We need an int.
- 			int tmpVal = atoi(receivedChars + 5);
+ 			int tmpVal = atof(receivedChars + 5);
  			sizeFactorX.setVal(tmpVal);
 			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 
@@ -226,7 +226,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		else if(size >= 6 && strncmp(receivedChars, "winY", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			int tmpVal = atof(receivedChars + 5);
  			sizeFactorY.setVal(tmpVal);
 			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 		}
@@ -297,7 +297,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			gGrav->init(-tmpVal);
 		}
 
-		else if(strncmp(receivedChars, "fade", 1) == 0)
+		else if(size >= strncmp(receivedChars, "fade", 4) == 0)
 		{
 			float tmpVal = atof(receivedChars + 5);
 			fadeDistance.setVal(tmpVal);
@@ -306,17 +306,17 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 
 		else if(size >= 6 && strncmp(receivedChars, "disp", 4) == 0)
 		{
-			//gDisplayInfo = !gDisplayInfo;
+			gDisplayInfo = !gDisplayInfo;
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "stat", 4) == 0)
 		{
-			//gStatsGraph = !gStatsGraph;
+			gStatsGraph = !gStatsGraph;
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "wire", 4) == 0)
 		{
-			//gWireframe = !gWireframe;
+			gWireframe = !gWireframe;
 		}
 	}
 }
