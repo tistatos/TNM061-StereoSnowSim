@@ -37,10 +37,14 @@ sgct::SharedDouble sizeFactorZ(0.0);
 sgct::SharedDouble vortFactorX(0.0);
 sgct::SharedDouble vortFactorY(0.0);
 sgct::SharedDouble vortFactorZ(0.0);
+sgct::SharedDouble gravFactor(-9.81);
 sgct::SharedDouble positionX(0.0);
 sgct::SharedDouble positionZ(0.0);
 sgct::SharedDouble radius(0.0);
 sgct::SharedDouble fadeDistance(0.0);
+sgct::SharedBool pause(false);
+sgct::SharedBool showStats(false);
+sgct::SharedBool showGraph(false);
 
 
 void initialize();
@@ -143,9 +147,8 @@ void initialize()
 	gBubble->createSphere(1.5f, 100);
 
 	// hide stats and such by default
-	gDisplayInfo = false;
-	gStatsGraph = false;
-	gWireframe = false;
+	
+	
 }
 
 void draw()
@@ -160,6 +163,7 @@ void draw()
 
 	//if(gEngine->isExternalControlConnected())
 	//	cout << "Connectad is very nice";
+
 }
 
 //Checking the time since the program started, not sure if we need this either.
@@ -170,6 +174,8 @@ void myPreSyncFun()
 	{
 		//Sets the current time since the program started
 		curr_time.setVal(sgct::Engine::getTime());
+		
+		
 	}
 }
 
@@ -182,10 +188,14 @@ void myEncodeFun()
  	sgct::SharedData::instance()->writeDouble(&vortFactorX);
  	sgct::SharedData::instance()->writeDouble(&vortFactorY);
  	sgct::SharedData::instance()->writeDouble(&vortFactorZ);
+	sgct::SharedData::instance()->writeDouble(&gravFactor);
  	sgct::SharedData::instance()->writeDouble(&positionX);
  	sgct::SharedData::instance()->writeDouble(&positionZ);
  	sgct::SharedData::instance()->writeDouble(&radius);
  	sgct::SharedData::instance()->writeDouble(&fadeDistance);
+	sgct::SharedData::instance()->writeBool(&pause);
+	sgct::SharedData::instance()->writeBool(&showGraph);
+	sgct::SharedData::instance()->writeBool(&showStats);
 }
 
 
@@ -198,18 +208,29 @@ void myDecodeFun()
 	sgct::SharedData::instance()->readDouble(&vortFactorX);
 	sgct::SharedData::instance()->readDouble(&vortFactorY);
 	sgct::SharedData::instance()->readDouble(&vortFactorZ);
+	sgct::SharedData::instance()->readDouble(&gravFactor);
 	sgct::SharedData::instance()->readDouble(&positionX);
 	sgct::SharedData::instance()->readDouble(&positionZ);
 	sgct::SharedData::instance()->readDouble(&radius);
 	sgct::SharedData::instance()->readDouble(&fadeDistance);
+	sgct::SharedData::instance()->readBool(&pause);
+	sgct::SharedData::instance()->readBool(&showGraph);
+	sgct::SharedData::instance()->readBool(&showStats);
 }
 
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this? Currently set to false.
 void statsDrawFun()
 {
-	gEngine->setDisplayInfoVisibility(gDisplayInfo);
-	gEngine->setStatsGraphVisibility(gStatsGraph);
+	gEngine->setDisplayInfoVisibility(showGraph.getVal());
+	gEngine->setStatsGraphVisibility(showStats.getVal());
 	gEngine->setWireframe(gWireframe);
+	gParticles->pauseControl(pause.getVal());
+	gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+	gTurbine->setForce((vortFactorX.getVal()*0.01f), (vortFactorY.getVal()*0.01f), (vortFactorZ.getVal()*0.01f));
+	gTurbine->setPosition((positionX.getVal()*0.01f), (positionZ.getVal()*0.01f));
+	gTurbine->setRadius(radius.getVal());
+	gGrav->init(gravFactor.getVal());
+	gParticles->setFadeDistance(fadeDistance.getVal()*0.1f);
 }
 
 //Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
@@ -223,7 +244,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
  			int tmpVal = atof(receivedChars + 5);
  			sizeFactorX.setVal(tmpVal);
-			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winY", 4) == 0)
@@ -231,7 +251,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atof(receivedChars + 5);
  			sizeFactorY.setVal(tmpVal);
-			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winZ", 4) == 0)
@@ -239,13 +258,12 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
  			sizeFactorZ.setVal(tmpVal);
-			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 		}
 		else if(size >= 6 && strncmp(receivedChars, "vorX", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			gTurbine->setForce((tmpVal*0.01f), (tmpVal*0.01f), (tmpVal*0.01f));
+			vortFactorX.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "vorY", 4) == 0)
@@ -253,7 +271,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			vortFactorY.setVal(tmpVal);
-			gTurbine->setForce((vortFactorX.getVal()*0.01f), (vortFactorY.getVal()*0.01f), (vortFactorZ.getVal()*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "vorZ", 4) == 0)
@@ -261,7 +278,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			vortFactorZ.setVal(tmpVal);
-			gTurbine->setForce((vortFactorX.getVal()*0.01f), (vortFactorY.getVal()*0.01f), (vortFactorZ.getVal()*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "posX", 4) == 0)
@@ -269,7 +285,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			positionX.setVal(tmpVal);
-			gTurbine->setPosition((positionX.getVal()*0.01f),(positionZ.getVal()*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "posZ", 4) == 0)
@@ -277,7 +292,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			positionZ.setVal(tmpVal);
-			gTurbine->setPosition((positionX.getVal()*0.01f),(positionZ.getVal()*0.01f));
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "radi", 4) == 0)
@@ -285,51 +299,38 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			radius.setVal(tmpVal);
-			gTurbine->setRadius(radius.getVal());
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "paus", 4) == 0)
 		{
 			int tmpVal = atoi(receivedChars + 5);
-			gParticles->pauseControl(tmpVal);
+			pause.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "grav", 4) == 0)
 		{
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
-			gGrav->init(-tmpVal);
+			gravFactor.setVal(-tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "fade", 4) == 0)
 		{
 			int tmpVal = atoi(receivedChars + 5);
 			fadeDistance.setVal(tmpVal);
-			gParticles->setFadeDistance(fadeDistance.getVal()*0.1f);
-			cout << tmpVal;
+			
 		}
 
-		/*else if(size >= 6 && strncmp(receivedChars, "graph", 5) == 0)
+		else if(size >= 6 && strncmp(receivedChars, "graph", 5) == 0)
 		{
 			int tmpVal = atoi(receivedChars + 6);
-			if(tmpVal);
-				gDisplayInfo = !gDisplayInfo;
-
-
+			showGraph.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "stats", 5) == 0)
 		{
 			int tmpVal = atoi(receivedChars + 6);
-			if(tmpVal);
-				gStatsGraph = !gStatsGraph;
-
-		}*/
-
-		else if(size >= 6 && strncmp(receivedChars, "fade", 4) == 0)
-		{
-			int tmpVal = atoi(receivedChars + 5);
-
+			showStats.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "wire", 4) == 0)
