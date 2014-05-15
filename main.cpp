@@ -41,7 +41,7 @@ sgct::SharedDouble gravFactor(-9.81);
 sgct::SharedDouble positionX(0.0);
 sgct::SharedDouble positionZ(0.0);
 sgct::SharedDouble radius(0.0);
-sgct::SharedDouble fadeDistance(0.0);
+sgct::SharedDouble fadeDistance(40.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
 sgct::SharedBool showGraph(false);
@@ -50,7 +50,7 @@ sgct::SharedBool showGraph(false);
 void initialize();
 void draw();
 void myPreSyncFun();
-void statsDrawFun();
+void myPostSyncPreDrawFun();
 void myEncodeFun();
 void myDecodeFun();
 void externalControlCallback(const char * receivedChars, int size, int clientId);
@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 	gEngine->setInitOGLFunction(initialize);
 	gEngine->setDrawFunction(draw);
 	gEngine->setPreSyncFunction(myPreSyncFun);
-	gEngine->setPostSyncPreDrawFunction(statsDrawFun);
+	gEngine->setPostSyncPreDrawFunction(myPostSyncPreDrawFun);
 	gEngine->setExternalControlCallback(externalControlCallback);
 	sgct::SharedData::instance()->setEncodeFunction(myEncodeFun);
 	sgct::SharedData::instance()->setDecodeFunction(myDecodeFun);
@@ -219,7 +219,7 @@ void myDecodeFun()
 }
 
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this? Currently set to false.
-void statsDrawFun()
+void myPostSyncPreDrawFun()
 {
 	gEngine->setDisplayInfoVisibility(showGraph.getVal());
 	gEngine->setStatsGraphVisibility(showStats.getVal());
