@@ -41,7 +41,7 @@ sgct::SharedDouble gravFactor(-9.81);
 sgct::SharedDouble positionX(0.0);
 sgct::SharedDouble positionZ(0.0);
 sgct::SharedDouble radius(0.0);
-sgct::SharedDouble fadeDistance(0.0);
+sgct::SharedDouble fadeDistance(4.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
 sgct::SharedBool showGraph(false);
