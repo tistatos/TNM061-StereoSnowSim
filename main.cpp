@@ -132,11 +132,11 @@ void initialize()
 	}
 	gWorld->initializeWorld();
 
-	road->loadObj("road/road.obj", "road/road.png");
+	road->loadObj("objects/road.obj", "objects/road.png");
 	road->scale(0.2f,0.2f,0.2f);
 	road->translate(0.0f, -2.0f, 5.0f);
 
-	tree->loadObj("road/tree.obj","road/tree.png");
+	tree->loadObj("objects/tree.obj","objects/tree.png");
 	tree->scale(0.05f,0.05f,0.05f);
 	tree->translate(0.0f, -1.0f, -6.0f);
 
@@ -152,9 +152,9 @@ void draw()
 {
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
-	gBubble->drawBubble();
-	road->draw();
-	tree->draw();
+	//gBubble->drawBubble();
+	//road->draw();
+	//tree->draw();
 	gParticles->move(delta);
 	gParticles->draw(delta);
 
@@ -315,7 +315,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			if(tmpVal);
 				gDisplayInfo = !gDisplayInfo;
 
-				
+
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "stats", 5) == 0)
@@ -329,7 +329,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		else if(size >= 6 && strncmp(receivedChars, "fade", 4) == 0)
 		{
 			int tmpVal = atoi(receivedChars + 5);
-					
+
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "wire", 4) == 0)

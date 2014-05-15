@@ -196,7 +196,7 @@ void SoapBubble::createSphere(float radius, int segments)
 
 	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
 	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
-	sgct::TextureManager::instance()->loadTexure(mTextureHandle, "bubble", "bubble.png", true);
+	sgct::TextureManager::instance()->loadTexure(mTextureHandle, "bubble", "img/bubble.png", true);
 
 	//Create shader
 	sgct::ShaderManager::instance()->addShaderProgram("bubble", "shaders/bubble.vert", "shaders/bubble.frag");
