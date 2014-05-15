@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
 
 	gEngine = new sgct::Engine(argc, argv);
 
+	// sgct setup and preparation
 	gEngine->setInitOGLFunction(initialize);
 	gEngine->setDrawFunction(draw);
 	gEngine->setPreSyncFunction(myPreSyncFun);
@@ -68,24 +69,29 @@ int main(int argc, char *argv[])
 	gParticles = new Snow(gEngine);
 	gWorld = new World(gEngine);
 
+	// add some nice objects
 	gBubble = new SoapBubble(gEngine);
-
 	road = new Object(gEngine);
 	tree = new Object(gEngine);
 
+	// dem fields
 	gGrav = new Gravity();
 	gGrav->init(-9.81f);
 	gParticles->addField(gGrav);
 
-
 	gWind = new Wind();
 	//wind->init(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
 	gWind->setAcceleration(getRandom(-0.2, 0.2), 0.0f, getRandom(-0.2, 0.2));
-	//gParticles->addField(gWind);
+	gParticles->addField(gWind);
 
 	gTurbine = new Vortex();
 	gTurbine->init(0.0f, 0.0f, 0.0f);
-	// gParticles->addField(gTurbine);
+	gParticles->addField(gTurbine);
+
+	//Not working yet... :(
+	SimplexNoise* noise = new SimplexNoise();
+	noise->init(glm::vec3(0), glm::vec3(0), gEngine->getTime());
+	// gParticles->addField(noise);
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
@@ -93,18 +99,15 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	//Not working yet... :(
-	SimplexNoise* noise = new SimplexNoise();
-	noise->init(glm::vec3(0), glm::vec3(0), gEngine->getTime());
-
-	// gParticles->addField(noise);
-
+	// tell user what field's are active
 	cout << "---- Fields active on gParticles ----" << endl;
 	gParticles->printFields();
 	cout << "---------------" << endl << endl;
 
+	// Let's get ready to rendeeeeeer!
 	gEngine->render();
 
+	// destroy everything and exit
 	gParticles->destroy();
 	road->deleteObject();
 	delete road;
@@ -137,7 +140,7 @@ void initialize()
 
 	gBubble->createSphere(1.5f, 100);
 
-
+	// hide stats and such by default
 	gDisplayInfo = false;
 	gStatsGraph = false;
 	gWireframe = false;
@@ -181,7 +184,6 @@ void myEncodeFun()
  	sgct::SharedData::instance()->writeDouble(&positionZ);
  	sgct::SharedData::instance()->writeDouble(&radius);
  	sgct::SharedData::instance()->writeDouble(&fadeDistance);
-
 }
 
 
@@ -220,7 +222,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
  			int tmpVal = atoi(receivedChars + 5);
  			sizeFactorX.setVal(tmpVal);
 			gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winY", 4) == 0)
