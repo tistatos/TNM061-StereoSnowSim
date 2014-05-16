@@ -44,18 +44,7 @@ namespace snowCozyGUI
             mClient.connection = new NetworkManager();
             mClient.port = 24250;
             mClient.bufferSize = 1024;
-            //default ip
             mClient.ip = "127.0.0.1";
-            mClient.windX = "0";
-            mClient.windY = "0";
-            mClient.windZ = "0";
-            mClient.vortexX = "0";
-            mClient.vortexY = "0";
-            mClient.vortexZ = "0";
-            mClient.vortexRadius = "1";
-            mClient.vortexPosX = "0";
-            mClient.vortexPosZ = "-1";
-            mClient.pause = "0";
 
             componentVisability(false);
 
@@ -99,7 +88,18 @@ namespace snowCozyGUI
                 this.fieldGroupBox.Enabled = true;
                 this.programGroupBox.Enabled = true;
                 this.fadeDistGroupBox.Enabled = true;
-                //this.partGroupBox.Enabled = true;
+                this.partGroupBox.Enabled = true;
+
+                mClient.windX = "0";
+                mClient.windY = "0";
+                mClient.windZ = "0";
+                mClient.vortexX = "0";
+                mClient.vortexY = "0";
+                mClient.vortexZ = "0";
+                mClient.vortexRadius = "1";
+                mClient.vortexPosX = "0";
+                mClient.vortexPosZ = "-1";
+                mClient.pause = "0";
 
                 //set default values
                 this.radiusTextBox.Text = mClient.vortexRadius;
@@ -120,16 +120,7 @@ namespace snowCozyGUI
             componentVisability(false);
             this.connectButton.Text = "Connect";
             this.statusMessage.Text = "Disconnected";
-            
-            //set slider default value to 0
-            this.xTrackBar.Value = 0;
-            this.xForce.Text = "0";
-            this.yTrackBar.Value = 0;
-            this.yForce.Text = "0";
-            this.zTrackBar.Value = 0;
-            this.zForce.Text = "0";
-            this.gravityTrackBar.Value = 0;
-            this.gravityForce.Text = "0";
+            this.pausButton.Text = "Pause";
 
             if (mClient.connection != null)
             {
@@ -149,6 +140,9 @@ namespace snowCozyGUI
             this.programGroupBox.Enabled = status;
             this.fadeDistGroupBox.Enabled = status;
             this.partGroupBox.Enabled = status;
+            this.windRadio.Checked = status;
+            this.vortexRadio.Checked = status;
+            this.gravityButton.Checked = status;
         }
 
         private void xTrackBar_Scroll(object sender, EventArgs e)

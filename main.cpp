@@ -174,8 +174,6 @@ void myPreSyncFun()
 	{
 		//Sets the current time since the program started
 		curr_time.setVal(sgct::Engine::getTime());
-
-
 	}
 }
 
@@ -318,7 +316,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		{
 			int tmpVal = atoi(receivedChars + 5);
 			fadeDistance.setVal(tmpVal);
-
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "graph", 5) == 0)
