@@ -3,17 +3,19 @@
 layout(location = 0) in vec3 squareVertices; // Data from billboard
 //layout(location = 1) in vec4 xyzs; //Particle Matrix
 layout(location = 1) in mat4 transformmatrix;
+layout(location = 5) in float inLife; // life data
 
 out vec2 UV;
 out float camDistance;
 uniform mat4 VP; // Model-View-Projection matrix, but without the Model (the position is in BillboardPos; the orientation depends on the camera)
 uniform float fadeDistanceIn; //distance where particles should fade off
 out float fadeDistance;
+out float life;
 
 void main()
 {
 	mat4 M = transformmatrix;
-	float particleSize = .05;
+	float particleSize = .3;
 	vec4 xyzs = transformmatrix[3];
 	vec3 particleCenter_wordspace = xyzs.xyz;
 	vec3 CameraRight_worldspace = vec3(1.0f,0.0,0.0);
@@ -27,4 +29,7 @@ void main()
 	// UV of the vertex. No special space for this one.
 	UV = squareVertices.xy * vec2(0.5, 0.5)+vec2(0.5, 0.5);
 	fadeDistance = fadeDistanceIn;
+
+	// copy life and send it to frag
+	life = inLife;
 }
