@@ -33,7 +33,7 @@ std::ostream &operator<< (std::ostream &out, const glm::mat4 &mat)
 
 void initRandom()
 {
-    srand (1337691373);
+    srand(1337691373);
 }
 
 float getRandom()
