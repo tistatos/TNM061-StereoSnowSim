@@ -375,17 +375,5 @@ namespace snowCozyGUI
             }
         }
 
-        private void partTrackBar_Scroll(object sender, EventArgs e)
-        {
-            TrackBar tBar = (TrackBar)sender;
-            this.particles.Text = tBar.Value.ToString();
-
-            if (mClient.connection.valid)
-            {
-                mClient.connection.Send("part=" + tBar.Value.ToString());
-                //System.Console.Write(tBar.Value.ToString());
-            }
-        }
-
     }
 }
