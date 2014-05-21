@@ -21,7 +21,9 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 
 	mBillBoardVB = 0;
 	mParticlePositionBuffer = 0;
+	mParticleLifeBuffer = 0;
 	mParticlePositionData = new GLfloat[mParticlesAmount * 4 * 4];
+	mParticleLifeData = new GLfloat[mParticlesAmount];
 	mFadeDistance = 4.0f;
 	mFirstDraw = true;
 }
@@ -62,6 +64,12 @@ bool ParticleSystem::initialize()
 	//Prepare for position buffers
 	glGenBuffers(1, &mParticlePositionBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
+	glBufferData(GL_ARRAY_BUFFER, mParticlesAmount*4*4*sizeof(GLfloat),
+				 NULL, GL_STREAM_DRAW);
+
+	//Prepare for position buffers
+	glGenBuffers(1, &mParticleLifeBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, mParticleLifeBuffer);
 	glBufferData(GL_ARRAY_BUFFER, mParticlesAmount*4*4*sizeof(GLfloat),
 				 NULL, GL_STREAM_DRAW);
 
@@ -183,6 +191,8 @@ void ParticleSystem::draw(double delta)
 				mParticlePositionData[16*particleCount+14] = p.mMatrix[3][2];
 				mParticlePositionData[16*particleCount+15] = p.mMatrix[3][3];
 
+				mParticleLifeData[particleCount] = p.mLife;
+
 				particleCount++;
 			}
 		}
@@ -190,6 +200,11 @@ void ParticleSystem::draw(double delta)
 		glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
         glBufferData(GL_ARRAY_BUFFER, mParticlesAmount * 4 * 4 * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
         glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * sizeof(GLfloat) * 4 * 4, mParticlePositionData);
+
+        // life stuff
+		glBindBuffer(GL_ARRAY_BUFFER, mParticleLifeBuffer);
+        glBufferData(GL_ARRAY_BUFFER, mParticlesAmount * sizeof(GLfloat), NULL, GL_STREAM_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, particleCount * sizeof(GLfloat), mParticleLifeData);
 
 		glEnable(GL_BLEND);
 		glDisable(GL_CULL_FACE);
@@ -229,22 +244,15 @@ void ParticleSystem::draw(double delta)
 		glEnableVertexAttribArray(pos + 3);
 		glBindBuffer(GL_ARRAY_BUFFER, mParticlePositionBuffer);
 
-		glVertexAttribPointer(pos, 4, GL_FLOAT,  GL_FALSE, sizeof(GLfloat) * 4 * 4, (void*)(0));
-		glVertexAttribPointer(pos + 1, 4, GL_FLOAT, GL_FALSE,  sizeof(GLfloat) * 4 * 4, (void*)(sizeof(float)*4));
-		glVertexAttribPointer(pos + 2, 4, GL_FLOAT, GL_FALSE,  sizeof(GLfloat) * 4 * 4, (void*)(sizeof(float)*8));
-		glVertexAttribPointer(pos + 3, 4, GL_FLOAT, GL_FALSE,  sizeof(GLfloat) * 4 * 4, (void*)(sizeof(float)*12));
+		glVertexAttribPointer(pos, 4, GL_FLOAT,  GL_FALSE, sizeof(GLfloat)*4*4, (void*)(0));
+		glVertexAttribPointer(pos + 1, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*4*4, (void*)(sizeof(float)*4));
+		glVertexAttribPointer(pos + 2, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*4*4, (void*)(sizeof(float)*8));
+		glVertexAttribPointer(pos + 3, 4, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*4*4, (void*)(sizeof(float)*12));
 
-		//only position attribs
-       	// glEnableVertexAttribArray(1);
-
-		// glVertexAttribPointer(
-  //                       1,
-  //                       4,
-  //                       GL_FLOAT,
-  //                       GL_FALSE,
-  //                       0,
-		// 				reinterpret_cast<void*>(0) // array buffer offset
-  //               );
+		int lifePos  = sgct::ShaderManager::instance()->getShaderProgram(mShader.mShaderName).getAttribLocation("inLife");
+		glEnableVertexAttribArray(lifePos);
+		glBindBuffer(GL_ARRAY_BUFFER, mParticleLifeBuffer);
+		glVertexAttribPointer(lifePos, 1, GL_FLOAT, GL_FALSE, sizeof(GLfloat), (void*)(0));
 
         // Draw the particules !
         // This draws many times a small triangle_strip (which looks like a quad).
@@ -258,6 +266,7 @@ void ParticleSystem::draw(double delta)
 		glVertexAttribDivisor(pos + 1, 1);
 		glVertexAttribDivisor(pos + 2, 1);
 		glVertexAttribDivisor(pos + 3, 1);
+		glVertexAttribDivisor(lifePos, 1);
         //glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
 
         glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particleCount);
@@ -267,6 +276,7 @@ void ParticleSystem::draw(double delta)
 		glDisableVertexAttribArray(pos + 1);
 		glDisableVertexAttribArray(pos + 2);
 		glDisableVertexAttribArray(pos + 3);
+		glDisableVertexAttribArray(lifePos);
 
 		glBindVertexArray(0);
 
@@ -282,10 +292,12 @@ void ParticleSystem::destroy()
 	{
 		glDeleteBuffers(1, &mBillBoardVB);
 		glDeleteBuffers(1, &mParticlePositionBuffer);
+		glDeleteBuffers(1, &mParticleLifeBuffer);
 
 		glDeleteVertexArrays(1, &mVertexArray);
 
 		delete[] mParticlePositionData;
+		delete[] mParticleLifeData;
 
 		mInitialized = false;
 	}

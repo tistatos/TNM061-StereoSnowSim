@@ -70,7 +70,9 @@ protected:
 	GLuint mVertexArray; /// pointer for vertex array on GPU
 	GLuint mBillBoardVB; /// Vertex buffer for billboard
 	GLuint mParticlePositionBuffer; /// Buffer for particle's position data
+	GLuint mParticleLifeBuffer; /// Buffer for particle's position data
 	GLfloat* mParticlePositionData; /// temp storage to move data from particles to buffer
+	GLfloat* mParticleLifeData; /// temp storage to move data from particles to buffer
 	std::vector<Field*> mFields; /// the fields that affect the particles
 
 	GLint mViewProjectionLoc; /// matrix loc in shader
