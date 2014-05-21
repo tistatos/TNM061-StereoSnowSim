@@ -36,7 +36,7 @@ void Snow::destroy()
 void Snow::calculateLife(Particle& p, double delta)
 {
 	glm::vec3 pos = p.position();
-	if(pos.y < -2.0f || abs(pos.x)>15.0f || abs(pos.z)>15.0f || abs(pos.y) >15.0f)
+	if(pos.y < -2.0f || abs(pos.x)>15.0f || abs(pos.z)>15.0f || abs(pos.y) >25.0f)
 	{
 		p.mLife -= delta;
 	}
@@ -52,10 +52,9 @@ void Snow::reset(Particle& p)
 
 
 	float xval = getRandom(-10.0f, 10.0f);
-	float yval = getRandom(1.0f, 18.0f);
+	float yval = mFirstDraw? getRandom(1.0f, 25.0f) : getRandom(18.0f, 25.0f);
 	float zval = getRandom(-10.0f, 10.0f);
 
-	// std::cout << xval << " " << yval << std::endl;
 
  	p.mMatrix[3][0] = xval; //x;
 	p.mMatrix[3][1] = yval; //x;
@@ -65,17 +64,17 @@ void Snow::reset(Particle& p)
 	yval = getRandom(-1.0f, 1.0f);
 	zval = getRandom(-1.0f, 1.0f);
 
+	//Rotate particle around random vector
+	glm::mat4 rotation =  glm::rotate( glm::mat4(1.0f), getRandom(-180.0f,180.0f), glm::vec3(xval,yval,zval));
 
-	glm::mat4 hej =  glm::rotate( glm::mat4(1.0f), getRandom(-180.0f,180.0f), glm::vec3(xval,yval,zval));
+	p.mMatrix *= rotation;
 
-	p.mMatrix *= hej;
-
-	xval = getRandom(-0.3f, 0.3f);
-	yval = getRandom(-0.3f, 0.3f);
-	zval = getRandom(-0.3f, 0.3f);
+	//Randomize initial velocity
+	xval = getRandom(-0.1f, 0.1f);
+	yval = getRandom(-0.1f, 0.1f);
+	zval = getRandom(-0.1f, 0.1f);
 
 	p.mVelocity = glm::vec3(xval,yval,zval);
-	p.mVelocity = glm::vec3(0);
 
     p.mSize = 0.000025f; // FIXME the size is set in the shader atm
 }

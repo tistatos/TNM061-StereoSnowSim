@@ -41,7 +41,7 @@ sgct::SharedDouble gravFactor(-9.81);
 sgct::SharedDouble positionX(0.0);
 sgct::SharedDouble positionZ(0.0);
 sgct::SharedDouble radius(0.0);
-sgct::SharedDouble fadeDistance(0.0);
+sgct::SharedDouble fadeDistance(20.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
 sgct::SharedBool showGraph(false);
@@ -92,7 +92,7 @@ int main(int argc, char *argv[])
 
 	gTurbine = new Vortex();
 	gTurbine->init(0.0f, 0.0f, 0.0f);
-	gParticles->addField(gTurbine);
+	//gParticles->addField(gTurbine);
 
 	//Not working yet... :(
 	SimplexNoise* noise = new SimplexNoise();
@@ -147,8 +147,8 @@ void initialize()
 	gBubble->createSphere(1.5f, 100);
 
 	// hide stats and such by default
-	
-	
+
+
 }
 
 void draw()
@@ -174,8 +174,6 @@ void myPreSyncFun()
 	{
 		//Sets the current time since the program started
 		curr_time.setVal(sgct::Engine::getTime());
-		
-		
 	}
 }
 
@@ -318,7 +316,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		{
 			int tmpVal = atoi(receivedChars + 5);
 			fadeDistance.setVal(tmpVal);
-			
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "graph", 5) == 0)

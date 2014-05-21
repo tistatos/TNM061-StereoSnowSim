@@ -23,6 +23,7 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mParticlePositionBuffer = 0;
 	mParticlePositionData = new GLfloat[mParticlesAmount * 4 * 4];
 	mFadeDistance = 4.0f;
+	mFirstDraw = true;
 }
 
 /**
@@ -270,7 +271,7 @@ void ParticleSystem::draw(double delta)
 		glBindVertexArray(0);
 
 		sgct::ShaderManager::instance()->unBindShaderProgram();
-
+		mFirstDraw = false;
 		//std::cout << "Drawing all them pritty particles\n";
 	}
 }

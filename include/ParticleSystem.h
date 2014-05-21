@@ -75,6 +75,8 @@ protected:
 
 	GLint mViewProjectionLoc; /// matrix loc in shader
 
+	bool mFirstDraw; //Ugly as fuck solution
+
 };
 
 
