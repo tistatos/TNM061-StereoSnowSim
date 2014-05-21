@@ -140,10 +140,6 @@ void initialize()
 	tree->loadObj("objects/tree.obj","objects/tree.png");
 	tree->scale(0.05f,0.05f,0.05f);
 	tree->translate(0.0f, -1.0f, -6.0f);
-
-	// hide stats and such by default
-
-
 }
 
 void draw()
@@ -157,7 +153,6 @@ void draw()
 
 	//if(gEngine->isExternalControlConnected())
 	//	cout << "Connectad is very nice";
-
 }
 
 //Checking the time since the program started, not sure if we need this either.
@@ -278,7 +273,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			float tmpVal = atof(receivedChars + 5);
 			positionX.setVal(tmpVal);
-			cout << positionX.getVal();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "posZ", 4) == 0)
@@ -286,7 +280,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			float tmpVal = atof(receivedChars + 5);
 			positionZ.setVal(tmpVal);
-			cout << positionZ.getVal();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "radi", 4) == 0)
@@ -294,7 +287,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			radius.setVal(tmpVal);
-			cout << radius.getVal();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "paus", 4) == 0)
