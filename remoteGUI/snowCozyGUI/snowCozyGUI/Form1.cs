@@ -88,7 +88,6 @@ namespace snowCozyGUI
                 this.fieldGroupBox.Enabled = true;
                 this.programGroupBox.Enabled = true;
                 this.fadeDistGroupBox.Enabled = true;
-                this.partGroupBox.Enabled = true;
 
                 mClient.windX = "0";
                 mClient.windY = "0";
@@ -139,7 +138,6 @@ namespace snowCozyGUI
             this.propertiesGroupBox.Enabled = status;
             this.programGroupBox.Enabled = status;
             this.fadeDistGroupBox.Enabled = status;
-            this.partGroupBox.Enabled = status;
             this.windRadio.Checked = status;
             this.vortexRadio.Checked = status;
             this.gravityButton.Checked = status;
