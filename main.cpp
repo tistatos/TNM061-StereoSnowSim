@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 
 	gTurbine = new Vortex();
 	gTurbine->init(0.0f, 0.0f, 0.0f);
-	//gParticles->addField(gTurbine);
+	gParticles->addField(gTurbine);
 
 	//Not working yet... :(
 	SimplexNoise* noise = new SimplexNoise();
@@ -227,12 +227,14 @@ void myPostSyncPreDrawFun()
 	gEngine->setWireframe(gWireframe);
 	gParticles->pauseControl(sharedPause.getVal());
 	gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-	gTurbine->setForce((vortFactorX.getVal()*0.01f), (vortFactorY.getVal()*0.01f), (vortFactorZ.getVal()*0.01f));
-	gTurbine->setPosition((positionX.getVal()*0.01f), (positionZ.getVal()*0.01f));
+	gTurbine->setForce((vortFactorX.getVal()*0.1f), (vortFactorY.getVal()*0.1f), (vortFactorZ.getVal()*0.1f));
+	gTurbine->setPosition((positionX.getVal()), (positionZ.getVal()));
+	gTurbine->printInfo();
+	cout << vortFactorX.getVal();
 	gTurbine->setRadius(radius.getVal());
 	gGrav->init(gravFactor.getVal());
 	gParticles->setFadeDistance(fadeDistance.getVal()*0.1f);
-	gParticles->setAmount(particleAmount.getVal());
+	//gParticles->setAmount(particleAmount.getVal());
 }
 
 //Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
@@ -244,56 +246,58 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		if(size >= 6 && strncmp(receivedChars, "winX", 4) == 0)
 		{
 			//We need an int.
- 			int tmpVal = atof(receivedChars + 5);
+ 			float tmpVal = atof(receivedChars + 5);
  			sizeFactorX.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winY", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atof(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
  			sizeFactorY.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winZ", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
  			sizeFactorZ.setVal(tmpVal);
 		}
 		else if(size >= 6 && strncmp(receivedChars, "vorX", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			vortFactorX.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "vorY", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			vortFactorY.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "vorZ", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			vortFactorZ.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "posX", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			positionX.setVal(tmpVal);
+			cout << positionX.getVal();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "posZ", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			positionZ.setVal(tmpVal);
+			cout << positionZ.getVal();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "radi", 4) == 0)
@@ -301,6 +305,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			radius.setVal(tmpVal);
+			cout << radius.getVal();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "paus", 4) == 0)
@@ -312,13 +317,13 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		else if(size >= 6 && strncmp(receivedChars, "grav", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			gravFactor.setVal(-tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "fade", 4) == 0)
 		{
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			fadeDistance.setVal(tmpVal);
 		}
 

@@ -107,7 +107,7 @@ namespace snowCozyGUI
                 this.posZTextBox.Text = mClient.vortexPosZ;
 
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradius=1\r\nfade=40\r\npart=2500");
+                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradi=1\r\nfade=40\r\npart=2500");
             }
             else
             {
@@ -202,13 +202,13 @@ namespace snowCozyGUI
                 if (mClient.choice == 0)
                 {
                     mClient.windZ = tBar.Value.ToString();
-                    mClient.connection.Send("winY=" + mClient.windZ);
+                    mClient.connection.Send("winZ=" + mClient.windZ);
                     //System.Console.Write(tBar.Value.ToString());
                 }
                 else if (mClient.choice == 1)
                 {
                     mClient.vortexZ = tBar.Value.ToString();
-                    mClient.connection.Send("vorY=" + mClient.vortexZ);
+                    mClient.connection.Send("vorZ=" + mClient.vortexZ);
                     //System.Console.Write(tBar.Value.ToString());
                 }
             }
@@ -311,7 +311,7 @@ namespace snowCozyGUI
         private void radiusTextBox_TextChanged(object sender, EventArgs e)
         {
             mClient.vortexRadius = radiusTextBox.Text;
-            mClient.connection.Send("radius=" + mClient.vortexRadius);
+            mClient.connection.Send("radi=" + mClient.vortexRadius);
 
             //System.Console.Write(mClient.vortexRadius);
         }
