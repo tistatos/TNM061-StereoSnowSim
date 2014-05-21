@@ -349,11 +349,11 @@ namespace snowCozyGUI
 
                 if (cb.Checked)
                 {
-                    mClient.connection.Send("stats=0");
+                    mClient.connection.Send("stats=1");
                 }
                 else
                 {
-                    mClient.connection.Send("stats=1");
+                    mClient.connection.Send("stats=0");
                 }
             }
         }
@@ -366,11 +366,11 @@ namespace snowCozyGUI
 
                 if (cb.Checked)
                 {
-                    mClient.connection.Send("graph=0");
+                    mClient.connection.Send("graph=1");
                 }
                 else
                 {
-                    mClient.connection.Send("graph=1");
+                    mClient.connection.Send("graph=0");
                 }
             }
         }

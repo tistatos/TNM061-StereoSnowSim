@@ -222,15 +222,13 @@ void myDecodeFun()
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this? Currently set to false.
 void myPostSyncPreDrawFun()
 {
-	gEngine->setDisplayInfoVisibility(showGraph.getVal());
-	gEngine->setStatsGraphVisibility(showStats.getVal());
 	gEngine->setWireframe(gWireframe);
 	gParticles->pauseControl(sharedPause.getVal());
 	gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 	gTurbine->setForce((vortFactorX.getVal()*0.1f), (vortFactorY.getVal()*0.1f), (vortFactorZ.getVal()*0.1f));
 	gTurbine->setPosition((positionX.getVal()), (positionZ.getVal()));
-	gTurbine->printInfo();
-	cout << vortFactorX.getVal();
+	//gTurbine->printInfo();
+	//cout << vortFactorX.getVal();
 	gTurbine->setRadius(radius.getVal());
 	gGrav->init(gravFactor.getVal());
 	gParticles->setFadeDistance(fadeDistance.getVal()*0.1f);
@@ -331,12 +329,16 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		{
 			int tmpVal = atoi(receivedChars + 6);
 			showGraph.setVal(tmpVal);
+			gEngine->setDisplayInfoVisibility(showGraph.getVal());
+			
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "stats", 5) == 0)
 		{
 			int tmpVal = atoi(receivedChars + 6);
 			showStats.setVal(tmpVal);
+			gEngine->setStatsGraphVisibility(showStats.getVal());
+			
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "wire", 4) == 0)
@@ -348,7 +350,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		{
 			int tmpVal = atoi(receivedChars + 6);
 			particleAmount.setVal(tmpVal);
-			
 		}
 	}
 }
