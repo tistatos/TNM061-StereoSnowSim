@@ -222,8 +222,6 @@ void myPostSyncPreDrawFun()
 	gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 	gTurbine->setForce((vortFactorX.getVal()*0.1f), (vortFactorY.getVal()*0.1f), (vortFactorZ.getVal()*0.1f));
 	gTurbine->setPosition((positionX.getVal()), (positionZ.getVal()));
-	gTurbine->printInfo();
-	cout << vortFactorX.getVal();
 	gTurbine->setRadius(radius.getVal());
 	gGrav->init(gravFactor.getVal());
 	gParticles->setFadeDistance(fadeDistance.getVal()*0.1f);
@@ -341,7 +339,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		{
 			int tmpVal = atoi(receivedChars + 6);
 			particleAmount.setVal(tmpVal);
-			
+
 		}
 	}
 }
