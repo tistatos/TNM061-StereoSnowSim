@@ -42,6 +42,7 @@ sgct::SharedDouble positionX(0.0);
 sgct::SharedDouble positionZ(0.0);
 sgct::SharedDouble radius(0.0);
 sgct::SharedDouble fadeDistance(40.0);
+sgct::SharedInt particleAmount(2500);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
 sgct::SharedBool showGraph(false);
@@ -193,6 +194,7 @@ void myEncodeFun()
  	sgct::SharedData::instance()->writeDouble(&positionZ);
  	sgct::SharedData::instance()->writeDouble(&radius);
  	sgct::SharedData::instance()->writeDouble(&fadeDistance);
+	sgct::SharedData::instance()->writeInt(&particleAmount);
 	sgct::SharedData::instance()->writeBool(&sharedPause);
 	sgct::SharedData::instance()->writeBool(&showGraph);
 	sgct::SharedData::instance()->writeBool(&showStats);
@@ -213,6 +215,7 @@ void myDecodeFun()
 	sgct::SharedData::instance()->readDouble(&positionZ);
 	sgct::SharedData::instance()->readDouble(&radius);
 	sgct::SharedData::instance()->readDouble(&fadeDistance);
+	sgct::SharedData::instance()->readInt(&particleAmount);
 	sgct::SharedData::instance()->readBool(&sharedPause);
 	sgct::SharedData::instance()->readBool(&showGraph);
 	sgct::SharedData::instance()->readBool(&showStats);
@@ -231,6 +234,7 @@ void myPostSyncPreDrawFun()
 	gTurbine->setRadius(radius.getVal());
 	gGrav->init(gravFactor.getVal());
 	gParticles->setFadeDistance(fadeDistance.getVal()*0.1f);
+	gParticles->setAmount(particleAmount.getVal());
 }
 
 //Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
@@ -336,6 +340,13 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		else if(size >= 6 && strncmp(receivedChars, "wire", 4) == 0)
 		{
 			//gWireframe = !gWireframe;
+		}
+
+		else if (size >= 6 && strncmp(receivedChars, "part", 4) == 0)
+		{
+			int tmpVal = atoi(receivedChars + 6);
+			particleAmount.setVal(tmpVal);
+			
 		}
 	}
 }

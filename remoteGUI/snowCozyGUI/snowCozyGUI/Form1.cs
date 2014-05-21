@@ -99,7 +99,7 @@ namespace snowCozyGUI
                 this.fieldGroupBox.Enabled = true;
                 this.programGroupBox.Enabled = true;
                 this.fadeDistGroupBox.Enabled = true;
-                //this.partGroupBox.Enabled = true;
+                this.partGroupBox.Enabled = true;
 
                 //set default values
                 this.radiusTextBox.Text = mClient.vortexRadius;
