@@ -8,7 +8,6 @@
 #include "Gravity.h"
 #include "Wind.h"
 #include "ObjSystem.h"
-#include "SoapBubble.h"
 #include "Vortex.h"
 #include <iostream>
 #include "SimplexNoise.h"
@@ -19,7 +18,6 @@ Snow* gParticles;
 World* gWorld;
 Object* road;
 Object* tree;
-SoapBubble* gBubble;
 Wind* gWind;
 Gravity* gGrav;
 Vortex* gTurbine;
@@ -41,6 +39,7 @@ sgct::SharedDouble gravFactor(-9.81);
 sgct::SharedDouble positionX(0.0);
 sgct::SharedDouble positionZ(0.0);
 sgct::SharedDouble radius(0.0);
+sgct::SharedInt particleAmount(2500);
 sgct::SharedDouble fadeDistance(20.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
@@ -50,7 +49,7 @@ sgct::SharedBool showGraph(false);
 void initialize();
 void draw();
 void myPreSyncFun();
-void statsDrawFun();
+void myPostSyncPreDrawFun();
 void myEncodeFun();
 void myDecodeFun();
 void externalControlCallback(const char * receivedChars, int size, int clientId);
@@ -67,7 +66,7 @@ int main(int argc, char *argv[])
 	gEngine->setInitOGLFunction(initialize);
 	gEngine->setDrawFunction(draw);
 	gEngine->setPreSyncFunction(myPreSyncFun);
-	gEngine->setPostSyncPreDrawFunction(statsDrawFun);
+	gEngine->setPostSyncPreDrawFunction(myPostSyncPreDrawFun);
 	gEngine->setExternalControlCallback(externalControlCallback);
 	sgct::SharedData::instance()->setEncodeFunction(myEncodeFun);
 	sgct::SharedData::instance()->setDecodeFunction(myDecodeFun);
@@ -76,7 +75,6 @@ int main(int argc, char *argv[])
 	gWorld = new World(gEngine);
 
 	// add some nice objects
-	gBubble = new SoapBubble(gEngine);
 	road = new Object(gEngine);
 	tree = new Object(gEngine);
 
@@ -92,7 +90,7 @@ int main(int argc, char *argv[])
 
 	gTurbine = new Vortex();
 	gTurbine->init(0.0f, 0.0f, 0.0f);
-	//gParticles->addField(gTurbine);
+	gParticles->addField(gTurbine);
 
 	//Not working yet... :(
 	SimplexNoise* noise = new SimplexNoise();
@@ -120,7 +118,6 @@ int main(int argc, char *argv[])
 	delete gEngine;
 	delete gParticles;
 	delete gWorld;
-	delete gBubble;
 	delete gWind;
 	delete gTurbine;
 
@@ -144,8 +141,6 @@ void initialize()
 	tree->scale(0.05f,0.05f,0.05f);
 	tree->translate(0.0f, -1.0f, -6.0f);
 
-	gBubble->createSphere(1.5f, 100);
-
 	// hide stats and such by default
 
 
@@ -155,7 +150,6 @@ void draw()
 {
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
-	//gBubble->drawBubble();
 	//road->draw();
 	//tree->draw();
 	gParticles->move(delta);
@@ -191,6 +185,7 @@ void myEncodeFun()
  	sgct::SharedData::instance()->writeDouble(&positionZ);
  	sgct::SharedData::instance()->writeDouble(&radius);
  	sgct::SharedData::instance()->writeDouble(&fadeDistance);
+	sgct::SharedData::instance()->writeInt(&particleAmount);
 	sgct::SharedData::instance()->writeBool(&sharedPause);
 	sgct::SharedData::instance()->writeBool(&showGraph);
 	sgct::SharedData::instance()->writeBool(&showStats);
@@ -211,24 +206,28 @@ void myDecodeFun()
 	sgct::SharedData::instance()->readDouble(&positionZ);
 	sgct::SharedData::instance()->readDouble(&radius);
 	sgct::SharedData::instance()->readDouble(&fadeDistance);
+	sgct::SharedData::instance()->readInt(&particleAmount);
 	sgct::SharedData::instance()->readBool(&sharedPause);
 	sgct::SharedData::instance()->readBool(&showGraph);
 	sgct::SharedData::instance()->readBool(&showStats);
 }
 
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this? Currently set to false.
-void statsDrawFun()
+void myPostSyncPreDrawFun()
 {
 	gEngine->setDisplayInfoVisibility(showGraph.getVal());
 	gEngine->setStatsGraphVisibility(showStats.getVal());
 	gEngine->setWireframe(gWireframe);
 	gParticles->pauseControl(sharedPause.getVal());
 	gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
-	gTurbine->setForce((vortFactorX.getVal()*0.01f), (vortFactorY.getVal()*0.01f), (vortFactorZ.getVal()*0.01f));
-	gTurbine->setPosition((positionX.getVal()*0.01f), (positionZ.getVal()*0.01f));
+	gTurbine->setForce((vortFactorX.getVal()*0.1f), (vortFactorY.getVal()*0.1f), (vortFactorZ.getVal()*0.1f));
+	gTurbine->setPosition((positionX.getVal()), (positionZ.getVal()));
+	gTurbine->printInfo();
+	cout << vortFactorX.getVal();
 	gTurbine->setRadius(radius.getVal());
 	gGrav->init(gravFactor.getVal());
 	gParticles->setFadeDistance(fadeDistance.getVal()*0.1f);
+	//gParticles->setAmount(particleAmount.getVal());
 }
 
 //Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
@@ -240,56 +239,58 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		if(size >= 6 && strncmp(receivedChars, "winX", 4) == 0)
 		{
 			//We need an int.
- 			int tmpVal = atof(receivedChars + 5);
+ 			float tmpVal = atof(receivedChars + 5);
  			sizeFactorX.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winY", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atof(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
  			sizeFactorY.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winZ", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
  			sizeFactorZ.setVal(tmpVal);
 		}
 		else if(size >= 6 && strncmp(receivedChars, "vorX", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			vortFactorX.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "vorY", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			vortFactorY.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "vorZ", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			vortFactorZ.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "posX", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			positionX.setVal(tmpVal);
+			cout << positionX.getVal();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "posZ", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			positionZ.setVal(tmpVal);
+			cout << positionZ.getVal();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "radi", 4) == 0)
@@ -297,6 +298,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			//We need an int.
 			int tmpVal = atoi(receivedChars + 5);
 			radius.setVal(tmpVal);
+			cout << radius.getVal();
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "paus", 4) == 0)
@@ -308,13 +310,13 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		else if(size >= 6 && strncmp(receivedChars, "grav", 4) == 0)
 		{
 			//We need an int.
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			gravFactor.setVal(-tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "fade", 4) == 0)
 		{
-			int tmpVal = atoi(receivedChars + 5);
+			float tmpVal = atof(receivedChars + 5);
 			fadeDistance.setVal(tmpVal);
 		}
 
@@ -333,6 +335,13 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		else if(size >= 6 && strncmp(receivedChars, "wire", 4) == 0)
 		{
 			//gWireframe = !gWireframe;
+		}
+
+		else if (size >= 6 && strncmp(receivedChars, "part", 4) == 0)
+		{
+			int tmpVal = atoi(receivedChars + 6);
+			particleAmount.setVal(tmpVal);
+			
 		}
 	}
 }
