@@ -88,7 +88,6 @@ namespace snowCozyGUI
                 this.fieldGroupBox.Enabled = true;
                 this.programGroupBox.Enabled = true;
                 this.fadeDistGroupBox.Enabled = true;
-                this.partGroupBox.Enabled = true;
 
                 mClient.windX = "0";
                 mClient.windY = "0";
@@ -107,7 +106,7 @@ namespace snowCozyGUI
                 this.posZTextBox.Text = mClient.vortexPosZ;
 
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradi=1\r\nfade=40\r\npart=2500");
+                mClient.connection.Send("stats=1\r\ngraph=1\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradi=1\r\nfade=40\r\npart=2500");
             }
             else
             {
@@ -139,7 +138,6 @@ namespace snowCozyGUI
             this.propertiesGroupBox.Enabled = status;
             this.programGroupBox.Enabled = status;
             this.fadeDistGroupBox.Enabled = status;
-            this.partGroupBox.Enabled = status;
             this.windRadio.Checked = status;
             this.vortexRadio.Checked = status;
             this.gravityButton.Checked = status;
@@ -372,18 +370,6 @@ namespace snowCozyGUI
                 {
                     mClient.connection.Send("graph=0");
                 }
-            }
-        }
-
-        private void partTrackBar_Scroll(object sender, EventArgs e)
-        {
-            TrackBar tBar = (TrackBar)sender;
-            this.particles.Text = tBar.Value.ToString();
-
-            if (mClient.connection.valid)
-            {
-                mClient.connection.Send("part=" + tBar.Value.ToString());
-                //System.Console.Write(tBar.Value.ToString());
             }
         }
 

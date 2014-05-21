@@ -67,9 +67,6 @@
             this.fadeDistTrackBar = new System.Windows.Forms.TrackBar();
             this.fadeDistGroupBox = new System.Windows.Forms.GroupBox();
             this.fadeDist = new System.Windows.Forms.Label();
-            this.partGroupBox = new System.Windows.Forms.GroupBox();
-            this.particles = new System.Windows.Forms.Label();
-            this.partTrackBar = new System.Windows.Forms.TrackBar();
             this.networkGroupBox.SuspendLayout();
             this.forceGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zTrackBar)).BeginInit();
@@ -83,8 +80,6 @@
             this.programGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fadeDistTrackBar)).BeginInit();
             this.fadeDistGroupBox.SuspendLayout();
-            this.partGroupBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.partTrackBar)).BeginInit();
             this.SuspendLayout();
             // 
             // connectButton
@@ -482,42 +477,11 @@
             this.fadeDist.TabIndex = 12;
             this.fadeDist.Text = "4.0";
             // 
-            // partGroupBox
-            // 
-            this.partGroupBox.Controls.Add(this.particles);
-            this.partGroupBox.Controls.Add(this.partTrackBar);
-            this.partGroupBox.Location = new System.Drawing.Point(12, 207);
-            this.partGroupBox.Name = "partGroupBox";
-            this.partGroupBox.Size = new System.Drawing.Size(292, 65);
-            this.partGroupBox.TabIndex = 12;
-            this.partGroupBox.TabStop = false;
-            this.partGroupBox.Text = "Particles";
-            // 
-            // particles
-            // 
-            this.particles.AutoSize = true;
-            this.particles.Location = new System.Drawing.Point(249, 33);
-            this.particles.Name = "particles";
-            this.particles.Size = new System.Drawing.Size(31, 13);
-            this.particles.TabIndex = 1;
-            this.particles.Text = "2500";
-            // 
-            // partTrackBar
-            // 
-            this.partTrackBar.Location = new System.Drawing.Point(6, 20);
-            this.partTrackBar.Maximum = 10000;
-            this.partTrackBar.Name = "partTrackBar";
-            this.partTrackBar.Size = new System.Drawing.Size(248, 45);
-            this.partTrackBar.TabIndex = 0;
-            this.partTrackBar.Value = 2500;
-            this.partTrackBar.Scroll += new System.EventHandler(this.partTrackBar_Scroll);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 393);
-            this.Controls.Add(this.partGroupBox);
             this.Controls.Add(this.fadeDistGroupBox);
             this.Controls.Add(this.programGroupBox);
             this.Controls.Add(this.propertiesGroupBox);
@@ -549,9 +513,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.fadeDistTrackBar)).EndInit();
             this.fadeDistGroupBox.ResumeLayout(false);
             this.fadeDistGroupBox.PerformLayout();
-            this.partGroupBox.ResumeLayout(false);
-            this.partGroupBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.partTrackBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -598,9 +559,6 @@
         private System.Windows.Forms.TrackBar fadeDistTrackBar;
         private System.Windows.Forms.GroupBox fadeDistGroupBox;
         private System.Windows.Forms.Label fadeDist;
-        private System.Windows.Forms.GroupBox partGroupBox;
-        private System.Windows.Forms.Label particles;
-        private System.Windows.Forms.TrackBar partTrackBar;
     }
 }
 

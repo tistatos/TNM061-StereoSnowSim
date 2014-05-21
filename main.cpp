@@ -8,7 +8,6 @@
 #include "Gravity.h"
 #include "Wind.h"
 #include "ObjSystem.h"
-#include "SoapBubble.h"
 #include "Vortex.h"
 #include <iostream>
 #include "SimplexNoise.h"
@@ -19,7 +18,6 @@ Snow* gParticles;
 World* gWorld;
 Object* road;
 Object* tree;
-SoapBubble* gBubble;
 Wind* gWind;
 Gravity* gGrav;
 Vortex* gTurbine;
@@ -77,7 +75,6 @@ int main(int argc, char *argv[])
 	gWorld = new World(gEngine);
 
 	// add some nice objects
-	gBubble = new SoapBubble(gEngine);
 	road = new Object(gEngine);
 	tree = new Object(gEngine);
 
@@ -121,7 +118,6 @@ int main(int argc, char *argv[])
 	delete gEngine;
 	delete gParticles;
 	delete gWorld;
-	delete gBubble;
 	delete gWind;
 	delete gTurbine;
 
@@ -145,8 +141,6 @@ void initialize()
 	tree->scale(0.05f,0.05f,0.05f);
 	tree->translate(0.0f, -1.0f, -6.0f);
 
-	gBubble->createSphere(1.5f, 100);
-
 	// hide stats and such by default
 
 
@@ -156,7 +150,6 @@ void draw()
 {
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
-	//gBubble->drawBubble();
 	//road->draw();
 	//tree->draw();
 	gParticles->move(delta);
