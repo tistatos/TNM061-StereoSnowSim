@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.connectButton = new System.Windows.Forms.Button();
             this.ipTextBox = new System.Windows.Forms.TextBox();
             this.networkGroupBox = new System.Windows.Forms.GroupBox();
@@ -71,6 +72,7 @@
             this.partGroupBox = new System.Windows.Forms.GroupBox();
             this.partBar = new System.Windows.Forms.TrackBar();
             this.partLabel = new System.Windows.Forms.Label();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.networkGroupBox.SuspendLayout();
             this.forceGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zTrackBar)).BeginInit();
@@ -525,6 +527,11 @@
             this.partLabel.TabIndex = 1;
             this.partLabel.Text = "0.04";
             // 
+            // timer
+            // 
+            this.timer.Interval = 1000;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -615,6 +622,7 @@
         private System.Windows.Forms.GroupBox partGroupBox;
         private System.Windows.Forms.Label partLabel;
         private System.Windows.Forms.TrackBar partBar;
+        private System.Windows.Forms.Timer timer;
     }
 }
 
