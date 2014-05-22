@@ -376,7 +376,7 @@ namespace snowCozyGUI
         private void infoButton_Click(object sender, EventArgs e)
         {
             this.statusMessage.Text = "Printing info";
-            mClient.connection.Send("paus=1");
+            mClient.connection.Send("info=1");
         }
 
     }
