@@ -25,6 +25,7 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mParticlePositionData = new GLfloat[mParticlesAmount * 4 * 4];
 	mParticleLifeData = new GLfloat[mParticlesAmount];
 	mFadeDistance = 4.0f;
+	mParticleSize = 0.04f;
 	mFirstDraw = true;
 }
 
@@ -222,8 +223,12 @@ void ParticleSystem::draw(double delta)
 
 		glm::mat4 MVP = mEngine->getActiveModelViewProjectionMatrix();
 		int fadeDistanceLoc = sgct::ShaderManager::instance()->getShaderProgram(mShader.mShaderName).getUniformLocation("fadeDistanceIn");
+		int particleSizeLoc = sgct::ShaderManager::instance()->getShaderProgram(mShader.mShaderName).getUniformLocation("particleSize");
+
 		glUniformMatrix4fv(mViewProjectionLoc, 1, GL_FALSE, &MVP[0][0]);
+
 		glUniform1f(fadeDistanceLoc,mFadeDistance);
+		glUniform1f(particleSizeLoc,mParticleSize);
 
 		glBindVertexArray(mVertexArray);
 
@@ -415,4 +420,9 @@ void ParticleSystem::togglePause()
 void ParticleSystem::setAmount(int amount)
 {
 	mParticlesAmount = (amount > MAX_PARTICLES ? MAX_PARTICLES : amount);
+}
+
+void ParticleSystem::setPaticleSize(float s)
+{
+	mParticleSize = s;
 }

@@ -8,7 +8,6 @@ struct Particle
 	glm::vec3 mVelocity;
 
 	float mDistance; /// Distance from camera
-	float mSize; /// size of particle FIXME: this is hardcoded in shader atm
 	float mLife; /// life remaining of particle
 
 	glm::vec3 position() { return glm::vec3(mMatrix[3][0],mMatrix[3][1],mMatrix[3][2]);}

@@ -36,6 +36,7 @@ public:
 	void setShader(string name, string vertFile, string fragFile);
 	void toggleDebug();
 	void setFadeDistance(float d);
+	void setPaticleSize(float s);
 	void enableFieldDebug();
 	void toggleFieldDebug();
 	void pauseControl(bool status);
@@ -52,6 +53,7 @@ protected:
 	virtual void reset(Particle& p);
 
 	float mFadeDistance; /// Distance from camera when particles should fade away to not create crossedeye effect
+	float mParticleSize; /// Distance from camera when particles should fade away to not create crossedeye effect
 	bool mInitialized; /// Is the particle system initalized?
 	bool mPaused;
 
