@@ -119,7 +119,7 @@ namespace snowCozyGUI
                 this.posZTextBox.Text = mClient.vortexPosZ;
 
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradi=1\r\nfade=40\r\npart=40\r\ninfo=0");
+                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradi=1\r\nfade=40\r\npart=40\r\ninfo=0\r\nobje=0");
             }
             else
             {
@@ -430,6 +430,23 @@ namespace snowCozyGUI
             else if(mClient.vortexZ.ToString() != mClient.vortexZEnd)
             {
                 mClient.vortexZ++;
+            }
+        }
+
+        private void objectCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (mClient.connection.valid)
+            {
+                CheckBox cb = (CheckBox)sender;
+
+                if (cb.Checked)
+                {
+                    mClient.connection.Send("obje=1");
+                }
+                else
+                {
+                    mClient.connection.Send("obje=0");
+                }
             }
         }
 

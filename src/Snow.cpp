@@ -36,10 +36,18 @@ void Snow::destroy()
 void Snow::calculateLife(Particle& p, double delta)
 {
 	glm::vec3 pos = p.position();
-	if(pos.y < -2.0f || abs(pos.x)>15.0f || abs(pos.z)>15.0f || abs(pos.y) >25.0f)
+	if(pos.y < -2.0f || abs(pos.x) > 15.0f || abs(pos.z) > 15.0f || abs(pos.y) > 25.0f)
 	{
 		p.mLife -= delta;
+		p.mIsReset = false;
 	}
+}
+
+void Snow::increaseLife(Particle& p, double delta)
+{
+	p.mLife += delta;
+
+	// std::cout << "increasing life: " << p.mLife << std::endl;
 }
 
 /**
@@ -48,22 +56,25 @@ void Snow::calculateLife(Particle& p, double delta)
  */
 void Snow::reset(Particle& p)
 {
-    p.mLife = 5.0f;
+	if(mFirstDraw)
+	{
+		p.mLife = 5.0f; //mFirstDraw ? 0.1f : 5.0f;
+	}
 
 	float xval = getRandom(-10.0f, 10.0f);
-	float yval = mFirstDraw ? getRandom(1.0f, 25.0f) : getRandom(15.0f, 25.0f);
+	float yval = mFirstDraw ? getRandom(0.0f, 25.0f) : getRandom(15.0f, 25.0f);
 	float zval = getRandom(-10.0f, 10.0f);
 
- 	p.mMatrix[3][0] = xval; //x;
-	p.mMatrix[3][1] = yval; //x;
-	p.mMatrix[3][2] = zval; //x;
+ 	p.mMatrix[3][0] = xval; // x
+	p.mMatrix[3][1] = yval; // y
+	p.mMatrix[3][2] = zval; // z
 
 	xval = getRandom(-1.0f, 0.0f);
 	yval = getRandom(-1.0f, 1.0f);
 	zval = getRandom(-1.0f, 1.0f);
 
 	//Rotate particle around random vector
-	glm::mat4 rotation =  glm::rotate( glm::mat4(1.0f), getRandom(-180.0f,180.0f), glm::vec3(xval,yval,zval));
+	glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), getRandom(-180.0f, 180.0f), glm::vec3(xval, yval, zval));
 
 	p.mMatrix *= rotation;
 
@@ -73,5 +84,6 @@ void Snow::reset(Particle& p)
 	zval = getRandom(-0.1f, 0.1f);
 
 	p.mVelocity = glm::vec3(xval,yval,zval);
+	p.mIsReset = true;
 
 }

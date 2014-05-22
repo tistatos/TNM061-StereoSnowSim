@@ -51,6 +51,7 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.fieldGroupBox = new System.Windows.Forms.GroupBox();
             this.gravityButton = new System.Windows.Forms.RadioButton();
+            this.infoButton = new System.Windows.Forms.Button();
             this.vortexRadio = new System.Windows.Forms.RadioButton();
             this.windRadio = new System.Windows.Forms.RadioButton();
             this.gravityGroupBox = new System.Windows.Forms.GroupBox();
@@ -63,16 +64,19 @@
             this.radiusTextBox = new System.Windows.Forms.TextBox();
             this.pausButton = new System.Windows.Forms.Button();
             this.programGroupBox = new System.Windows.Forms.GroupBox();
-            this.infoButton = new System.Windows.Forms.Button();
+            this.objectCheckBox = new System.Windows.Forms.CheckBox();
             this.graphCheckBox = new System.Windows.Forms.CheckBox();
             this.statsCheckBox = new System.Windows.Forms.CheckBox();
             this.fadeDistTrackBar = new System.Windows.Forms.TrackBar();
             this.fadeDistGroupBox = new System.Windows.Forms.GroupBox();
             this.fadeDist = new System.Windows.Forms.Label();
             this.partGroupBox = new System.Windows.Forms.GroupBox();
-            this.partBar = new System.Windows.Forms.TrackBar();
             this.partLabel = new System.Windows.Forms.Label();
+<<<<<<< HEAD
             this.timer = new System.Windows.Forms.Timer(this.components);
+=======
+            this.partBar = new System.Windows.Forms.TrackBar();
+>>>>>>> 4321884c7a369364fede7ce09596744923e5906e
             this.networkGroupBox.SuspendLayout();
             this.forceGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zTrackBar)).BeginInit();
@@ -280,6 +284,7 @@
             // fieldGroupBox
             // 
             this.fieldGroupBox.Controls.Add(this.gravityButton);
+            this.fieldGroupBox.Controls.Add(this.infoButton);
             this.fieldGroupBox.Controls.Add(this.vortexRadio);
             this.fieldGroupBox.Controls.Add(this.windRadio);
             this.fieldGroupBox.Location = new System.Drawing.Point(12, 283);
@@ -301,6 +306,16 @@
             this.gravityButton.Text = "Gravity";
             this.gravityButton.UseVisualStyleBackColor = true;
             this.gravityButton.CheckedChanged += new System.EventHandler(this.gravityButton_CheckedChanged);
+            // 
+            // infoButton
+            // 
+            this.infoButton.Location = new System.Drawing.Point(222, 20);
+            this.infoButton.Name = "infoButton";
+            this.infoButton.Size = new System.Drawing.Size(60, 23);
+            this.infoButton.TabIndex = 12;
+            this.infoButton.Text = "Print info";
+            this.infoButton.UseVisualStyleBackColor = true;
+            this.infoButton.Click += new System.EventHandler(this.infoButton_Click);
             // 
             // vortexRadio
             // 
@@ -409,7 +424,7 @@
             // 
             // pausButton
             // 
-            this.pausButton.Location = new System.Drawing.Point(234, 19);
+            this.pausButton.Location = new System.Drawing.Point(238, 19);
             this.pausButton.Name = "pausButton";
             this.pausButton.Size = new System.Drawing.Size(48, 23);
             this.pausButton.TabIndex = 9;
@@ -419,7 +434,7 @@
             // 
             // programGroupBox
             // 
-            this.programGroupBox.Controls.Add(this.infoButton);
+            this.programGroupBox.Controls.Add(this.objectCheckBox);
             this.programGroupBox.Controls.Add(this.graphCheckBox);
             this.programGroupBox.Controls.Add(this.statsCheckBox);
             this.programGroupBox.Controls.Add(this.pausButton);
@@ -430,15 +445,17 @@
             this.programGroupBox.TabStop = false;
             this.programGroupBox.Text = "Program";
             // 
-            // infoButton
+            // objectCheckBox
             // 
-            this.infoButton.Location = new System.Drawing.Point(155, 19);
-            this.infoButton.Name = "infoButton";
-            this.infoButton.Size = new System.Drawing.Size(60, 23);
-            this.infoButton.TabIndex = 12;
-            this.infoButton.Text = "Print info";
-            this.infoButton.UseVisualStyleBackColor = true;
-            this.infoButton.Click += new System.EventHandler(this.infoButton_Click);
+            this.objectCheckBox.AutoSize = true;
+            this.objectCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.objectCheckBox.Location = new System.Drawing.Point(136, 23);
+            this.objectCheckBox.Name = "objectCheckBox";
+            this.objectCheckBox.Size = new System.Drawing.Size(62, 17);
+            this.objectCheckBox.TabIndex = 13;
+            this.objectCheckBox.Text = "Objects";
+            this.objectCheckBox.UseVisualStyleBackColor = true;
+            this.objectCheckBox.CheckedChanged += new System.EventHandler(this.objectCheckBox_CheckedChanged);
             // 
             // graphCheckBox
             // 
@@ -507,6 +524,15 @@
             this.partGroupBox.TabStop = false;
             this.partGroupBox.Text = "Particle size";
             // 
+            // partLabel
+            // 
+            this.partLabel.AutoSize = true;
+            this.partLabel.Location = new System.Drawing.Point(251, 35);
+            this.partLabel.Name = "partLabel";
+            this.partLabel.Size = new System.Drawing.Size(28, 13);
+            this.partLabel.TabIndex = 1;
+            this.partLabel.Text = "0.04";
+            // 
             // partBar
             // 
             this.partBar.Location = new System.Drawing.Point(10, 19);
@@ -517,6 +543,7 @@
             this.partBar.Value = 40;
             this.partBar.Scroll += new System.EventHandler(this.partBar_Scroll);
             // 
+
             // partLabel
             // 
             this.partLabel.AutoSize = true;
@@ -623,6 +650,7 @@
         private System.Windows.Forms.Label partLabel;
         private System.Windows.Forms.TrackBar partBar;
         private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.CheckBox objectCheckBox;
     }
 }
 
