@@ -67,6 +67,7 @@
             this.fadeDistTrackBar = new System.Windows.Forms.TrackBar();
             this.fadeDistGroupBox = new System.Windows.Forms.GroupBox();
             this.fadeDist = new System.Windows.Forms.Label();
+            this.infoButton = new System.Windows.Forms.Button();
             this.networkGroupBox.SuspendLayout();
             this.forceGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zTrackBar)).BeginInit();
@@ -106,9 +107,9 @@
             this.networkGroupBox.Controls.Add(this.adress);
             this.networkGroupBox.Controls.Add(this.ipTextBox);
             this.networkGroupBox.Controls.Add(this.connectButton);
-            this.networkGroupBox.Location = new System.Drawing.Point(12, 12);
+            this.networkGroupBox.Location = new System.Drawing.Point(12, 0);
             this.networkGroupBox.Name = "networkGroupBox";
-            this.networkGroupBox.Size = new System.Drawing.Size(292, 49);
+            this.networkGroupBox.Size = new System.Drawing.Size(292, 61);
             this.networkGroupBox.TabIndex = 2;
             this.networkGroupBox.TabStop = false;
             this.networkGroupBox.Text = "Network";
@@ -133,7 +134,7 @@
             this.forceGroupBox.Controls.Add(this.xForce);
             this.forceGroupBox.Controls.Add(this.xLabel);
             this.forceGroupBox.Controls.Add(this.xTrackBar);
-            this.forceGroupBox.Location = new System.Drawing.Point(326, 67);
+            this.forceGroupBox.Location = new System.Drawing.Point(326, 0);
             this.forceGroupBox.Name = "forceGroupBox";
             this.forceGroupBox.Size = new System.Drawing.Size(292, 151);
             this.forceGroupBox.TabIndex = 4;
@@ -254,7 +255,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusMessage,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 371);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 305);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(640, 22);
             this.statusStrip1.TabIndex = 5;
@@ -274,7 +275,7 @@
             this.fieldGroupBox.Controls.Add(this.gravityButton);
             this.fieldGroupBox.Controls.Add(this.vortexRadio);
             this.fieldGroupBox.Controls.Add(this.windRadio);
-            this.fieldGroupBox.Location = new System.Drawing.Point(326, 0);
+            this.fieldGroupBox.Location = new System.Drawing.Point(12, 211);
             this.fieldGroupBox.Name = "fieldGroupBox";
             this.fieldGroupBox.Size = new System.Drawing.Size(292, 61);
             this.fieldGroupBox.TabIndex = 6;
@@ -326,7 +327,7 @@
             this.gravityGroupBox.Controls.Add(this.gravityTrackBar);
             this.gravityGroupBox.Controls.Add(this.gravityForce);
             this.gravityGroupBox.Controls.Add(this.gravity);
-            this.gravityGroupBox.Location = new System.Drawing.Point(326, 298);
+            this.gravityGroupBox.Location = new System.Drawing.Point(326, 232);
             this.gravityGroupBox.Name = "gravityGroupBox";
             this.gravityGroupBox.Size = new System.Drawing.Size(292, 70);
             this.gravityGroupBox.TabIndex = 7;
@@ -341,7 +342,7 @@
             this.propertiesGroupBox.Controls.Add(this.xPosLabel);
             this.propertiesGroupBox.Controls.Add(this.radiusLabel);
             this.propertiesGroupBox.Controls.Add(this.radiusTextBox);
-            this.propertiesGroupBox.Location = new System.Drawing.Point(326, 224);
+            this.propertiesGroupBox.Location = new System.Drawing.Point(326, 157);
             this.propertiesGroupBox.Name = "propertiesGroupBox";
             this.propertiesGroupBox.Size = new System.Drawing.Size(292, 68);
             this.propertiesGroupBox.TabIndex = 8;
@@ -401,7 +402,7 @@
             // 
             // pausButton
             // 
-            this.pausButton.Location = new System.Drawing.Point(187, 19);
+            this.pausButton.Location = new System.Drawing.Point(234, 19);
             this.pausButton.Name = "pausButton";
             this.pausButton.Size = new System.Drawing.Size(48, 23);
             this.pausButton.TabIndex = 9;
@@ -411,10 +412,11 @@
             // 
             // programGroupBox
             // 
+            this.programGroupBox.Controls.Add(this.infoButton);
             this.programGroupBox.Controls.Add(this.graphCheckBox);
             this.programGroupBox.Controls.Add(this.statsCheckBox);
             this.programGroupBox.Controls.Add(this.pausButton);
-            this.programGroupBox.Location = new System.Drawing.Point(12, 74);
+            this.programGroupBox.Location = new System.Drawing.Point(12, 67);
             this.programGroupBox.Name = "programGroupBox";
             this.programGroupBox.Size = new System.Drawing.Size(292, 55);
             this.programGroupBox.TabIndex = 10;
@@ -425,7 +427,7 @@
             // 
             this.graphCheckBox.AutoSize = true;
             this.graphCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.graphCheckBox.Location = new System.Drawing.Point(92, 23);
+            this.graphCheckBox.Location = new System.Drawing.Point(65, 23);
             this.graphCheckBox.Name = "graphCheckBox";
             this.graphCheckBox.Size = new System.Drawing.Size(55, 17);
             this.graphCheckBox.TabIndex = 11;
@@ -437,7 +439,7 @@
             // 
             this.statsCheckBox.AutoSize = true;
             this.statsCheckBox.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.statsCheckBox.Location = new System.Drawing.Point(17, 23);
+            this.statsCheckBox.Location = new System.Drawing.Point(6, 23);
             this.statsCheckBox.Name = "statsCheckBox";
             this.statsCheckBox.Size = new System.Drawing.Size(50, 17);
             this.statsCheckBox.TabIndex = 10;
@@ -477,11 +479,21 @@
             this.fadeDist.TabIndex = 12;
             this.fadeDist.Text = "4.0";
             // 
+            // infoButton
+            // 
+            this.infoButton.Location = new System.Drawing.Point(155, 19);
+            this.infoButton.Name = "infoButton";
+            this.infoButton.Size = new System.Drawing.Size(60, 23);
+            this.infoButton.TabIndex = 12;
+            this.infoButton.Text = "Print info";
+            this.infoButton.UseVisualStyleBackColor = true;
+            this.infoButton.Click += new System.EventHandler(this.infoButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 393);
+            this.ClientSize = new System.Drawing.Size(640, 327);
             this.Controls.Add(this.fadeDistGroupBox);
             this.Controls.Add(this.programGroupBox);
             this.Controls.Add(this.propertiesGroupBox);
@@ -559,6 +571,7 @@
         private System.Windows.Forms.TrackBar fadeDistTrackBar;
         private System.Windows.Forms.GroupBox fadeDistGroupBox;
         private System.Windows.Forms.Label fadeDist;
+        private System.Windows.Forms.Button infoButton;
     }
 }
 
