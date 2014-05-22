@@ -106,7 +106,7 @@ namespace snowCozyGUI
                 this.posZTextBox.Text = mClient.vortexPosZ;
 
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradi=1\r\nfade=40\r\npart=2500\r\ninfo=0");
+                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradi=1\r\nfade=40\r\npart=40\r\ninfo=0");
             }
             else
             {
@@ -377,6 +377,19 @@ namespace snowCozyGUI
         {
             this.statusMessage.Text = "Printing info";
             mClient.connection.Send("info=1");
+        }
+
+        private void partBar_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tBar = (TrackBar)sender;
+            float tempInt = tBar.Value * 0.001f;
+            this.partLabel.Text = tempInt.ToString();
+
+            if (mClient.connection.valid)
+            {
+                mClient.connection.Send("part=" + tBar.Value.ToString());
+                //System.Console.Write(tBar.Value.ToString());
+            }
         }
 
     }

@@ -62,12 +62,15 @@
             this.radiusTextBox = new System.Windows.Forms.TextBox();
             this.pausButton = new System.Windows.Forms.Button();
             this.programGroupBox = new System.Windows.Forms.GroupBox();
+            this.infoButton = new System.Windows.Forms.Button();
             this.graphCheckBox = new System.Windows.Forms.CheckBox();
             this.statsCheckBox = new System.Windows.Forms.CheckBox();
             this.fadeDistTrackBar = new System.Windows.Forms.TrackBar();
             this.fadeDistGroupBox = new System.Windows.Forms.GroupBox();
             this.fadeDist = new System.Windows.Forms.Label();
-            this.infoButton = new System.Windows.Forms.Button();
+            this.partGroupBox = new System.Windows.Forms.GroupBox();
+            this.partBar = new System.Windows.Forms.TrackBar();
+            this.partLabel = new System.Windows.Forms.Label();
             this.networkGroupBox.SuspendLayout();
             this.forceGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zTrackBar)).BeginInit();
@@ -81,6 +84,8 @@
             this.programGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fadeDistTrackBar)).BeginInit();
             this.fadeDistGroupBox.SuspendLayout();
+            this.partGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.partBar)).BeginInit();
             this.SuspendLayout();
             // 
             // connectButton
@@ -134,7 +139,7 @@
             this.forceGroupBox.Controls.Add(this.xForce);
             this.forceGroupBox.Controls.Add(this.xLabel);
             this.forceGroupBox.Controls.Add(this.xTrackBar);
-            this.forceGroupBox.Location = new System.Drawing.Point(326, 0);
+            this.forceGroupBox.Location = new System.Drawing.Point(326, 48);
             this.forceGroupBox.Name = "forceGroupBox";
             this.forceGroupBox.Size = new System.Drawing.Size(292, 151);
             this.forceGroupBox.TabIndex = 4;
@@ -255,7 +260,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusMessage,
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 305);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 356);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(640, 22);
             this.statusStrip1.TabIndex = 5;
@@ -275,7 +280,7 @@
             this.fieldGroupBox.Controls.Add(this.gravityButton);
             this.fieldGroupBox.Controls.Add(this.vortexRadio);
             this.fieldGroupBox.Controls.Add(this.windRadio);
-            this.fieldGroupBox.Location = new System.Drawing.Point(12, 211);
+            this.fieldGroupBox.Location = new System.Drawing.Point(12, 283);
             this.fieldGroupBox.Name = "fieldGroupBox";
             this.fieldGroupBox.Size = new System.Drawing.Size(292, 61);
             this.fieldGroupBox.TabIndex = 6;
@@ -327,7 +332,7 @@
             this.gravityGroupBox.Controls.Add(this.gravityTrackBar);
             this.gravityGroupBox.Controls.Add(this.gravityForce);
             this.gravityGroupBox.Controls.Add(this.gravity);
-            this.gravityGroupBox.Location = new System.Drawing.Point(326, 232);
+            this.gravityGroupBox.Location = new System.Drawing.Point(326, 283);
             this.gravityGroupBox.Name = "gravityGroupBox";
             this.gravityGroupBox.Size = new System.Drawing.Size(292, 70);
             this.gravityGroupBox.TabIndex = 7;
@@ -342,7 +347,7 @@
             this.propertiesGroupBox.Controls.Add(this.xPosLabel);
             this.propertiesGroupBox.Controls.Add(this.radiusLabel);
             this.propertiesGroupBox.Controls.Add(this.radiusTextBox);
-            this.propertiesGroupBox.Location = new System.Drawing.Point(326, 157);
+            this.propertiesGroupBox.Location = new System.Drawing.Point(326, 209);
             this.propertiesGroupBox.Name = "propertiesGroupBox";
             this.propertiesGroupBox.Size = new System.Drawing.Size(292, 68);
             this.propertiesGroupBox.TabIndex = 8;
@@ -423,6 +428,16 @@
             this.programGroupBox.TabStop = false;
             this.programGroupBox.Text = "Program";
             // 
+            // infoButton
+            // 
+            this.infoButton.Location = new System.Drawing.Point(155, 19);
+            this.infoButton.Name = "infoButton";
+            this.infoButton.Size = new System.Drawing.Size(60, 23);
+            this.infoButton.TabIndex = 12;
+            this.infoButton.Text = "Print info";
+            this.infoButton.UseVisualStyleBackColor = true;
+            this.infoButton.Click += new System.EventHandler(this.infoButton_Click);
+            // 
             // graphCheckBox
             // 
             this.graphCheckBox.AutoSize = true;
@@ -479,21 +494,42 @@
             this.fadeDist.TabIndex = 12;
             this.fadeDist.Text = "4.0";
             // 
-            // infoButton
+            // partGroupBox
             // 
-            this.infoButton.Location = new System.Drawing.Point(155, 19);
-            this.infoButton.Name = "infoButton";
-            this.infoButton.Size = new System.Drawing.Size(60, 23);
-            this.infoButton.TabIndex = 12;
-            this.infoButton.Text = "Print info";
-            this.infoButton.UseVisualStyleBackColor = true;
-            this.infoButton.Click += new System.EventHandler(this.infoButton_Click);
+            this.partGroupBox.Controls.Add(this.partLabel);
+            this.partGroupBox.Controls.Add(this.partBar);
+            this.partGroupBox.Location = new System.Drawing.Point(13, 209);
+            this.partGroupBox.Name = "partGroupBox";
+            this.partGroupBox.Size = new System.Drawing.Size(291, 68);
+            this.partGroupBox.TabIndex = 12;
+            this.partGroupBox.TabStop = false;
+            this.partGroupBox.Text = "Particle size";
+            // 
+            // partBar
+            // 
+            this.partBar.Location = new System.Drawing.Point(10, 19);
+            this.partBar.Maximum = 1000;
+            this.partBar.Name = "partBar";
+            this.partBar.Size = new System.Drawing.Size(243, 45);
+            this.partBar.TabIndex = 0;
+            this.partBar.Value = 40;
+            this.partBar.Scroll += new System.EventHandler(this.partBar_Scroll);
+            // 
+            // partLabel
+            // 
+            this.partLabel.AutoSize = true;
+            this.partLabel.Location = new System.Drawing.Point(251, 35);
+            this.partLabel.Name = "partLabel";
+            this.partLabel.Size = new System.Drawing.Size(28, 13);
+            this.partLabel.TabIndex = 1;
+            this.partLabel.Text = "0.04";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(640, 327);
+            this.ClientSize = new System.Drawing.Size(640, 378);
+            this.Controls.Add(this.partGroupBox);
             this.Controls.Add(this.fadeDistGroupBox);
             this.Controls.Add(this.programGroupBox);
             this.Controls.Add(this.propertiesGroupBox);
@@ -525,6 +561,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.fadeDistTrackBar)).EndInit();
             this.fadeDistGroupBox.ResumeLayout(false);
             this.fadeDistGroupBox.PerformLayout();
+            this.partGroupBox.ResumeLayout(false);
+            this.partGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.partBar)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -572,6 +611,9 @@
         private System.Windows.Forms.GroupBox fadeDistGroupBox;
         private System.Windows.Forms.Label fadeDist;
         private System.Windows.Forms.Button infoButton;
+        private System.Windows.Forms.GroupBox partGroupBox;
+        private System.Windows.Forms.Label partLabel;
+        private System.Windows.Forms.TrackBar partBar;
     }
 }
 
