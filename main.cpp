@@ -37,8 +37,8 @@ sgct::SharedFloat vortFactorY(0.0);
 sgct::SharedFloat vortFactorZ(0.0);
 sgct::SharedFloat gravFactor(-9.81);
 sgct::SharedFloat positionX(0.0);
-sgct::SharedFloat positionZ(0.0);
-sgct::SharedInt radius(0.0);
+sgct::SharedFloat positionZ(-1.0);
+sgct::SharedInt radius(1.0); 
 sgct::SharedFloat fadeDistance(20.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
@@ -315,6 +315,11 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			showStats.setVal(tmpVal);
 			gEngine->setStatsGraphVisibility(showStats.getVal());
 			
+		}
+
+		else if (size >= 6 && strncmp(receivedChars, "info", 4) == 0)
+		{
+			gParticles->printFields();
 		}
 	}
 }
