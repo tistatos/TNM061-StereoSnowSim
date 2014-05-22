@@ -38,6 +38,7 @@ sgct::SharedFloat fadeDistance(20.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
 sgct::SharedBool showGraph(false);
+sgct::SharedBool showObject(false);
 
 
 void initialize();
@@ -139,8 +140,13 @@ void draw()
 {
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
-	//road->draw();
-	//tree->draw();
+
+	if (showObject.getVal())
+	{
+		road->draw();
+		tree->draw();
+	}
+	
 	gParticles->move(delta);
 	gParticles->draw(delta);
 }
@@ -174,6 +180,7 @@ void myEncodeFun()
 	sgct::SharedData::instance()->writeBool(&sharedPause);
 	sgct::SharedData::instance()->writeBool(&showGraph);
 	sgct::SharedData::instance()->writeBool(&showStats);
+	sgct::SharedData::instance()->writeBool(&showObject);
 }
 
 //We need this to sync the variables trough the cluster
@@ -194,7 +201,8 @@ void myDecodeFun()
 	sgct::SharedData::instance()->readFloat(&fadeDistance);
 	sgct::SharedData::instance()->readBool(&sharedPause);
 	sgct::SharedData::instance()->readBool(&showGraph);
-	sgct::SharedData::instance()->readBool(&showStats);
+	sgct::SharedData::instance()->readBool(&showStats); 
+	sgct::SharedData::instance()->readBool(&showObject);
 }
 
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this? Currently set to false.
@@ -323,5 +331,14 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			float tmpVal = atof(receivedChars + 5);
 			particleSize.setVal(tmpVal);
 		}
+
+		else if (size >= 6 && strncmp(receivedChars, "obje", 4) == 0)
+		{
+			int tmpVal = atoi(receivedChars + 5);
+			showObject.setVal(tmpVal);
+			cout << showObject.getVal();
+		}
+
+
 	}
 }
