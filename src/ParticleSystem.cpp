@@ -422,7 +422,7 @@ void ParticleSystem::setAmount(int amount)
 	mParticlesAmount = (amount > MAX_PARTICLES ? MAX_PARTICLES : amount);
 }
 
-void ParticleSystem::setPaticleSize(float s)
+void ParticleSystem::setParticleSize(float s)
 {
 	mParticleSize = s;
 }

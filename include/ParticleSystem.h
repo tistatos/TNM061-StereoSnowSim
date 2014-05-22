@@ -36,7 +36,7 @@ public:
 	void setShader(string name, string vertFile, string fragFile);
 	void toggleDebug();
 	void setFadeDistance(float d);
-	void setPaticleSize(float s);
+	void setParticleSize(float s);
 	void enableFieldDebug();
 	void toggleFieldDebug();
 	void pauseControl(bool status);
