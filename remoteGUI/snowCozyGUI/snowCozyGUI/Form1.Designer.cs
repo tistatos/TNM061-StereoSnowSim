@@ -72,11 +72,8 @@
             this.fadeDist = new System.Windows.Forms.Label();
             this.partGroupBox = new System.Windows.Forms.GroupBox();
             this.partLabel = new System.Windows.Forms.Label();
-<<<<<<< HEAD
             this.timer = new System.Windows.Forms.Timer(this.components);
-=======
             this.partBar = new System.Windows.Forms.TrackBar();
->>>>>>> 4321884c7a369364fede7ce09596744923e5906e
             this.networkGroupBox.SuspendLayout();
             this.forceGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.zTrackBar)).BeginInit();
