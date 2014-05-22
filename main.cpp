@@ -29,18 +29,17 @@ bool gWireframe;
 int mParticlesAmount;
 
 sgct::SharedDouble curr_time(0.0);
-sgct::SharedDouble sizeFactorX(0.0);
-sgct::SharedDouble sizeFactorY(0.0);
-sgct::SharedDouble sizeFactorZ(0.0);
-sgct::SharedDouble vortFactorX(0.0);
-sgct::SharedDouble vortFactorY(0.0);
-sgct::SharedDouble vortFactorZ(0.0);
-sgct::SharedDouble gravFactor(-9.81);
-sgct::SharedDouble positionX(0.0);
-sgct::SharedDouble positionZ(0.0);
-sgct::SharedDouble radius(0.0);
-sgct::SharedInt particleAmount(2500);
-sgct::SharedDouble fadeDistance(20.0);
+sgct::SharedFloat sizeFactorX(0.0);
+sgct::SharedFloat sizeFactorY(0.0);
+sgct::SharedFloat sizeFactorZ(0.0);
+sgct::SharedFloat vortFactorX(0.0);
+sgct::SharedFloat vortFactorY(0.0);
+sgct::SharedFloat vortFactorZ(0.0);
+sgct::SharedFloat gravFactor(-9.81);
+sgct::SharedFloat positionX(0.0);
+sgct::SharedFloat positionZ(0.0);
+sgct::SharedInt radius(0.0);
+sgct::SharedFloat fadeDistance(20.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
 sgct::SharedBool showGraph(false);
@@ -150,9 +149,6 @@ void draw()
 	//tree->draw();
 	gParticles->move(delta);
 	gParticles->draw(delta);
-
-	//if(gEngine->isExternalControlConnected())
-	//	cout << "Connectad is very nice";
 }
 
 //Checking the time since the program started, not sure if we need this either.
@@ -165,43 +161,41 @@ void myPreSyncFun()
 		curr_time.setVal(sgct::Engine::getTime());
 	}
 }
-
+//We need this to sync the variables trough the cluster
 void myEncodeFun()
 {
 	sgct::SharedData::instance()->writeDouble(&curr_time);
- 	sgct::SharedData::instance()->writeDouble(&sizeFactorX);
- 	sgct::SharedData::instance()->writeDouble(&sizeFactorY);
- 	sgct::SharedData::instance()->writeDouble(&sizeFactorZ);
- 	sgct::SharedData::instance()->writeDouble(&vortFactorX);
- 	sgct::SharedData::instance()->writeDouble(&vortFactorY);
- 	sgct::SharedData::instance()->writeDouble(&vortFactorZ);
-	sgct::SharedData::instance()->writeDouble(&gravFactor);
- 	sgct::SharedData::instance()->writeDouble(&positionX);
- 	sgct::SharedData::instance()->writeDouble(&positionZ);
- 	sgct::SharedData::instance()->writeDouble(&radius);
- 	sgct::SharedData::instance()->writeDouble(&fadeDistance);
-	sgct::SharedData::instance()->writeInt(&particleAmount);
+ 	sgct::SharedData::instance()->writeFloat(&sizeFactorX);
+ 	sgct::SharedData::instance()->writeFloat(&sizeFactorY);
+ 	sgct::SharedData::instance()->writeFloat(&sizeFactorZ);
+ 	sgct::SharedData::instance()->writeFloat(&vortFactorX);
+ 	sgct::SharedData::instance()->writeFloat(&vortFactorY);
+ 	sgct::SharedData::instance()->writeFloat(&vortFactorZ);
+	sgct::SharedData::instance()->writeFloat(&gravFactor);
+ 	sgct::SharedData::instance()->writeFloat(&positionX);
+ 	sgct::SharedData::instance()->writeFloat(&positionZ);
+ 	sgct::SharedData::instance()->writeInt(&radius);
+ 	sgct::SharedData::instance()->writeFloat(&fadeDistance);
 	sgct::SharedData::instance()->writeBool(&sharedPause);
 	sgct::SharedData::instance()->writeBool(&showGraph);
 	sgct::SharedData::instance()->writeBool(&showStats);
 }
 
-
+//We need this to sync the variables trough the cluster
 void myDecodeFun()
 {
 	sgct::SharedData::instance()->readDouble(&curr_time);
-	sgct::SharedData::instance()->readDouble(&sizeFactorX);
-	sgct::SharedData::instance()->readDouble(&sizeFactorY);
-	sgct::SharedData::instance()->readDouble(&sizeFactorZ);
-	sgct::SharedData::instance()->readDouble(&vortFactorX);
-	sgct::SharedData::instance()->readDouble(&vortFactorY);
-	sgct::SharedData::instance()->readDouble(&vortFactorZ);
-	sgct::SharedData::instance()->readDouble(&gravFactor);
-	sgct::SharedData::instance()->readDouble(&positionX);
-	sgct::SharedData::instance()->readDouble(&positionZ);
-	sgct::SharedData::instance()->readDouble(&radius);
-	sgct::SharedData::instance()->readDouble(&fadeDistance);
-	sgct::SharedData::instance()->readInt(&particleAmount);
+	sgct::SharedData::instance()->readFloat(&sizeFactorX);
+	sgct::SharedData::instance()->readFloat(&sizeFactorY);
+	sgct::SharedData::instance()->readFloat(&sizeFactorZ);
+	sgct::SharedData::instance()->readFloat(&vortFactorX);
+	sgct::SharedData::instance()->readFloat(&vortFactorY);
+	sgct::SharedData::instance()->readFloat(&vortFactorZ);
+	sgct::SharedData::instance()->readFloat(&gravFactor);
+	sgct::SharedData::instance()->readFloat(&positionX);
+	sgct::SharedData::instance()->readFloat(&positionZ);
+	sgct::SharedData::instance()->readInt(&radius);
+	sgct::SharedData::instance()->readFloat(&fadeDistance);
 	sgct::SharedData::instance()->readBool(&sharedPause);
 	sgct::SharedData::instance()->readBool(&showGraph);
 	sgct::SharedData::instance()->readBool(&showStats);
@@ -218,7 +212,6 @@ void myPostSyncPreDrawFun()
 	gTurbine->setRadius(radius.getVal());
 	gGrav->init(gravFactor.getVal());
 	gParticles->setFadeDistance(fadeDistance.getVal()*0.1f);
-	//gParticles->setAmount(particleAmount.getVal());
 }
 
 //Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
@@ -322,17 +315,6 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			showStats.setVal(tmpVal);
 			gEngine->setStatsGraphVisibility(showStats.getVal());
 			
-		}
-
-		else if(size >= 6 && strncmp(receivedChars, "wire", 4) == 0)
-		{
-			//gWireframe = !gWireframe;
-		}
-
-		else if (size >= 6 && strncmp(receivedChars, "part", 4) == 0)
-		{
-			int tmpVal = atoi(receivedChars + 6);
-			particleAmount.setVal(tmpVal);
 		}
 	}
 }
