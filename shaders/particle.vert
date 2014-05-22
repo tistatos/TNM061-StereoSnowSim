@@ -15,7 +15,7 @@ out float life;
 void main()
 {
 	mat4 M = transformmatrix;
-	float particleSize = .05;
+	float particleSize = .5;
 	vec4 xyzs = transformmatrix[3];
 	vec3 particleCenter_wordspace = xyzs.xyz;
 	vec3 CameraRight_worldspace = vec3(1.0f,0.0,0.0);

@@ -137,7 +137,7 @@ void initialize()
 	road->scale(0.2f,0.2f,0.2f);
 	road->translate(0.0f, -2.0f, 5.0f);
 
-	tree->loadObj("objects/tree.obj","objects/tree.png");
+	tree->loadObj("objects/tree.obj", "objects/tree.png");
 	tree->scale(0.05f,0.05f,0.05f);
 	tree->translate(0.0f, -1.0f, -6.0f);
 }

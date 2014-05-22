@@ -11,6 +11,8 @@ struct Particle
 	float mSize; /// size of particle FIXME: this is hardcoded in shader atm
 	float mLife; /// life remaining of particle
 
+	bool mIsReset; /// wether or not the particle has been reset
+
 	glm::vec3 position() { return glm::vec3(mMatrix[3][0],mMatrix[3][1],mMatrix[3][2]);}
 
     bool operator<(const Particle& that) const
