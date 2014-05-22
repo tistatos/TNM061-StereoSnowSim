@@ -62,7 +62,7 @@ void Snow::reset(Particle& p)
 	}
 
 	float xval = getRandom(-10.0f, 10.0f);
-	float yval = mFirstDraw ? getRandom(0.0f, 25.0f) : getRandom(18.0f, 25.0f);
+	float yval = mFirstDraw ? getRandom(0.0f, 25.0f) : getRandom(15.0f, 25.0f);
 	float zval = getRandom(-10.0f, 10.0f);
 
  	p.mMatrix[3][0] = xval; // x
@@ -86,5 +86,4 @@ void Snow::reset(Particle& p)
 	p.mVelocity = glm::vec3(xval,yval,zval);
 	p.mIsReset = true;
 
-    p.mSize = 0.000025f; // FIXME the size is set in the shader atm
 }

@@ -9,13 +9,13 @@ out vec2 UV;
 out float camDistance;
 uniform mat4 VP; // Model-View-Projection matrix, but without the Model (the position is in BillboardPos; the orientation depends on the camera)
 uniform float fadeDistanceIn; //distance where particles should fade off
+uniform float particleSize;
 out float fadeDistance;
 out float life;
 
 void main()
 {
 	mat4 M = transformmatrix;
-	float particleSize = .5;
 	vec4 xyzs = transformmatrix[3];
 	vec3 particleCenter_wordspace = xyzs.xyz;
 	vec3 CameraRight_worldspace = vec3(1.0f,0.0,0.0);

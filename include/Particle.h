@@ -8,7 +8,6 @@ struct Particle
 	glm::vec3 mVelocity;
 
 	float mDistance; /// Distance from camera
-	float mSize; /// size of particle FIXME: this is hardcoded in shader atm
 	float mLife; /// life remaining of particle
 
 	bool mIsReset; /// wether or not the particle has been reset
