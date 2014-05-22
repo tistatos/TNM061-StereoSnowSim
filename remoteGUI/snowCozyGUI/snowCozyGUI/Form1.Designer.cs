@@ -538,6 +538,17 @@
             this.partBar.Value = 40;
             this.partBar.Scroll += new System.EventHandler(this.partBar_Scroll);
             // 
+
+            // partLabel
+            // 
+            this.partLabel.AutoSize = true;
+            this.partLabel.Location = new System.Drawing.Point(251, 35);
+            this.partLabel.Name = "partLabel";
+            this.partLabel.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.partLabel.Size = new System.Drawing.Size(28, 13);
+            this.partLabel.TabIndex = 1;
+            this.partLabel.Text = "0.04";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
