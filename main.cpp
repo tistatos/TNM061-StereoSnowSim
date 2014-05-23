@@ -18,6 +18,7 @@ Snow* gParticles;
 World* gWorld;
 Object* road;
 Object* tree;
+Object* gGround;
 Wind* gWind;
 Gravity* gGrav;
 Vortex* gTurbine;
@@ -38,7 +39,7 @@ sgct::SharedFloat vortFactorZ(0.0);
 sgct::SharedFloat gravFactor(-9.81);
 sgct::SharedFloat positionX(0.0);
 sgct::SharedFloat positionZ(-1.0);
-sgct::SharedInt radius(1.0); 
+sgct::SharedInt radius(1.0);
 sgct::SharedFloat fadeDistance(20.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
@@ -76,6 +77,7 @@ int main(int argc, char *argv[])
 	// add some nice objects
 	road = new Object(gEngine);
 	tree = new Object(gEngine);
+	gGround = new Object(gEngine);
 
 	// dem fields
 	gGrav = new Gravity();
@@ -134,18 +136,24 @@ void initialize()
 
 	road->loadObj("objects/road.obj", "objects/road.png");
 	road->scale(0.2f,0.2f,0.2f);
-	road->translate(0.0f, -2.0f, 5.0f);
+	road->translate(0.0f, -2.0f, -25.0f);
 
 	tree->loadObj("objects/tree.obj","objects/tree.png");
 	tree->scale(0.05f,0.05f,0.05f);
 	tree->translate(0.0f, -1.0f, -6.0f);
+
+	gGround->loadObj("objects/ground.obj", "objects/tree.png");
+	gGround->scale(0.2f,0.2f,0.2f);
+	gGround->translate(0.0f, -2.0f, -30.0f);
+
 }
 
 void draw()
 {
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
-	//road->draw();
+	gGround->draw();
+	road->draw();
 	//tree->draw();
 	gParticles->move(delta);
 	gParticles->draw(delta);
@@ -306,7 +314,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			int tmpVal = atoi(receivedChars + 6);
 			showGraph.setVal(tmpVal);
 			gEngine->setDisplayInfoVisibility(showGraph.getVal());
-			
+
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "stats", 5) == 0)
@@ -314,7 +322,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			int tmpVal = atoi(receivedChars + 6);
 			showStats.setVal(tmpVal);
 			gEngine->setStatsGraphVisibility(showStats.getVal());
-			
+
 		}
 
 		else if (size >= 6 && strncmp(receivedChars, "info", 4) == 0)

@@ -6,7 +6,7 @@ World::World(sgct::Engine* engine)
 	mEngine = engine;
 	mSphere = nullptr;
 	mMatrixLocation = -1;
-	mSize = 25;
+	mSize = 100;
 	mName = "sky";
 	mTextureFile = "img/skybox.png";
 }
