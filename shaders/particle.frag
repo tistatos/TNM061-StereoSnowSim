@@ -15,8 +15,8 @@ void main(){
 	color = texture(tex, UV.st);
 
 	float alpha = (life / 5.0)*color.a;
+	
 	alpha = smoothstep(fadeDistance/4.0, fadeDistance, alpha-(1-camDistance)) * alpha;
 
 	color.a = max(0, alpha);
-	// color = vec4(life);
 }

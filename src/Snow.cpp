@@ -62,7 +62,7 @@ void Snow::reset(Particle& p)
 	}
 
 	float xval = getRandom(-10.0f, 10.0f);
-	float yval = mFirstDraw ? getRandom(0.0f, 25.0f) : getRandom(10.0f, 25.0f);
+	float yval = mFirstDraw ? getRandom(0.0f, 25.0f) : getRandom(10.0f, 17.0f);
 	float zval = getRandom(-10.0f, 10.0f);
 
  	p.mMatrix[3][0] = xval; // x
