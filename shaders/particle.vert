@@ -16,7 +16,7 @@ out float life;
 void main()
 {
 	mat4 M = transformmatrix;
-		vec4 xyzs = transformmatrix[3];
+	vec4 xyzs = transformmatrix[3];
 	vec3 particleCenter_wordspace = xyzs.xyz;
 	vec3 CameraRight_worldspace = vec3(1.0f,0.0,0.0);
 	vec3 CameraUp_worldspace = vec3(0.0f,1.0f,0.0f);

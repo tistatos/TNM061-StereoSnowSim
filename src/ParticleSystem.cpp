@@ -318,6 +318,23 @@ void ParticleSystem::move(double delta)
 			// get ref to current particle
 			Particle& p = mParticles[i];
 
+			// when the particle is grown up, flip mIsReset to false, so that
+			// it's life decreases instead of increases
+			if(p.mIsReset && p.mLife >= 5.0f)
+			{
+				// std::cout << "Particle is dying." << std::endl;
+				p.mIsReset = false;
+			}
+
+			if(p.mIsReset)
+			{
+				increaseLife(p, delta);
+			}
+			else
+			{
+				calculateLife(p, delta);
+			}
+
 			if(p.mLife > 0.0f)
 			{
 				glm::vec3 tempVelo;
@@ -327,22 +344,22 @@ void ParticleSystem::move(double delta)
 					tempVelo += (*f)->getVelocity(delta, p);
 				}
 
-
 				p.mVelocity = tempVelo;
 
-				calculateLife(p, delta);
 				// apply the velocity
 				glm::mat4 tran = glm::translate(glm::mat4(1.0f), p.mVelocity*(float)delta);
 				//glm::mat4 rot =  glm::rotate( glm::mat4(1.0f), static_cast<float>(delta) * 10, glm::vec3(0.5f, 1.0f, 0.0f));
 				p.mMatrix = tran * p.mMatrix;
 
 				//distance is positions magnitude since camera is in the
-				p.mDistance = glm::dot(p.position(),p.position());
-
+				p.mDistance = glm::dot(p.position(), p.position());
 			}
 			else
 			{
-				reset(p); // reset particle
+				if(!p.mIsReset)
+				{
+					reset(p); // reset particle
+				}
 			}
 		}
 	}
@@ -353,7 +370,6 @@ void ParticleSystem::calculateLife(Particle& p, double delta)
 {
 	p.mLife -= delta;
 }
-
 
 /**
  * reset the particle at index index
@@ -422,7 +438,7 @@ void ParticleSystem::setAmount(int amount)
 	mParticlesAmount = (amount > MAX_PARTICLES ? MAX_PARTICLES : amount);
 }
 
-void ParticleSystem::setPaticleSize(float s)
+void ParticleSystem::setParticleSize(float s)
 {
 	mParticleSize = s;
 }

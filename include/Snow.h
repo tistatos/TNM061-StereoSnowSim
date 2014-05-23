@@ -23,6 +23,7 @@ public:
 	void destroy();
 private:
 	void calculateLife(Particle& p, double delta);
+	void increaseLife(Particle& p, double delta);
 
 };
 

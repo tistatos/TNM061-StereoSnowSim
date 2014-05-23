@@ -23,12 +23,6 @@ Wind* gWind;
 Gravity* gGrav;
 Vortex* gTurbine;
 
-bool gDisplayInfo;
-bool gStatsGraph;
-bool gWireframe;
-
-int mParticlesAmount;
-
 sgct::SharedDouble curr_time(0.0);
 sgct::SharedFloat sizeFactorX(0.0);
 sgct::SharedFloat sizeFactorY(0.0);
@@ -40,10 +34,12 @@ sgct::SharedFloat gravFactor(-9.81);
 sgct::SharedFloat positionX(0.0);
 sgct::SharedFloat positionZ(-1.0);
 sgct::SharedInt radius(1.0);
+sgct::SharedFloat particleSize(40.0);
 sgct::SharedFloat fadeDistance(20.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
 sgct::SharedBool showGraph(false);
+sgct::SharedBool showObject(false);
 
 
 void initialize();
@@ -85,7 +81,6 @@ int main(int argc, char *argv[])
 	gParticles->addField(gGrav);
 
 	gWind = new Wind();
-
 	gWind->setAcceleration(getRandom(-0.05, 0.05), 0.0f, getRandom(-0.05, 0.05));
 	gParticles->addField(gWind);
 
@@ -138,7 +133,7 @@ void initialize()
 	road->scale(0.2f,0.2f,0.2f);
 	road->translate(0.0f, -2.0f, -25.0f);
 
-	tree->loadObj("objects/tree.obj","objects/tree.png");
+	tree->loadObj("objects/tree.obj", "objects/tree.png");
 	tree->scale(0.05f,0.05f,0.05f);
 	tree->translate(0.0f, -1.0f, -6.0f);
 
@@ -152,9 +147,14 @@ void draw()
 {
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
-	gGround->draw();
-	road->draw();
-	//tree->draw();
+
+	if (showObject.getVal())
+	{
+		road->draw();
+		gGround->draw();
+		tree->draw();
+	}
+
 	gParticles->move(delta);
 	gParticles->draw(delta);
 }
@@ -182,11 +182,13 @@ void myEncodeFun()
 	sgct::SharedData::instance()->writeFloat(&gravFactor);
  	sgct::SharedData::instance()->writeFloat(&positionX);
  	sgct::SharedData::instance()->writeFloat(&positionZ);
+	sgct::SharedData::instance()->writeFloat(&particleSize);
  	sgct::SharedData::instance()->writeInt(&radius);
  	sgct::SharedData::instance()->writeFloat(&fadeDistance);
 	sgct::SharedData::instance()->writeBool(&sharedPause);
 	sgct::SharedData::instance()->writeBool(&showGraph);
 	sgct::SharedData::instance()->writeBool(&showStats);
+	sgct::SharedData::instance()->writeBool(&showObject);
 }
 
 //We need this to sync the variables trough the cluster
@@ -202,17 +204,18 @@ void myDecodeFun()
 	sgct::SharedData::instance()->readFloat(&gravFactor);
 	sgct::SharedData::instance()->readFloat(&positionX);
 	sgct::SharedData::instance()->readFloat(&positionZ);
+	sgct::SharedData::instance()->readFloat(&particleSize);
 	sgct::SharedData::instance()->readInt(&radius);
 	sgct::SharedData::instance()->readFloat(&fadeDistance);
 	sgct::SharedData::instance()->readBool(&sharedPause);
 	sgct::SharedData::instance()->readBool(&showGraph);
 	sgct::SharedData::instance()->readBool(&showStats);
+	sgct::SharedData::instance()->readBool(&showObject);
 }
 
 //Shows stats and graph depending on if the variables are true or not. Dont know if we need this? Currently set to false.
 void myPostSyncPreDrawFun()
 {
-	gEngine->setWireframe(gWireframe);
 	gParticles->pauseControl(sharedPause.getVal());
 	gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
 	gTurbine->setForce((vortFactorX.getVal()*0.1f), (vortFactorY.getVal()*0.1f), (vortFactorZ.getVal()*0.1f));
@@ -220,6 +223,7 @@ void myPostSyncPreDrawFun()
 	gTurbine->setRadius(radius.getVal());
 	gGrav->init(gravFactor.getVal());
 	gParticles->setFadeDistance(fadeDistance.getVal()*0.1f);
+	gParticles->setParticleSize(particleSize.getVal()*0.001f);
 }
 
 //Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
@@ -309,7 +313,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 			fadeDistance.setVal(tmpVal);
 		}
 
-		else if(size >= 6 && strncmp(receivedChars, "graph", 5) == 0)
+		else if(size >= 6 && strncmp(receivedChars, "stats", 5) == 0)
 		{
 			int tmpVal = atoi(receivedChars + 6);
 			showGraph.setVal(tmpVal);
@@ -317,7 +321,7 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 
 		}
 
-		else if(size >= 6 && strncmp(receivedChars, "stats", 5) == 0)
+		else if(size >= 6 && strncmp(receivedChars, "graph", 5) == 0)
 		{
 			int tmpVal = atoi(receivedChars + 6);
 			showStats.setVal(tmpVal);
@@ -329,5 +333,20 @@ void externalControlCallback(const char * receivedChars, int size, int clientId)
 		{
 			gParticles->printFields();
 		}
+
+		else if (size >= 6 && strncmp(receivedChars, "part", 4) == 0)
+		{
+			float tmpVal = atof(receivedChars + 5);
+			particleSize.setVal(tmpVal);
+		}
+
+		else if (size >= 6 && strncmp(receivedChars, "obje", 4) == 0)
+		{
+			int tmpVal = atoi(receivedChars + 5);
+			showObject.setVal(tmpVal);
+			cout << showObject.getVal();
+		}
+
+
 	}
 }

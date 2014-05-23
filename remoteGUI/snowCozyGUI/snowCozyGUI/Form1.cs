@@ -19,9 +19,15 @@ namespace snowCozyGUI
         public string windX;
         public string windY;
         public string windZ;
-        public string vortexX;
-        public string vortexY;
-        public string vortexZ;
+        public string vortexXBeg;
+        public string vortexYBeg;
+        public string vortexZBeg;
+        public int vortexX;
+        public int vortexY;
+        public int vortexZ;
+        public string vortexXEnd;
+        public string vortexYEnd;
+        public string vortexZEnd;
         public string vortexRadius;
         public string vortexPosX;
         public string vortexPosZ;
@@ -88,13 +94,20 @@ namespace snowCozyGUI
                 this.fieldGroupBox.Enabled = true;
                 this.programGroupBox.Enabled = true;
                 this.fadeDistGroupBox.Enabled = true;
+                this.partGroupBox.Enabled = true;
 
                 mClient.windX = "0";
                 mClient.windY = "0";
                 mClient.windZ = "0";
-                mClient.vortexX = "0";
-                mClient.vortexY = "0";
-                mClient.vortexZ = "0";
+                mClient.vortexXBeg = "0";
+                mClient.vortexYBeg = "0";
+                mClient.vortexZBeg = "0";
+                mClient.vortexXEnd = "0";
+                mClient.vortexYEnd = "0";
+                mClient.vortexZEnd = "0";
+                mClient.vortexX = 0;
+                mClient.vortexY = 0;
+                mClient.vortexZ = 0;
                 mClient.vortexRadius = "1";
                 mClient.vortexPosX = "0";
                 mClient.vortexPosZ = "-1";
@@ -106,7 +119,7 @@ namespace snowCozyGUI
                 this.posZTextBox.Text = mClient.vortexPosZ;
 
                 //send defaults
-                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradi=1\r\nfade=40\r\npart=2500\r\ninfo=0");
+                mClient.connection.Send("stats=0\r\ngraph=0\r\nwinX=0\r\nwinY=0\r\nwinZ=0\r\ngrav=10\r\nvorX=0\r\nvorY=0\r\nvorZ=0\r\npaus=0\r\nradi=1\r\nfade=40\r\npart=40\r\ninfo=0\r\nobje=0");
             }
             else
             {
@@ -120,6 +133,7 @@ namespace snowCozyGUI
             this.connectButton.Text = "Connect";
             this.statusMessage.Text = "Disconnected";
             this.pausButton.Text = "Pause";
+
 
             if (mClient.connection != null)
             {
@@ -138,9 +152,11 @@ namespace snowCozyGUI
             this.propertiesGroupBox.Enabled = status;
             this.programGroupBox.Enabled = status;
             this.fadeDistGroupBox.Enabled = status;
+            this.partGroupBox.Enabled = status;
             this.windRadio.Checked = status;
             this.vortexRadio.Checked = status;
             this.gravityButton.Checked = status;
+            this.timer.Enabled = status;
         }
 
         private void xTrackBar_Scroll(object sender, EventArgs e)
@@ -150,19 +166,15 @@ namespace snowCozyGUI
 
             if (mClient.connection.valid)
             {
-                //System.Console.Write(mClient.choice);
-
                 if (mClient.choice == 0)
                 {
                     mClient.windX = tBar.Value.ToString();
                     mClient.connection.Send("winX=" + mClient.windX);
-                    //System.Console.Write(tBar.Value.ToString());
                 }
                 else if (mClient.choice == 1)
                 {
-                    mClient.vortexX = tBar.Value.ToString();
-                    mClient.connection.Send("vorX=" + mClient.vortexX);
-                    //System.Console.Write(tBar.Value.ToString());
+                    mClient.vortexXEnd = tBar.Value.ToString();
+                    mClient.vortexX = Int32.Parse(mClient.vortexXBeg);
                 }
             }
         }
@@ -178,15 +190,12 @@ namespace snowCozyGUI
                 {
                     mClient.windY = tBar.Value.ToString();
                     mClient.connection.Send("winY=" + mClient.windY);
-                    //System.Console.Write(tBar.Value.ToString());
                 }
                 else if (mClient.choice == 1)
                 {
-                    mClient.vortexY = tBar.Value.ToString();
-                    mClient.connection.Send("vorY=" + mClient.vortexY);
-                    //System.Console.Write(tBar.Value.ToString());
+                    mClient.vortexYEnd = tBar.Value.ToString();
+                    mClient.vortexY = Int32.Parse(mClient.vortexYBeg);
                 }
-                //System.Console.Write(tYBar.Value.ToString());
             }
         }
 
@@ -205,9 +214,8 @@ namespace snowCozyGUI
                 }
                 else if (mClient.choice == 1)
                 {
-                    mClient.vortexZ = tBar.Value.ToString();
-                    mClient.connection.Send("vorZ=" + mClient.vortexZ);
-                    //System.Console.Write(tBar.Value.ToString());
+                    mClient.vortexZEnd = tBar.Value.ToString();
+                    mClient.vortexZ = Int32.Parse(mClient.vortexZBeg);
                 }
             }
         }
@@ -254,13 +262,14 @@ namespace snowCozyGUI
             if (rButt.Checked)
             {
                 mClient.choice = 1;
+                this.timer.Enabled = true;
 
-                this.xTrackBar.Value = Convert.ToInt32(mClient.vortexX);
-                this.xForce.Text = mClient.vortexX;
-                this.yTrackBar.Value = Convert.ToInt32(mClient.vortexY);
-                this.yForce.Text = mClient.vortexY;
-                this.zTrackBar.Value = Convert.ToInt32(mClient.vortexZ);
-                this.zForce.Text = mClient.vortexZ;
+                this.xTrackBar.Value = Convert.ToInt32(mClient.vortexXEnd);
+                this.xForce.Text = mClient.vortexXBeg;
+                this.yTrackBar.Value = Convert.ToInt32(mClient.vortexYEnd);
+                this.yForce.Text = mClient.vortexYBeg;
+                this.zTrackBar.Value = Convert.ToInt32(mClient.vortexZEnd);
+                this.zForce.Text = mClient.vortexZBeg;
 
                 this.forceGroupBox.Enabled = true;
                 this.propertiesGroupBox.Enabled = true;
@@ -377,6 +386,68 @@ namespace snowCozyGUI
         {
             this.statusMessage.Text = "Printing info";
             mClient.connection.Send("info=1");
+        }
+
+        private void partBar_Scroll(object sender, EventArgs e)
+        {
+            TrackBar tBar = (TrackBar)sender;
+            float tempInt = tBar.Value * 0.001f;
+            this.partLabel.Text = tempInt.ToString();
+
+            if (mClient.connection.valid)
+            {
+                mClient.connection.Send("part=" + tBar.Value.ToString());
+                //System.Console.Write(tBar.Value.ToString());
+            }
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            mClient.connection.Send("vorX=" + mClient.vortexX.ToString());
+            mClient.connection.Send("vorY=" + mClient.vortexX.ToString());
+            mClient.connection.Send("vorZ=" + mClient.vortexX.ToString());
+
+            if (mClient.vortexX.ToString() == mClient.vortexXEnd)
+            {
+                mClient.vortexXBeg = mClient.vortexXEnd;
+            }
+            else if(mClient.vortexX.ToString() != mClient.vortexXEnd)
+            {
+                mClient.vortexX++;
+            }
+            else if (mClient.vortexY.ToString() == mClient.vortexYEnd)
+            {
+                mClient.vortexYBeg = mClient.vortexYEnd;
+            }
+            else if(mClient.vortexY.ToString() != mClient.vortexYEnd)
+            {
+                mClient.vortexY++;
+            }
+            if (mClient.vortexZ.ToString() == mClient.vortexZEnd)
+            {
+                mClient.vortexZBeg = mClient.vortexZEnd;
+            }
+            else if(mClient.vortexZ.ToString() != mClient.vortexZEnd)
+            {
+                mClient.vortexZ++;
+            }
+        }
+
+        private void objectCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (mClient.connection.valid)
+            {
+                CheckBox cb = (CheckBox)sender;
+
+                if (cb.Checked)
+                {
+                    mClient.connection.Send("obje=1");
+                }
+                else
+                {
+                    mClient.connection.Send("obje=0");
+                }
+            }
         }
 
     }
