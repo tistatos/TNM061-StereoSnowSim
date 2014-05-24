@@ -41,11 +41,6 @@ void World::initializeWorld()
 	createSkyBox();
 	loadTexture();
 
-	//set up backface culling
-	glCullFace(GL_BACK);
-	//define frontfacing polygons
-	glFrontFace(GL_CW);
-
 	//add shaders
 	sgct::ShaderManager::instance()->addShaderProgram("world", "shaders/World.vert", "shaders/World.frag");
 
@@ -60,9 +55,10 @@ void World::initializeWorld()
 void World::drawWorld()
 {
 	//do depth comparisons and pdate the depth buffer
-	glEnable(GL_DEPTH_TEST);
 	//cull polygons not shown in window
 	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+
 	glFrontFace(GL_CW);
 
 	//create a scene matrix incase we want movement
@@ -83,7 +79,6 @@ void World::drawWorld()
 
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
-	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 }
 
