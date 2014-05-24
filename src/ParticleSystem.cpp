@@ -37,7 +37,13 @@ bool ParticleSystem::initialize()
 {
 	// initialize debug field
 	mDebugField->init();
+	for (int i = 0; i < mParticlesAmount; ++i)
+	{
+		mParticles[i].mLife = 0.0f;
+		mParticles[i].mDistance = 1000.0f;
+		mParticles[i].mIsReset = false;
 
+	}
 	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
 	{
