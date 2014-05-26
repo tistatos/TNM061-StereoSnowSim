@@ -22,7 +22,8 @@ Object* gGround;
 Wind* gWind;
 Gravity* gGrav;
 Vortex* gTurbine;
-double gPrevtime;
+
+
 
 sgct::SharedDouble curr_time(0.0);
 sgct::SharedFloat sizeFactorX(0.0);
@@ -117,7 +118,6 @@ int main(int argc, char *argv[])
 	delete gWorld;
 	delete gWind;
 	delete gTurbine;
-	gPrevtime = 0.0;
 	exit(EXIT_SUCCESS);
 }
 
@@ -146,6 +146,8 @@ void initialize()
 
 void draw()
 {
+	glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
 
@@ -158,7 +160,8 @@ void draw()
 
 	gParticles->move(delta);
 	gParticles->draw(delta);
-	gPrevtime = curr_time.getVal();
+	glDisable(GL_DEPTH_TEST);
+
 }
 
 //Checking the time since the program started, not sure if we need this either.
