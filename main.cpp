@@ -23,6 +23,8 @@ Wind* gWind;
 Gravity* gGrav;
 Vortex* gTurbine;
 
+
+
 sgct::SharedDouble curr_time(0.0);
 sgct::SharedFloat sizeFactorX(0.0);
 sgct::SharedFloat sizeFactorY(0.0);
@@ -30,11 +32,11 @@ sgct::SharedFloat sizeFactorZ(0.0);
 sgct::SharedFloat vortFactorX(0.0);
 sgct::SharedFloat vortFactorY(0.0);
 sgct::SharedFloat vortFactorZ(0.0);
-sgct::SharedFloat gravFactor(-9.81);
+sgct::SharedFloat gravFactor(-400.81);
 sgct::SharedFloat positionX(0.0);
 sgct::SharedFloat positionZ(-1.0);
 sgct::SharedInt radius(1.0);
-sgct::SharedFloat particleSize(40.0);
+sgct::SharedFloat particleSize(900.0);
 sgct::SharedFloat fadeDistance(20.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
@@ -116,7 +118,6 @@ int main(int argc, char *argv[])
 	delete gWorld;
 	delete gWind;
 	delete gTurbine;
-
 	exit(EXIT_SUCCESS);
 }
 
@@ -150,7 +151,7 @@ void draw()
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
 
-	//if (showObject.getVal())
+	if (showObject.getVal())
 	{
 		road->draw();
 		gGround->draw();
