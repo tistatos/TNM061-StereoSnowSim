@@ -175,10 +175,6 @@ void Object::loadObj(char* filename, string texture)
         cout << "Mesh read error. No mesh data generated";
 		return;
 	}
-	// Enable depth test
-    glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
 
 	// Generate one vertex array object (VAO) and bind it
 	glGenVertexArrays(1, &vertexArrayObject);
@@ -256,11 +252,6 @@ void Object::loadObj(char* filename, string texture)
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
-	// Enable depth test
-    glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
-
 	return;
 }
 
@@ -285,8 +276,6 @@ void Object::rotate(float ang, float rx, float ry, float rz)
 
 void Object::draw()
 {
-	//do depth comparisons and pdate the depth buffer
-	glEnable(GL_DEPTH_TEST);
 	//cull polygons not shown in window
 	glEnable(GL_CULL_FACE);
 	//Draws in other direction
@@ -313,7 +302,6 @@ void Object::draw()
 
 	sgct::ShaderManager::instance()->unBindShaderProgram();
 
-	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_CULL_FACE);
 }
 

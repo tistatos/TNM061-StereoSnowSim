@@ -53,11 +53,6 @@ bool ParticleSystem::initialize()
 		1.0f, 1.0f, 0.0f,
 	};
 
-	// Enable depth test
-    glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
-
     //Fix buffers
 	glGenVertexArrays(1, &mVertexArray);
 	glBindVertexArray(mVertexArray);
@@ -103,11 +98,6 @@ bool ParticleSystem::initialize()
 
 	//Unbind shader
 	sgct::ShaderManager::instance()->unBindShaderProgram();
-
-	// Enable depth test
-    glEnable(GL_DEPTH_TEST);
-    // Accept fragment if it closer to the camera than the former one
-    glDepthFunc(GL_LESS);
 
     //Particle shader is now initialized
 	mInitialized = true;

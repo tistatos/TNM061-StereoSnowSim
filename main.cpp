@@ -145,10 +145,12 @@ void initialize()
 
 void draw()
 {
+	glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
 	double delta = gEngine->getDt();
 	gWorld->drawWorld();
 
-	if (showObject.getVal())
+	//if (showObject.getVal())
 	{
 		road->draw();
 		gGround->draw();
@@ -157,6 +159,8 @@ void draw()
 
 	gParticles->move(delta);
 	gParticles->draw(delta);
+	glDisable(GL_DEPTH_TEST);
+
 }
 
 //Checking the time since the program started, not sure if we need this either.
