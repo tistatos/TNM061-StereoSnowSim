@@ -11,7 +11,7 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mInitialized = false;
 	mPaused = false;
 
-	setAmount(2500);
+	setAmount(10);
 
 	mDebugField = new DebugField(engine);
 

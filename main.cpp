@@ -22,6 +22,7 @@ Object* gGround;
 Wind* gWind;
 Gravity* gGrav;
 Vortex* gTurbine;
+double gPrevtime;
 
 sgct::SharedDouble curr_time(0.0);
 sgct::SharedFloat sizeFactorX(0.0);
@@ -30,11 +31,11 @@ sgct::SharedFloat sizeFactorZ(0.0);
 sgct::SharedFloat vortFactorX(0.0);
 sgct::SharedFloat vortFactorY(0.0);
 sgct::SharedFloat vortFactorZ(0.0);
-sgct::SharedFloat gravFactor(-9.81);
+sgct::SharedFloat gravFactor(-400.81);
 sgct::SharedFloat positionX(0.0);
 sgct::SharedFloat positionZ(-1.0);
 sgct::SharedInt radius(1.0);
-sgct::SharedFloat particleSize(40.0);
+sgct::SharedFloat particleSize(900.0);
 sgct::SharedFloat fadeDistance(20.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
@@ -116,7 +117,7 @@ int main(int argc, char *argv[])
 	delete gWorld;
 	delete gWind;
 	delete gTurbine;
-
+	gPrevtime = 0.0;
 	exit(EXIT_SUCCESS);
 }
 
@@ -157,6 +158,7 @@ void draw()
 
 	gParticles->move(delta);
 	gParticles->draw(delta);
+	gPrevtime = curr_time.getVal();
 }
 
 //Checking the time since the program started, not sure if we need this either.
