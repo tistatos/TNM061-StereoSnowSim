@@ -82,7 +82,7 @@ bool ParticleSystem::initialize()
 	//add texture for snowflake
 	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
 	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
-	sgct::TextureManager::instance()->loadTexure(handle, mTexture.mTextureName, mTexture.mTextureFile, true);
+	sgct::TextureManager::instance()->loadTexure(mTexture.mTextureName, mTexture.mTextureFile, true);
 
 
 	//Create shader
@@ -210,7 +210,7 @@ void ParticleSystem::draw(double delta)
 		sgct::ShaderManager::instance()->bindShaderProgram( mShader.mShaderName );
 
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByName(mTexture.mTextureName));
+		glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureId(mTexture.mTextureName));
 		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

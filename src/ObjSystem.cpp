@@ -238,7 +238,7 @@ void Object::loadObj(char* filename, string texture)
 
 	sgct::TextureManager::instance()->setAnisotropicFilterSize(8.0f);
 	sgct::TextureManager::instance()->setCompression(sgct::TextureManager::S3TC_DXT);
-	sgct::TextureManager::instance()->loadTexure(mTextureHandle, name, texture, true);
+	sgct::TextureManager::instance()->loadTexure(name, texture, true);
 
 	//Create shader if it doesn't exist
 	if(!sgct::ShaderManager::instance()->shaderProgramExists("object"))
@@ -257,13 +257,13 @@ void Object::loadObj(char* filename, string texture)
 
 void Object::scale(float sx, float sy, float sz)
 {
-	glm::mat4 s = glm::scale(sx,sy,sz);
+	glm::mat4 s = glm::scale(glm::mat4(1.0f), glm::vec3(sx,sy,sz));
 	transMatrix = s * transMatrix;
 }
 
 void Object::translate(float tx, float ty, float tz)
 {
-	glm::mat4 t = glm::translate(tx,ty,tz);
+	glm::mat4 t = glm::translate(glm::mat4(1.0f), glm::vec3(tx, ty, tz));
 	transMatrix = t * transMatrix;
 }
 
@@ -289,9 +289,9 @@ void Object::draw()
 	//select active texture unit
 	glActiveTexture(GL_TEXTURE0);
 	//bind a named texture to a texturing target
-	glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureByHandle(mTextureHandle));
+	glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureId("object"));
 
-	sgct::ShaderManager::instance()->bindShaderProgram( "object" );
+	sgct::ShaderManager::instance()->bindShaderProgram("object");
 
 	glUniformMatrix4fv(mMatrixLocation, 1, GL_FALSE, &MVP[0][0]);
 	glUniformMatrix4fv(mTransformLocation, 1, GL_FALSE, &transMatrix[0][0]);

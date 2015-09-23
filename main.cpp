@@ -50,7 +50,7 @@ void myPreSyncFun();
 void myPostSyncPreDrawFun();
 void myEncodeFun();
 void myDecodeFun();
-void externalControlCallback(const char * receivedChars, int size, int clientId);
+void externalControlCallback(const char * receivedChars, int size);
 void sendMessageToExternalControl(void * data, int length);
 
 
@@ -232,7 +232,7 @@ void myPostSyncPreDrawFun()
 }
 
 //Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
-void externalControlCallback(const char * receivedChars, int size, int clientId)
+void externalControlCallback(const char * receivedChars, int size)
 {
 	//Checks so the gEnginenode is actually the master.
 	if(gEngine->isMaster())
