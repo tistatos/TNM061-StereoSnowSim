@@ -23,6 +23,7 @@ add_executable(${APP_NAME}
 	src/Wind.cpp include/Wind.h
 	src/Vortex.cpp include/Vortex.h
 	src/DebugField.cpp include/DebugField.h
+	src/ObjectParticle.cpp include/ObjectParticle.h
 	include/Texture.h
 	include/Shader.h
 	include/SimplexNoise.h src/SimplexNoise.cpp

@@ -11,10 +11,11 @@
 #include "Vortex.h"
 #include <iostream>
 #include "SimplexNoise.h"
+#include "ObjectParticle.h"
 
 //our beautiful global variables
 sgct::Engine* gEngine;
-Snow* gParticles;
+ObjectParticle* gParticles;
 World* gWorld;
 Object* road;
 Object* tree;
@@ -36,7 +37,7 @@ sgct::SharedFloat gravFactor(-9.81);
 sgct::SharedFloat positionX(0.0);
 sgct::SharedFloat positionZ(-1.0);
 sgct::SharedInt radius(1.0);
-sgct::SharedFloat particleSize(40.0);
+sgct::SharedFloat particleSize(1000.0);
 sgct::SharedFloat fadeDistance(20.0);
 sgct::SharedBool sharedPause(false);
 sgct::SharedBool showStats(false);
@@ -69,7 +70,9 @@ int main(int argc, char *argv[])
 	sgct::SharedData::instance()->setEncodeFunction(myEncodeFun);
 	sgct::SharedData::instance()->setDecodeFunction(myDecodeFun);
 
-	gParticles = new Snow(gEngine);
+	gParticles = new ObjectParticle(gEngine);
+	gParticles->setTexture("snow", "img/flaky.png");
+
 	gWorld = new World(gEngine);
 
 	// add some nice objects
@@ -93,7 +96,6 @@ int main(int argc, char *argv[])
 	//Not working yet... :(
 	SimplexNoise* noise = new SimplexNoise();
 	noise->init(glm::vec3(0), glm::vec3(0), gEngine->getTime());
-	//gParticles->addField(noise);
 
 	if(!gEngine->init(sgct::Engine::OpenGL_3_3_Core_Profile))
 	{
@@ -112,6 +114,7 @@ int main(int argc, char *argv[])
 	// destroy everything and exit
 	gParticles->destroy();
 	road->deleteObject();
+
 	delete road;
 	delete gEngine;
 	delete gParticles;
@@ -123,11 +126,14 @@ int main(int argc, char *argv[])
 
 void initialize()
 {
-	if(!gParticles->initialize())
-	{
-		std::cout << "Error Initialzing Particle System:" << std::endl;
-		exit(EXIT_FAILURE);
-	}
+	gParticles->initialize();
+
+	//if(!gfixParticles->initialize()) FIXME
+	//{
+	//	std::cout << "Error Initialzing Particle System:" << std::endl;
+	//	exit(EXIT_FAILURE);
+	//}
+
 	gWorld->initializeWorld();
 
 	road->loadObj("objects/road.obj", "objects/road.png");
@@ -146,6 +152,7 @@ void initialize()
 
 void draw()
 {
+
 	glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 	double delta = gEngine->getDt();
@@ -160,6 +167,8 @@ void draw()
 
 	gParticles->move(delta);
 	gParticles->draw(delta);
+
+
 	glDisable(GL_DEPTH_TEST);
 
 }

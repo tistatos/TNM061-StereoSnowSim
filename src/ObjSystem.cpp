@@ -347,3 +347,23 @@ void Object::deleteObject()
 	nVertices = 0;
 	nTriangles = 0;
 }
+
+
+GLfloat* Object::getVertexList()
+{
+	return vertexList;
+}
+
+GLuint Object::getVertexBuffer()
+{
+	return vertexBuffer;
+}
+GLuint Object::getIndexBuffer()
+{
+	return indexBuffer;
+}
+
+int Object::getVertexCount()
+{
+	return nVertices;
+}

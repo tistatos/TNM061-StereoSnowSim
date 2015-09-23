@@ -1,20 +1,15 @@
-#include "ParticleSystem.h"
 #include "Snow.h"
-#include "HelperFunctions.h"
-
 
 Snow::Snow(sgct::Engine* engine) : ParticleSystem(engine)
 {
-	mShader.mShaderName = "snow";
-	mShader.mVertexFile = "shaders/particle.vert";
-	mShader.mFragmentFile = "shaders/particle.frag";
-
-	mTexture.mTextureName = "snow";
-	mTexture.mTextureFile = "img/flaky.png";
 }
 
 bool Snow::initialize()
 {
+	setTexture(mTexture.mTextureName, mTexture.mTextureFile);
+	mShader.mShaderName = "snow";
+	mShader.mVertexFile = "shaders/particle.vert";
+	mShader.mFragmentFile = "shaders/particle.frag";
 	return ParticleSystem::initialize();
 }
 

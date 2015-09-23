@@ -42,7 +42,6 @@ public:
 	void pauseControl(bool status);
 	void togglePause();
 	void setAmount(int amount);
-
 	std::vector<Field*> getFields() {return mFields;};
 
 protected:

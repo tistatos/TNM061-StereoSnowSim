@@ -19,6 +19,12 @@ class Object
 		void scale(float sx, float sy, float sz);
 		void translate(float tx, float ty, float tz);
 		void rotate(float ang, float rx, float ry, float rz);
+
+		GLfloat* getVertexList();
+		int getVertexCount();
+		GLuint getIndexBuffer();
+		GLuint getVertexBuffer();
+
 	private:
 		sgct::Engine* mEngine;
 		Texture mTexture; //Strcut with Texture data

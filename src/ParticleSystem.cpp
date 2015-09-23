@@ -11,7 +11,7 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
 	mInitialized = false;
 	mPaused = false;
 
-	setAmount(10000);
+	setAmount(100);
 
 	mDebugField = new DebugField(engine);
 
@@ -35,14 +35,11 @@ ParticleSystem::ParticleSystem(sgct::Engine* engine)
  */
 bool ParticleSystem::initialize()
 {
-	// initialize debug field
-	mDebugField->init();
 	for (int i = 0; i < mParticlesAmount; ++i)
 	{
 		mParticles[i].mLife = 0.0f;
 		mParticles[i].mDistance = 1000.0f;
 		mParticles[i].mIsReset = false;
-
 	}
 	//Billboard that all particles share
 	static const GLfloat vertexBufferData[] =
@@ -72,7 +69,7 @@ bool ParticleSystem::initialize()
 	//Prepare for position buffers
 	glGenBuffers(1, &mParticleLifeBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, mParticleLifeBuffer);
-	glBufferData(GL_ARRAY_BUFFER, mParticlesAmount*4*4*sizeof(GLfloat),
+	glBufferData(GL_ARRAY_BUFFER, mParticlesAmount*sizeof(GLfloat),
 				 NULL, GL_STREAM_DRAW);
 
 	glBindVertexArray(0);
@@ -86,10 +83,14 @@ bool ParticleSystem::initialize()
 
 
 	//Create shader
-	bool shaderResult = sgct::ShaderManager::instance()->addShaderProgram(mShader.mShaderName, mShader.mVertexFile, mShader.mFragmentFile);
-	if(shaderResult == false)
+	bool shaderExists = sgct::ShaderManager::instance()->shaderProgramExists(mShader.mShaderName);
+	if(!shaderExists)
 	{
-		return false;
+		bool shaderResult = sgct::ShaderManager::instance()->addShaderProgram(mShader.mShaderName, mShader.mVertexFile, mShader.mFragmentFile);
+		if(shaderResult == false)
+		{
+			return false;
+		}
 	}
 	//Bind shader and get location of MVP matrix
 	sgct::ShaderManager::instance()->bindShaderProgram(mShader.mShaderName);
@@ -268,7 +269,6 @@ void ParticleSystem::draw(double delta)
 		glVertexAttribDivisor(pos + 2, 1);
 		glVertexAttribDivisor(pos + 3, 1);
 		glVertexAttribDivisor(lifePos, 1);
-        //glVertexAttribDivisor(1, 1); // positions : one per quad (its center)                 -> 1
 
         glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particleCount);
 
@@ -280,6 +280,7 @@ void ParticleSystem::draw(double delta)
 		glDisableVertexAttribArray(lifePos);
 
 		glBindVertexArray(0);
+		glBindTexture(GL_TEXTURE_2D,0);
 
 		sgct::ShaderManager::instance()->unBindShaderProgram();
 		mFirstDraw = false;
@@ -437,4 +438,10 @@ void ParticleSystem::setAmount(int amount)
 void ParticleSystem::setParticleSize(float s)
 {
 	mParticleSize = s;
+}
+
+void ParticleSystem::setTexture(string name, string file)
+{
+	mTexture.mTextureName = name;
+	mTexture.mTextureFile = file;
 }
