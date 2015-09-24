@@ -33,7 +33,6 @@ void World::loadTexture()
 {
 	//NOTE: missing a t in loadTexure
 	sgct::TextureManager::instance()->loadTexure(mName, mTextureFile, true);
-	//sgct::TextureManager::instance()->loadTexure(mTextureHandle, "einar", "img/einar.png", true);
 }
 
 void World::initializeWorld()
@@ -69,7 +68,7 @@ void World::drawWorld()
 	//select active texture unit
 	glActiveTexture(GL_TEXTURE0);
 	//bind a named texture to a texturing target
-	glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureId("world"));
+	glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureId("sky"));
 
 	sgct::ShaderManager::instance()->bindShaderProgram("world");
 

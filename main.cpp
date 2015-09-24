@@ -130,17 +130,17 @@ void initialize()
 	}
 	gWorld->initializeWorld();
 
-	road->loadObj("objects/road.obj", "objects/road.png");
-	road->scale(0.2f,0.2f,0.2f);
-	road->translate(0.0f, -2.0f, -25.0f);
+	//road->loadObj("objects/road.obj", "objects/road.png");
+	//road->scale(0.2f,0.2f,0.2f);
+	//road->translate(0.0f, -2.0f, -25.0f);
 
-	tree->loadObj("objects/tree.obj", "objects/tree.png");
-	tree->scale(0.05f,0.05f,0.05f);
-	tree->translate(0.0f, -1.0f, -6.0f);
+	//tree->loadObj("objects/tree.obj", "objects/tree.png");
+	//tree->scale(0.05f,0.05f,0.05f);
+	//tree->translate(0.0f, -1.0f, -6.0f);
 
-	gGround->loadObj("objects/ground.obj", "objects/tree.png");
-	gGround->scale(0.2f,0.2f,0.2f);
-	gGround->translate(0.0f, -2.0f, -30.0f);
+	//gGround->loadObj("objects/ground.obj", "objects/tree.png");
+	//gGround->scale(0.2f,0.2f,0.2f);
+	//gGround->translate(0.0f, -2.0f, -30.0f);
 
 }
 
