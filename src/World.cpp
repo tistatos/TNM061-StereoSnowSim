@@ -68,7 +68,7 @@ void World::drawWorld()
 	//select active texture unit
 	glActiveTexture(GL_TEXTURE0);
 	//bind a named texture to a texturing target
-	glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureId("sky"));
+	glBindTexture(GL_TEXTURE_2D, sgct::TextureManager::instance()->getTextureId(mName));
 
 	sgct::ShaderManager::instance()->bindShaderProgram("world");
 
