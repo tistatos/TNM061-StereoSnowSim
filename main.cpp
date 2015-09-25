@@ -149,6 +149,7 @@ void draw()
 	glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 	double delta = gEngine->getDt();
+	delta = 1/60.0f;
 	gWorld->drawWorld();
 
 	if (showObject.getVal())
