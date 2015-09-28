@@ -11,7 +11,7 @@ PROJECT(${APP_NAME})
 
 # to add more .cpp files, simply add the after main.cpp
 add_executable(${APP_NAME}
-	main.cpp
+	src/main.cpp
 	src/ParticleSystem.cpp include/ParticleSystem.h
 	src/HelperFunctions.cpp include/HelperFunctions.h
 	src/World.cpp include/World.h
