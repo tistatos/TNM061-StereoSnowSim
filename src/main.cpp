@@ -23,9 +23,7 @@ Wind* gWind;
 Gravity* gGrav;
 Vortex* gTurbine;
 
-
-
-sgct::SharedDouble curr_time(0.0);
+sgct::SharedDouble masterDelta(0.0);
 sgct::SharedFloat sizeFactorX(0.0);
 sgct::SharedFloat sizeFactorY(0.0);
 sgct::SharedFloat sizeFactorZ(0.0);
@@ -129,27 +127,14 @@ void initialize()
 		exit(EXIT_FAILURE);
 	}
 	gWorld->initializeWorld();
-
-	//road->loadObj("objects/road.obj", "objects/road.png");
-	//road->scale(0.2f,0.2f,0.2f);
-	//road->translate(0.0f, -2.0f, -25.0f);
-
-	//tree->loadObj("objects/tree.obj", "objects/tree.png");
-	//tree->scale(0.05f,0.05f,0.05f);
-	//tree->translate(0.0f, -1.0f, -6.0f);
-
-	//gGround->loadObj("objects/ground.obj", "objects/tree.png");
-	//gGround->scale(0.2f,0.2f,0.2f);
-	//gGround->translate(0.0f, -2.0f, -30.0f);
-
 }
 
 void draw()
 {
 	glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
-	double delta = gEngine->getDt();
-	delta = 1/60.0f;
+	double delta = masterDelta.getVal();
+
 	gWorld->drawWorld();
 
 	if (showObject.getVal())
@@ -172,13 +157,13 @@ void myPreSyncFun()
 	if( gEngine->isMaster() )
 	{
 		//Sets the current time since the program started
-		curr_time.setVal(sgct::Engine::getTime());
+		masterDelta.setVal(gEngine->getDt());
 	}
 }
 //We need this to sync the variables trough the cluster
 void myEncodeFun()
 {
-	sgct::SharedData::instance()->writeDouble(&curr_time);
+	sgct::SharedData::instance()->writeDouble(&masterDelta);
  	sgct::SharedData::instance()->writeFloat(&sizeFactorX);
  	sgct::SharedData::instance()->writeFloat(&sizeFactorY);
  	sgct::SharedData::instance()->writeFloat(&sizeFactorZ);
@@ -200,7 +185,7 @@ void myEncodeFun()
 //We need this to sync the variables trough the cluster
 void myDecodeFun()
 {
-	sgct::SharedData::instance()->readDouble(&curr_time);
+	sgct::SharedData::instance()->readDouble(&masterDelta);
 	sgct::SharedData::instance()->readFloat(&sizeFactorX);
 	sgct::SharedData::instance()->readFloat(&sizeFactorY);
 	sgct::SharedData::instance()->readFloat(&sizeFactorZ);
@@ -231,6 +216,7 @@ void myPostSyncPreDrawFun()
 	gParticles->setFadeDistance(fadeDistance.getVal()*0.1f);
 	gParticles->setParticleSize(particleSize.getVal()*0.001f);
 }
+
 
 //Used to alter certain values when sent from GUI. This way we can alter the fields or change gravity in realtime!
 void externalControlCallback(const char * receivedChars, int size)
