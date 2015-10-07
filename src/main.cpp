@@ -86,10 +86,13 @@ int main(int argc, char *argv[])
             
             if(std::string(argv[i]) == "-h")
             {
-                std::cout << "Snowsimulation commandline usage: \n"
-                          << "-g [GRAVITY CONSTANT] \t set value of gravity \n"
+                std::cout << "Snow simulation command line usage: \n"
+                          << "-g [GRAVITY CONSTANT] \t\t set value of gravity \n"
+                          << "   (default -9.81) \n"
                           << "-w [VALUEX] [VALUEY] [VALUEZ] \t set wind direction and strenght\n"
-                          << "-t [VALUEX] [VALUEZ] [RADIUS] \t set turbine values\n";
+                          << "   (default random[-0.05, 0.05] 0.0 random[-0.05, 0.05]) \n"
+                          << "-t [VALUEX] [VALUEZ] [RADIUS] \t set turbine values\n"
+                          << "   (default 0.0 0.0 0.0) \n";
 
                 return(EXIT_SUCCESS);
             }
