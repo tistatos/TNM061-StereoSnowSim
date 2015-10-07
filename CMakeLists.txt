@@ -28,14 +28,14 @@ add_executable(${APP_NAME}
 	include/SimplexNoise.h src/SimplexNoise.cpp
 	) # for example "main.cpp coolt.cpp kiss.cpp)"
 
-option(SGCT_PLACE_TARGETS_IN_SOURCE_TREE "Place targets in source tree" OFF)
+option(SGCT_PLACE_TARGETS_IN_SOURCE_TREE "Place targets in source tree" ON)
 if( SGCT_PLACE_TARGETS_IN_SOURCE_TREE )
-	set(EXAMPE_TARGET_PATH ${PROJECT_SOURCE_DIR})
+	set(EXEC_TARGET_PATH "${PROJECT_SOURCE_DIR}")
 else()
-	set(EXAMPE_TARGET_PATH ${PROJECT_BINARY_DIR})
+	set(EXEC_TARGET_PATH "${PROJECT_BINARY_DIR}")
 endif()
 
-set(EXECUTABLE_OUTPUT_PATH "${EXAMPE_TARGET_PATH}/bin")
+set(EXECUTABLE_OUTPUT_PATH "${EXEC_TARGET_PATH}/bin")
 
 set_target_properties(${APP_NAME} PROPERTIES
 	RUNTIME_OUTPUT_DIRECTORY_DEBUG ${EXECUTABLE_OUTPUT_PATH}
@@ -46,7 +46,7 @@ set_target_properties(${APP_NAME} PROPERTIES
 #if( NOT SGCT_PLACE_TARGETS_IN_SOURCE_TREE )
 #	add_custom_command(TARGET ${APP_NAME}
 #		PRE_BUILD
-#		COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR} ${EXAMPE_TARGET_PATH})
+#		COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR} ${EXEC_TARGET_PATH})
 #endif()
 
 if( APPLE  )
