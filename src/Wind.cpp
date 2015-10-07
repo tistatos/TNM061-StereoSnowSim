@@ -9,6 +9,12 @@ void Wind::setAcceleration(float x, float y, float z)
 	acceleration = glm::vec3(x, y, z);
 }
 
+void Wind::setAcceleration(float vals[])
+{
+    setAcceleration(vals[0], vals[1], vals[2]);
+}
+
+ 
 /**
  * returns the speed effect from the field (velocity = v0 + a*t)
  * @param  delta 		the time delta function, such as gEngines getDt();

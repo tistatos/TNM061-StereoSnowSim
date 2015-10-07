@@ -33,6 +33,11 @@ void Vortex::init(float x, float z, float r)
 	mRadius = r;
 }
 
+
+void Vortex::init(float vals[])
+{
+    init(vals[0], vals[1],vals[2]);
+}
 void Vortex::setPosition(float x, float z)
 {
 	mPosition.x = x;
@@ -47,6 +52,11 @@ void Vortex::setRadius(float r)
 void Vortex::setForce(float x, float y, float z)
 {
 	mForce = glm::vec3(x, y, z);
+}
+
+void Vortex::setForce(float vals[]) 
+{
+    setForce(vals[0], vals[1], vals[2]);
 }
 
 float Vortex::calcDistance(const Particle& p)

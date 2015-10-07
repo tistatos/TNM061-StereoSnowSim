@@ -13,9 +13,11 @@ class Vortex : public Field
 		Vortex(){};
 		glm::vec3 getVelocity(double delta, Particle& p);
 		void init(float x, float z, float r);
+		void init(float vals[]);
 		void setPosition(float x, float z);
 		void setRadius(float r);
 		void setForce(float x, float y, float z);
+		void setForce(float vals[]);
 		void printInfo();
 		void showField();
 	private:

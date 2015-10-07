@@ -24,13 +24,13 @@ Gravity* gGrav;
 Vortex* gTurbine;
 
 sgct::SharedDouble masterDelta(0.0);
-sgct::SharedFloat sizeFactorX(0.0);
-sgct::SharedFloat sizeFactorY(0.0);
-sgct::SharedFloat sizeFactorZ(0.0);
+sgct::SharedFloat windDirX(0.0);
+sgct::SharedFloat windDirY(0.0);
+sgct::SharedFloat windDirZ(0.0);
 sgct::SharedFloat vortFactorX(0.0);
 sgct::SharedFloat vortFactorY(0.0);
 sgct::SharedFloat vortFactorZ(0.0);
-sgct::SharedFloat gravFactor(-9.81);
+sgct::SharedFloat gravFactor(0.0);
 sgct::SharedFloat positionX(0.0);
 sgct::SharedFloat positionZ(-1.0);
 sgct::SharedInt radius(1.0);
@@ -75,17 +75,60 @@ int main(int argc, char *argv[])
 	tree = new Object(gEngine);
 	gGround = new Object(gEngine);
 
-	// dem fields
+    float gravityValue = -9.81f;
+    float windValues[] = {getRandom(-0.05, 0.05), 0.0f, getRandom(-0.05, 0.05)}; 
+    float turbineValues[] = { 0.0, 0.0, 0.0,};
+
+    if(argc > 0)
+    {
+        for(int i = 0; i < argc; i++)
+        {
+            
+            if(std::string(argv[i]) == "-h")
+            {
+                std::cout << "Snow simulation command line usage: \n"
+                          << "-g [GRAVITY CONSTANT] \t\t set value of gravity \n"
+                          << "   (default -9.81) \n"
+                          << "-w [VALUEX] [VALUEY] [VALUEZ] \t set wind direction and strenght\n"
+                          << "   (default random[-0.05, 0.05] 0.0 random[-0.05, 0.05]) \n"
+                          << "-t [VALUEX] [VALUEZ] [RADIUS] \t set turbine values\n"
+                          << "   (default 0.0 0.0 0.0) \n";
+
+                return(EXIT_SUCCESS);
+            }
+            if(std::string(argv[i]) == "-g" && i+1 < argc)
+            {
+                gravityValue = atof(argv[++i]);
+            }
+            
+            if(std::string(argv[i]) == "-w" && i+3 < argc)
+            {
+                windValues[0] = atof(argv[++i]);
+                windValues[1] = atof(argv[++i]);
+                windValues[2] = atof(argv[++i]);
+            }
+
+            if(std::string(argv[i]) == "-w" && i+3 < argc)
+            {
+                turbineValues[0] = atof(argv[++i]);
+                turbineValues[1] = atof(argv[++i]);
+                turbineValues[2] = atof(argv[++i]);
+            }
+        }
+    }
+    
+    
+    // dem fields
 	gGrav = new Gravity();
-	gGrav->init(-9.81f);
+	gGrav->init(gravityValue);
 	gParticles->addField(gGrav);
 
 	gWind = new Wind();
-	gWind->setAcceleration(getRandom(-0.05, 0.05), 0.0f, getRandom(-0.05, 0.05));
+	gWind->setAcceleration(windValues);
 	gParticles->addField(gWind);
 
 	gTurbine = new Vortex();
-	gTurbine->init(0.0f, 0.0f, 0.0f);
+	gTurbine->init(turbineValues);
 	gParticles->addField(gTurbine);
 
 	//Not working yet... :(
@@ -103,6 +146,17 @@ int main(int argc, char *argv[])
 	cout << "---- Fields active on gParticles ----" << endl;
 	gParticles->printFields();
 	cout << "---------------" << endl << endl;
+    
+    // set proper sync values
+    gravFactor.setVal(gravityValue);
+    
+    windDirX.setVal(windValues[0]);
+    windDirY.setVal(windValues[1]);
+    windDirZ.setVal(windValues[2]);
+
+    vortFactorX.setVal(turbineValues[0]);    
+    vortFactorY.setVal(turbineValues[1]);
+    vortFactorZ.setVal(turbineValues[2]);
 
 	// Let's get ready to rendeeeeeer!
 	gEngine->render();
@@ -164,9 +218,9 @@ void myPreSyncFun()
 void myEncodeFun()
 {
 	sgct::SharedData::instance()->writeDouble(&masterDelta);
- 	sgct::SharedData::instance()->writeFloat(&sizeFactorX);
- 	sgct::SharedData::instance()->writeFloat(&sizeFactorY);
- 	sgct::SharedData::instance()->writeFloat(&sizeFactorZ);
+ 	sgct::SharedData::instance()->writeFloat(&windDirX);
+ 	sgct::SharedData::instance()->writeFloat(&windDirY);
+ 	sgct::SharedData::instance()->writeFloat(&windDirZ);
  	sgct::SharedData::instance()->writeFloat(&vortFactorX);
  	sgct::SharedData::instance()->writeFloat(&vortFactorY);
  	sgct::SharedData::instance()->writeFloat(&vortFactorZ);
@@ -186,9 +240,9 @@ void myEncodeFun()
 void myDecodeFun()
 {
 	sgct::SharedData::instance()->readDouble(&masterDelta);
-	sgct::SharedData::instance()->readFloat(&sizeFactorX);
-	sgct::SharedData::instance()->readFloat(&sizeFactorY);
-	sgct::SharedData::instance()->readFloat(&sizeFactorZ);
+	sgct::SharedData::instance()->readFloat(&windDirX);
+	sgct::SharedData::instance()->readFloat(&windDirY);
+	sgct::SharedData::instance()->readFloat(&windDirZ);
 	sgct::SharedData::instance()->readFloat(&vortFactorX);
 	sgct::SharedData::instance()->readFloat(&vortFactorY);
 	sgct::SharedData::instance()->readFloat(&vortFactorZ);
@@ -208,7 +262,7 @@ void myDecodeFun()
 void myPostSyncPreDrawFun()
 {
 	gParticles->pauseControl(sharedPause.getVal());
-	gWind->setAcceleration((sizeFactorX.getVal()*0.01f), (sizeFactorY.getVal()*0.01f), (sizeFactorZ.getVal()*0.01f));
+	gWind->setAcceleration((windDirX.getVal()*0.01f), (windDirY.getVal()*0.01f), (windDirZ.getVal()*0.01f));
 	gTurbine->setForce((vortFactorX.getVal()*0.1f), (vortFactorY.getVal()*0.1f), (vortFactorZ.getVal()*0.1f));
 	gTurbine->setPosition((positionX.getVal()), (positionZ.getVal()));
 	gTurbine->setRadius(radius.getVal());
@@ -228,21 +282,21 @@ void externalControlCallback(const char * receivedChars, int size)
 		{
 			//We need an int.
  			float tmpVal = atof(receivedChars + 5);
- 			sizeFactorX.setVal(tmpVal);
+ 			windDirX.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winY", 4) == 0)
 		{
 			//We need an int.
 			float tmpVal = atof(receivedChars + 5);
- 			sizeFactorY.setVal(tmpVal);
+ 			windDirY.setVal(tmpVal);
 		}
 
 		else if(size >= 6 && strncmp(receivedChars, "winZ", 4) == 0)
 		{
 			//We need an int.
 			float tmpVal = atof(receivedChars + 5);
- 			sizeFactorZ.setVal(tmpVal);
+ 			windDirZ.setVal(tmpVal);
 		}
 		else if(size >= 6 && strncmp(receivedChars, "vorX", 4) == 0)
 		{
