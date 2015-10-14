@@ -11,7 +11,7 @@
 #include "Vortex.h"
 #include <iostream>
 #include "SimplexNoise.h"
-
+#include <sgct/FontManager.h>
 //our beautiful global variables
 sgct::Engine* gEngine;
 Snow* gParticles;
@@ -55,7 +55,6 @@ void sendMessageToExternalControl(void * data, int length);
 int main(int argc, char *argv[])
 {
 	initRandom();
-
 	gEngine = new sgct::Engine(argc, argv);
 
 	// sgct setup and preparation
@@ -181,6 +180,7 @@ void initialize()
 		exit(EXIT_FAILURE);
 	}
 	gWorld->initializeWorld();
+    sgct_text::FontManager::instance()->addFont("font", "FreeMono.ttf");
 }
 
 void draw()
@@ -197,6 +197,16 @@ void draw()
 		gGround->draw();
 		tree->draw();
 	}
+   
+    string credit = "Snomys";
+    string creditText = "Ett projekt av \n Erik Sandren Carl Englund Klas Eskilson\n Therese Komstadius Daniel Ronnkvist";
+    glm::mat4 textMat = glm::translate(glm::mat4(1.0f), glm::vec3(-3,1,-3));
+    textMat = glm::scale(textMat,glm::vec3(0.4,0.4,0.4));
+    sgct_text::print3d( sgct_text::FontManager::instance()->getFont("font", 24), gEngine->getActiveModelViewProjectionMatrix() * textMat, credit.c_str());
+    
+    textMat = glm::translate(glm::scale(textMat, glm::vec3(0.5,0.5,0.5)), glm::vec3(0,-3,0));
+    
+    sgct_text::print3d( sgct_text::FontManager::instance()->getFont("font", 24), gEngine->getActiveModelViewProjectionMatrix() * textMat, creditText.c_str());
 
 	gParticles->move(delta);
 	gParticles->draw(delta);
