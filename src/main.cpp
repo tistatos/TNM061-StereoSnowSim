@@ -24,6 +24,7 @@ Gravity* gGrav;
 Vortex* gTurbine;
 
 sgct::SharedDouble masterDelta(0.0);
+sgct::SharedDouble creditTime(0.0);
 sgct::SharedFloat windDirX(0.0);
 sgct::SharedFloat windDirY(0.0);
 sgct::SharedFloat windDirZ(0.0);
@@ -197,17 +198,29 @@ void draw()
 		gGround->draw();
 		tree->draw();
 	}
-   
-    string credit = "Snomys";
-    string creditText = "Ett projekt av \n Erik Sandren Carl Englund Klas Eskilson\n Therese Komstadius Daniel Ronnkvist";
-    glm::mat4 textMat = glm::translate(glm::mat4(1.0f), glm::vec3(-3,1,-3));
-    textMat = glm::scale(textMat,glm::vec3(0.4,0.4,0.4));
-    sgct_text::print3d( sgct_text::FontManager::instance()->getFont("font", 24), gEngine->getActiveModelViewProjectionMatrix() * textMat, credit.c_str());
-    
-    textMat = glm::translate(glm::scale(textMat, glm::vec3(0.5,0.5,0.5)), glm::vec3(0,-3,0));
-    
-    sgct_text::print3d( sgct_text::FontManager::instance()->getFont("font", 24), gEngine->getActiveModelViewProjectionMatrix() * textMat, creditText.c_str());
+  
 
+    if(gEngine->isMaster() && (int)gEngine->getTime() % (60*5) == 10)
+    {
+        creditTime.setVal(25.0f);
+    }
+
+    if(creditTime.getVal() > 0)
+    {
+        string credit = "Snomys";
+        string creditText = "Ett projekt av \n Erik Sandren Carl Englund Klas Eskilson\n Therese Komstadius Daniel Ronnkvist";
+        glm::mat4 textMat = glm::translate(glm::mat4(1.0f), glm::vec3(-3,1,-3));
+        textMat = glm::scale(textMat,glm::vec3(0.4,0.4,0.4));
+        
+        sgct_text::print3d( sgct_text::FontManager::instance()->getFont("font", 24), gEngine->getActiveModelViewProjectionMatrix() * textMat, credit.c_str());
+        
+        textMat = glm::translate(glm::scale(textMat, glm::vec3(0.5,0.5,0.5)), glm::vec3(0,-3,0));
+        
+        sgct_text::print3d( sgct_text::FontManager::instance()->getFont("font", 24), gEngine->getActiveModelViewProjectionMatrix() * textMat, creditText.c_str());
+    }
+
+    if(gEngine->isMaster() && creditTime.getVal() >= 0)
+        creditTime.setVal(creditTime.getVal()-1.0f*masterDelta.getVal());
 	gParticles->move(delta);
 	gParticles->draw(delta);
 	glDisable(GL_DEPTH_TEST);
@@ -228,6 +241,7 @@ void myPreSyncFun()
 void myEncodeFun()
 {
 	sgct::SharedData::instance()->writeDouble(&masterDelta);
+	sgct::SharedData::instance()->writeDouble(&creditTime);
  	sgct::SharedData::instance()->writeFloat(&windDirX);
  	sgct::SharedData::instance()->writeFloat(&windDirY);
  	sgct::SharedData::instance()->writeFloat(&windDirZ);
@@ -250,6 +264,7 @@ void myEncodeFun()
 void myDecodeFun()
 {
 	sgct::SharedData::instance()->readDouble(&masterDelta);
+	sgct::SharedData::instance()->readDouble(&creditTime);
 	sgct::SharedData::instance()->readFloat(&windDirX);
 	sgct::SharedData::instance()->readFloat(&windDirY);
 	sgct::SharedData::instance()->readFloat(&windDirZ);
