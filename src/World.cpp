@@ -8,7 +8,7 @@ World::World(sgct::Engine* engine)
 	mMatrixLocation = -1;
 	mSize = 100;
 	mName = "sky";
-	mTextureFile = "img/skybox.png";
+	mTextureFile = "img/skybox_texture_1_dev.jpg";
 }
 
 void World::setBoxSize(float boxSize)
